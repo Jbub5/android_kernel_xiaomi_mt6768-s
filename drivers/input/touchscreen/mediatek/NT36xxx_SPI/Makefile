@@ -7,4 +7,5 @@ ccflags-y += -I$(srctree)/drivers/misc/mediatek/include/mt-plat/
 ccflags-y += -I$(srctree)/drivers/input/touchscreen/mediatek/
 ccflags-y += -I$(srctree)/drivers/misc/mediatek/include/mt-plat/$(MTK_PLATFORM)/include
 
-obj-$(CONFIG_TOUCHSCREEN_NT36xxx_SPI) += nt36xxx.o nt36xxx_fw_update.o nt36xxx_ext_proc.o nt36xxx_mp_ctrlram.o
+obj-$(CONFIG_TOUCHSCREEN_NT36xxx_SPI) += nt36xxx.o nt36xxx_fw_update.o nt36xxx_ext_proc.o
+obj-$(CONFIG_TOUCHSCREEN_NT36xxx_SPI_MP_CTRLRAM) += nt36xxx_mp_ctrlram.o
