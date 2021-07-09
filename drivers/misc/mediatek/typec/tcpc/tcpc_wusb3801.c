@@ -277,7 +277,7 @@ static void wusb3801_irq_work_handler(struct kthread_work *work)
 	rc = wusb3801_i2c_read8(chip->tcpc, WUSB3801_REG_STATUS);
 	if (rc < 0) {
 		pr_err("%s: failed to read reg status\n", __func__);
-		return;
+		return; 
 	}
 	pr_info("%s WUSB3801_REG_STATUS : 0x%02x\n", __func__, rc);
 
@@ -302,6 +302,7 @@ static void wusb3801_irq_work_handler(struct kthread_work *work)
 		//tcpci_notify_typec_state(tcpc);
 		if (tcpc->typec_attach_old == TYPEC_ATTACHED_SRC) {
 		    tcpci_source_vbus(tcpc, TCP_VBUS_CTRL_TYPEC, TCPC_VBUS_SOURCE_0V, 0);
+			msleep(100);
 		}
 		tcpc->typec_attach_old = TYPEC_UNATTACHED;
 	}
@@ -1033,7 +1034,7 @@ static int wusb3801_i2c_probe(struct i2c_client *client,
 	}
 	chip->dev = &client->dev;
 	chip->client = client;
-#ifdef __TEST_CC_PATCH_
+#ifdef __TEST_CC_PATCH__
 	chip->cc_sts = 0xFF;
 	chip->cc_test_flag = 0;
 	chip->dev_sub_id = dev_sub_id;
