@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -75,6 +76,7 @@
 #define AFDRV_DW9718TAF "DW9718TAF"
 #define AFDRV_GT9772AF "GT9772AF"
 #define AFDRV_GT9768AF "GT9768AF"
+#define AFDRV_CN3927AFJ19 "CN3927AFJ19"
 
 #define CONVERT_CCU_TIMESTAMP 0x1000
 
