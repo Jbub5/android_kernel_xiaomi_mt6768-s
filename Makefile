@@ -1013,6 +1013,20 @@ KBUILD_CPPFLAGS += $(ARCH_CPPFLAGS) $(KCPPFLAGS)
 KBUILD_AFLAGS   += $(ARCH_AFLAGS)   $(KAFLAGS)
 KBUILD_CFLAGS   += $(ARCH_CFLAGS)   $(KCFLAGS)
 
+# =============PROJECT==================================
+# Add macros by TARGET_PRODUCT for different projects
+ifeq ($(CONFIG_TARGET_PRODUCT_LANCELOTCOMMON),y)
+# Define macros here only for lancelot project
+KBUILD_CFLAGS += -DTARGET_PRODUCT_LANCELOT
+else ifeq ($(CONFIG_TARGET_PRODUCT_MERLINCOMMON),y)
+# Define macros here only for merlin common project
+KBUILD_CFLAGS += -DTARGET_PRODUCT_MERLINCOMMON
+else ifeq ($(CONFIG_TARGET_PRODUCT_SELENECOMMON),y)
+# Define macros here only for selene project
+KBUILD_CFLAGS += -DTARGET_PRODUCT_SELENE
+endif
+# =============PROJECT==================================
+
 # Use --build-id when available.
 LDFLAGS_BUILD_ID := $(call ld-option, --build-id)
 KBUILD_LDFLAGS_MODULE += $(LDFLAGS_BUILD_ID)
