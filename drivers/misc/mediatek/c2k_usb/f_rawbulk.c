@@ -342,7 +342,7 @@ static int rawbulk_function_setalt(struct usb_function *f, unsigned int intf,
 	struct rawbulk_function *fn = function_to_rbf(f);
 
 	C2K_NOTE("%s\n", __func__);
-	fn->activated = 1;
+	fn->activated = -1;
 	rawbulk_usb_state_set(fn->activated);
 	schedule_work(&fn->activator);
 	return 0;
