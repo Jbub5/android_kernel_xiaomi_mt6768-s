@@ -199,6 +199,7 @@ static inline int wusb3801_i2c_read8(struct tcpc_device *tcpc, u8 reg)
 static int test_cc_patch(struct wusb3801_chip *chip)
 {
 	int rc;
+	int ret;
 	int rc_reg_08 = 0, i = 0;
 
 	struct device *cdev = &chip->client->dev;
@@ -225,15 +226,28 @@ static int test_cc_patch(struct wusb3801_chip *chip)
 
 //huanglei add for reg 0x08 write zero fail begin
     do{
-	msleep(100);
-        wusb3801_i2c_write8(chip->tcpc,
-        WUSB3801_REG_TEST_02, 0x00);
-	msleep(100);
+		msleep(100);
+		wusb3801_i2c_write8(chip->tcpc,
+				WUSB3801_REG_TEST_02, 0x00);
+		msleep(100);
 	rc_reg_08 = wusb3801_i2c_read8(chip->tcpc, WUSB3801_REG_TEST_02);
-	i++;
+		i++;
     }while(rc_reg_08 != 0 && i < 5);
 //end
-    return BITS_GET(rc, 0x40);
+	/* Xiaomi error recovery handling */
+	ret = wusb3801_i2c_read8(chip->tcpc,
+			WUSB3801_REG_TEST_02);
+
+	if (ret & WUSB3801_FORCE_ERR_RCY_MASK) {
+		dev_err(cdev,
+			"%s enter error recovery :0x%x\n",
+			__func__, ret);
+
+		wusb3801_i2c_write8(chip->tcpc,
+				WUSB3801_REG_TEST_02, 0x00);
+	}
+
+	return BITS_GET(rc, 0x40);
 }
 #endif /* __TEST_CC_PATCH__ */
 
@@ -426,7 +440,17 @@ static int wusb3801_init_alert(struct tcpc_device *tcpc)
 	wusb3801_i2c_write8(chip->tcpc, WUSB3801_REG_TEST_02, 0x00);
 	wusb3801_i2c_write8(chip->tcpc, WUSB3801_REG_TEST_09, 0x00);
 //huanglei add for reg 0x08& 0x0F write zero fail end
-	
+
+	/* error recovery handling */
+	if (ret & WUSB3801_FORCE_ERR_RCY_MASK) {
+		dev_err(chip->dev,
+			"%s enter error recovery :0x%x\n",
+			__func__, ret);
+
+		wusb3801_i2c_write8(chip->tcpc,
+				WUSB3801_REG_TEST_02, 0x00);
+	}
+
 	ret = request_irq(chip->irq, wusb3801_intr_handler,
 		IRQF_TRIGGER_FALLING | IRQF_NO_THREAD |
 		IRQF_NO_SUSPEND, name, chip);
@@ -1121,15 +1145,12 @@ static void wusb3801_shutdown(struct i2c_client *client)
 	struct wusb3801_chip *chip = i2c_get_clientdata(client);
 
 	/* Please reset IC here */
-	//wusb3801_i2c_write8(chip->tcpc,
-	//		WUSB3801_REG_CONTROL0, 0x00);
+	wusb3801_i2c_write8(chip->tcpc,
+			WUSB3801_REG_CONTROL0, 0x00);
 	if (chip != NULL) {
 		if (chip->irq)
 			disable_irq(chip->irq);
 		tcpm_shutdown(chip->tcpc);
-	} else {
-		wusb3801_i2c_write8(chip->tcpc,
-				WUSB3801_REG_CONTROL0, 0x00);
 	}
 }
 
