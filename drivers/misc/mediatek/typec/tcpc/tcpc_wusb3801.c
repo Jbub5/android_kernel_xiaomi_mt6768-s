@@ -86,7 +86,7 @@ struct wusb3801_chip {
 //extern int tcpci_report_usb_port_attached(struct tcpc_device *tcpc);
 //extern int tcpci_report_usb_port_detached(struct tcpc_device *tcpc);
 #ifdef __TEST_CC_PATCH__
-uint8_t	typec_cc_orientation;
+extern uint8_t	typec_cc_orientation;
 #endif	/* __TEST_CC_PATCH__ */
 static struct i2c_client *w_client;
 
@@ -316,7 +316,6 @@ static void wusb3801_irq_work_handler(struct kthread_work *work)
 		}
 	}
 	typec_cc_orientation = BITS_GET(rc, WUSB3801_CC_STS_MASK);
-	tcpc->typec_polarity = typec_cc_orientation - 1;
 #endif	/* __TEST_CC_PATCH__ */
 	switch (type) {
 	case WUSB3801_TYPE_SNK:
@@ -756,7 +755,6 @@ static void wusb3801_first_check_typec_work(struct work_struct *work)
 		}
 	}
 	typec_cc_orientation = BITS_GET(rc, WUSB3801_CC_STS_MASK);
-	chip->tcpc->typec_polarity = typec_cc_orientation -1;
 #endif	/* __TEST_CC_PATCH__ */
 	switch (type) {
 	case WUSB3801_TYPE_SNK:
