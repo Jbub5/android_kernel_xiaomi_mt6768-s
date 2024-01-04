@@ -45,13 +45,6 @@ extern u8 g_debug_level;
 #define GF_NAV_INPUT_LONG_PRESS		KEY_SEARCH
 #define GF_NAV_INPUT_HEAVY		KEY_CHAT
 
-#define GF_KEY_INPUT_HOME		KEY_SELECT
-#define GF_KEY_INPUT_MENU		KEY_MENU
-#define GF_KEY_INPUT_BACK		KEY_BACK
-#define GF_KEY_INPUT_POWER		KEY_POWER
-#define GF_KEY_INPUT_CAMERA		KEY_CAMERA
-#define GF_KEY_INPUT_KPENTER            KEY_KPENTER
-
 typedef enum gf_nav_event {
 	GF_NAV_NONE = 0,
 	GF_NAV_FINGER_UP,
@@ -66,17 +59,7 @@ typedef enum gf_nav_event {
 	GF_NAV_DOUBLE_CLICK,
 } gf_nav_event_t;
 
-typedef enum gf_key_event {
-	GF_KEY_NONE = 0,
-	GF_KEY_HOME,
-	GF_KEY_POWER,
-	GF_KEY_MENU,
-	GF_KEY_BACK,
-	GF_KEY_CAMERA,
-} gf_key_event_t;
-
 struct gf_key {
-	enum gf_key_event key;
 	uint32_t value;   /* key down = 1, key up = 0 */
 };
 
