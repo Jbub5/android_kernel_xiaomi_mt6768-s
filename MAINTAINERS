@@ -3302,6 +3302,7 @@ F:	Documentation/module-signing.txt
 F:	certs/
 F:	scripts/sign-file.c
 F:	scripts/extract-cert.c
+F:	scripts/ssl-common.h
 
 CERTIFIED WIRELESS USB (WUSB) SUBSYSTEM:
 L:	linux-usb@vger.kernel.org
