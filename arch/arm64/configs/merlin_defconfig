@@ -104,7 +104,7 @@ CONFIG_MTK_PTPOD=y
 CONFIG_MTK_STATIC_POWER=y
 CONFIG_MTK_UNIFY_POWER=y
 CONFIG_MTK_CM_MGR=y
-CONFIG_MTK_SWPM=y
+# CONFIG_MTK_SWPM is not set
 CONFIG_MTK_THERMAL_PA_VIA_ATCMD=y
 CONFIG_CUSTOM_KERNEL_IMGSENSOR="s5kgm1sp_mipi_raw s5kgm1sp_sunny_mipi_raw ov13b10_mipi_raw ov13b10_sunny_mipi_raw s5k4h7yx_mipi_raw s5k4h7yx_sunny_mipi_raw ov2180_mipi_raw ov2180_sunny_mipi_raw gc02m1_macro_mipi_raw gc02m1_macro_sunny_mipi_raw ov2680_sunny_mipi_raw"
 CONFIG_CUSTOM_KERNEL_CAM_CAL_DRV="BRCB032GWZ_3 GT24c32a cat24c16"
