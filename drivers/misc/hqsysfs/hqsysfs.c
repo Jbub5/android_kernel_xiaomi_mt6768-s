@@ -543,7 +543,6 @@ static const struct file_operations sdc_detect_proc_fops = {
 
 static int sdc_detect_init(void)
 {
-	int ret = -1;
 	sdc_detect_status = proc_create(SDC_DETECT_STATUS, 0644, NULL, &sdc_detect_proc_fops);
 	if (sdc_detect_status == NULL) {
 		pr_err("[%s]: create_proc_entry sdc_detect_status failed\n", __func__);
