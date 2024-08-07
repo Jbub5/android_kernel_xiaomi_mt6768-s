@@ -212,7 +212,7 @@ static void fpc1022_get_irqNum(struct fpc1022_data *fpc1022)
 
 static int hw_reset(struct fpc1022_data *fpc1022)
 {
-	struct device *dev = fpc1022->dev;
+	//struct device *dev = fpc1022->dev;
 
 	pinctrl_select_state(fpc1022->pinctrl, fpc1022->st_rst_h);
 	usleep_range(FPC1022_RESET_HIGH1_US, FPC1022_RESET_HIGH1_US + 100);
@@ -332,7 +332,7 @@ static ssize_t irq_ack(struct device *device,
 		       struct device_attribute *attribute,
 		       const char *buffer, size_t count)
 {
-	struct fpc1022_data *fpc1022 = dev_get_drvdata(device);
+	//struct fpc1022_data *fpc1022 = dev_get_drvdata(device);
 	return count;
 }
 
