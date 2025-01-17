@@ -16,13 +16,21 @@ bat_gm30: battery{
 	io-channels = <&auxadc 2>;
 	io-channel-names = "batteryID-channel";
 
+#ifndef CONFIG_TARGET_PRODUCT_SELENECOMMON
 	DIFFERENCE_FULLOCV_ITH = <(250)>;			/*	Charging termination current*/
+#else
+	DIFFERENCE_FULLOCV_ITH = <(200)>;			/*	Charging termination current*/
+#endif
 
 	SHUTDOWN_1_TIME = <(5)>;					/*	If ui_soc shows 1% more than X minites, system will shutdown*/
 
 	KEEP_100_PERCENT = <(1)>;					/*	The ui_soc will keep 100% until SOC drop X percents after unplugged*/
 
+#ifndef CONFIG_TARGET_PRODUCT_SELENECOMMON
 	R_FG_VALUE = <(10)>;						/*	R_sense resistance*/
+#else
+	R_FG_VALUE = <(5)>;						/*	R_sense resistance*/
+#endif
 
 	EMBEDDED_SEL = <(1)>;						/*	Configures whether using embedded battery or not*/
 
@@ -36,7 +44,11 @@ bat_gm30: battery{
 
 	POWERON_SYSTEM_IBOOT = <(500)>;				/*	power on system iboot*/
 
+#ifndef CONFIG_TARGET_PRODUCT_SELENECOMMON
 	SHUTDOWN_GAUGE0_VOLTAGE = <(34000)>;		/*	shutdown gauge 0% voltage*/
+#else
+	SHUTDOWN_GAUGE0_VOLTAGE = <(33500)>;		/*	shutdown gauge 0% voltage*/
+#endif
 
 	TEMPERATURE_T0 = <(50)>;					/*	Battery temperature T0*/
 
@@ -76,5 +88,9 @@ bat_gm30: battery{
 
 	MULTI_TEMP_GAUGE0 = <(1)>;					/* Multi gauge0 enable*/
 
+#ifndef CONFIG_TARGET_PRODUCT_SELENECOMMON
 #include "mt6768_battery_table.dtsi"
+#else
+#include "mt6769_battery_table_ext.dtsi"
+#endif
 };
