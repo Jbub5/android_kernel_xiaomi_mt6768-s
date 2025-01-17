@@ -977,6 +977,9 @@ static void send_accdet_status_event(u32 cable_type, u32 status)
 		 * micbias, it will cause key no response
 		 */
 		del_timer_sync(&micbias_timer);
+#ifdef CONFIG_SWITCH
+		switch_set_state(&accdet_data, status == 0 ? NO_DEVICE : cable_type);
+#endif
 		break;
 	case LINE_OUT_DEVICE:
 		input_report_switch(accdet_input_dev, SW_LINEOUT_INSERT,
@@ -2398,6 +2401,8 @@ int mt_accdet_probe(struct platform_device *dev)
 	__set_bit(KEY_VOLUMEDOWN, accdet_input_dev->keybit);
 	__set_bit(KEY_VOLUMEUP, accdet_input_dev->keybit);
 	__set_bit(KEY_VOICECOMMAND, accdet_input_dev->keybit);
+	__set_bit(BTN_1, accdet_input_dev->keybit);
+	__set_bit(BTN_2, accdet_input_dev->keybit);
 
 	__set_bit(EV_SW, accdet_input_dev->evbit);
 	__set_bit(SW_HEADPHONE_INSERT, accdet_input_dev->swbit);
