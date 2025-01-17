@@ -289,7 +289,7 @@ static void ktd_parse_dt(struct device *dev, struct ktd3137_chip *chip)
 
 static int ktd3137_bl_enable_channel(struct ktd3137_chip *chip)
 {
-	int ret;
+	int ret = 0;
 	struct ktd3137_bl_pdata *pdata = chip->pdata;
 
 	if (pdata->channel == 0) {
