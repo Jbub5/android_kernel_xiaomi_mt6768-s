@@ -2,6 +2,17 @@
 # Makefile for the kernel flashlight device drivers.
 #
 
+ifeq ($(CONFIG_TARGET_PRODUCT_SELENECOMMON),y)
+ifeq ($(strip $(FACTORY_VERSION_MODE)),true)
+ccflags-y += -DFACTORY_CAMERA_MODE
+else
+ccflags-y += -D__XIAOMI_CAMERA__
+ifeq ($(strip $(TARGET_PRODUCT)),selene)
+ccflags-y += -D__SELENE_COMMON__
+endif
+endif
+endif
+
 flashlight-y := flashlight-core.o
 flashlight-y += flashlight-device.o
 
