@@ -24,8 +24,13 @@
 #else
 		mt-tcpc,notifier_supply_num = <2>;
 #endif
+#ifndef CONFIG_TARGET_PRODUCT_SELENECOMMON
 		mt6370pd,intr_gpio = <&pio 24 0x0>;
 		mt6370pd,intr_gpio_num = <24>;
+#else
+		mt6370pd,intr_gpio = <&pio 41 0x0>;
+		mt6370pd,intr_gpio_num = <41>;
+#endif
 		pd-data {
 			pd,vid = <0x29cf>;
 			pd,pid = <0x5081>;
