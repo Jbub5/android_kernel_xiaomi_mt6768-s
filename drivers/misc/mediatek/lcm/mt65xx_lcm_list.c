@@ -53,6 +53,15 @@ struct LCM_DRIVER *lcm_driver_list[] = {
 #if defined(NT36672D_FHDP_DSI_VDO_TIANMA)
     &nt36672D_fhdp_dsi_vdo_tianma_lcm_drv,
 #endif
+#if defined(DSI_PANEL_K19A_36_03_0C_DSC_VDO)
+	&dsi_panel_k19a_36_03_0c_dsc_vdo_lcm_drv,
+#endif
+#if defined(DSI_PANEL_K19A_36_02_0A_DSC_VDO)
+	&dsi_panel_k19a_36_02_0a_dsc_vdo_lcm_drv,
+#endif
+#if defined(DSI_PANEL_K19A_43_02_0B_DSC_VDO)
+        &dsi_panel_k19a_43_02_0b_dsc_vdo_lcm_drv,
+#endif
 
 #if defined(HX83102P_WXGA_VDO_INCELL_BOE)
 	&hx83102p_wxga_vdo_incell_boe_lcm_drv,
