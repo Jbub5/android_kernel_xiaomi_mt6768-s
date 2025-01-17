@@ -732,7 +732,7 @@ static int cpumaxfreq_proc_show(struct seq_file *m, void *v)
 	unsigned long freq = 0;
 	/* freq (kHz) */
 	freq = cpufreq_max_freq / 1000;
-	seq_printf(m, "%lu.%02lu", freq / 1000, freq % 100);
+	seq_printf(m, "%lu.%lu", freq / 1000, freq % 100);
 	return 0;
 }
 
