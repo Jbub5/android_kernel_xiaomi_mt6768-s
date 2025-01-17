@@ -44,6 +44,13 @@ config BACKLIGHT_SUPPORT_LM3697
 	  Set n to disable.
 	  Charge pump driver for external backlight.
 
+config LM3697_SUPPORT
+    tristate "TI LM3697"
+    default n
+	select BACKLIGHT_CLASS_DEVICE
+    help
+      Say y here to support TI backlight IC LM3697.
+
 config LEDS_MTK_DISP
 	tristate "Mediatek display LED support"
 	depends on LEDS_CLASS

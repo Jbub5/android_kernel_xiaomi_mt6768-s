@@ -289,7 +289,7 @@ static void ktd_parse_dt(struct device *dev, struct ktd3137_chip *chip)
 
 static int ktd3137_bl_enable_channel(struct ktd3137_chip *chip)
 {
-	int ret;
+	int ret = 0;
 	struct ktd3137_bl_pdata *pdata = chip->pdata;
 
 	if (pdata->channel == 0) {
@@ -1044,6 +1044,12 @@ static int ktd3137_probe(struct i2c_client *client,
 		return -ENODEV;
 	}
 
+	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
+	if (!chip) {
+		err = -ENOMEM;
+		goto exit0;
+	}
+
 	client->addr = 0x36;
 	LOG_DBG("probe start!\n");
 	if (!pdata) {
@@ -1057,12 +1063,6 @@ static int ktd3137_probe(struct i2c_client *client,
 	}
 
 	//ktd3137_client = client;
-
-	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
-	if (!chip) {
-		err = -ENOMEM;
-		goto exit0;
-	}
 
 	chip->client = client;
 	chip->pdata = pdata;
