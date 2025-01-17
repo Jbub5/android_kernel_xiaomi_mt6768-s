@@ -354,6 +354,18 @@ extern struct LCM_DRIVER nt36672c_fhdp_dsi_vdo_120hz_shenchao_6382_lcm_drv;
 extern struct LCM_DRIVER r66451_fhdp_dsi_cmd_tianma_lcm_drv;
 extern struct LCM_DRIVER hx83102p_wxga_vdo_incell_boe_lcm_drv;
 
+extern struct LCM_DRIVER nt36672c_fhdp_dsi_vdo_90hz_shenchao_lcm_drv;
+extern struct LCM_DRIVER nt36672c_fhdp_dsi_vdo_90hz_shenchao_6382_lcm_drv;
+/*K19A HQ-123492 K19A LCD bring up by caogaojie at 2021/3/27 start*/
+extern struct LCM_DRIVER dsi_panel_k19a_36_02_0a_dsc_vdo_lcm_drv;
+/*K19A HQ-123492 K19A LCD bring up by caogaojie at 2021/3/27 end*/
+/* Huaqin add for HQ-123491 by caogaojie at 2021/3/29 start */
+extern struct LCM_DRIVER dsi_panel_k19a_43_02_0b_dsc_vdo_lcm_drv;
+/* Huaqin add for HQ-123491 by caogaojie at 2021/3/29 end */
+/* Huaqin add for HQ-148596 by caogaojie at 2021/9/27 start */
+extern struct LCM_DRIVER dsi_panel_k19a_36_03_0c_dsc_vdo_lcm_drv;
+/* Huaqin add for HQ-148596 by caogaojie at 2021/9/27 end */
+
 #ifdef BUILD_LK
 extern void mdelay(unsigned long msec);
 #endif
