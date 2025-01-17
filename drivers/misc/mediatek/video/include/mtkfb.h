@@ -196,7 +196,6 @@ struct fb_lcd_merlin_para {
 	u32 white_point_r;
 	u32 white_point_g;
 	u32 white_point_b;
-
 };
 
 enum MTK_FB_LAYER_TYPE {
