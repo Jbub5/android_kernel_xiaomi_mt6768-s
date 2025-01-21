@@ -36,7 +36,7 @@
 
 #include "wm_adsp.h"
 
-#include "cs35l41.h"
+#include "cs35l41/cs35l41.h"
 #include "sound/cs35l41.h"
 
 #define adsp_crit(_dsp, fmt, ...) \
