@@ -2,7 +2,6 @@
  * cs35l41-spi.c -- CS35l41 SPI driver
  *
  * Copyright 2017 Cirrus Logic, Inc.
- * Copyright (C) 2021 XiaoMi, Inc.
  *
  * Author:	David Rhodes	<david.rhodes@cirrus.com>
  *
@@ -24,9 +23,9 @@
 #include <linux/spi/spi.h>
 #include <linux/regulator/consumer.h>
 
-#include "../wm_adsp.h"
+#include "wm_adsp.h"
 #include "cs35l41.h"
-#include <sound/cs35l41.h>
+#include <include/cs35l41.h>
 
 static struct regmap_config cs35l41_regmap_spi = {
 	.reg_bits = 32,
@@ -66,13 +65,11 @@ static int cs35l41_spi_probe(struct spi_device *spi)
 	if (cs35l41 == NULL)
 		return -ENOMEM;
 
-	mutex_init(&cs35l41->rate_lock);
-
 	spi_set_drvdata(spi, cs35l41);
 	cs35l41->regmap = devm_regmap_init_spi(spi, regmap_config);
 	if (IS_ERR(cs35l41->regmap)) {
 		ret = PTR_ERR(cs35l41->regmap);
-		dev_err(&spi->dev, "Failed to allocate register map: %d\n",
+		dev_info(&spi->dev, "Failed to allocate register map: %d\n",
 			ret);
 		return ret;
 	}
