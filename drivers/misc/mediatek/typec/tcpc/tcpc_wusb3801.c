@@ -42,6 +42,12 @@
 #include <linux/atomic.h>
 #include <linux/hrtimer.h>
 
+#ifdef CONFIG_CHARGER_BQ2589X_CHARGER
+/* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 start */
+#define __BQ25890H__ 1
+#include "../../../../power/supply/mediatek/charger/bq2589x_reg.h"
+/* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 end */
+#endif
 
 #if 1 /*  #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 9, 0))*/
 #include <linux/sched/rt.h>
@@ -89,6 +95,11 @@ struct wusb3801_chip {
 uint8_t	typec_cc_orientation;
 #endif	/* __TEST_CC_PATCH__ */
 static struct i2c_client *w_client;
+
+/* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 start */
+static bool g_irq_3801_flag = false;
+struct wusb3801_chip *g_3801_chip = NULL;
+/* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 end */
 
 static int wusb3801_read_device(void *client, u32 reg, int len, void *dst)
 {
@@ -228,6 +239,9 @@ static int test_cc_patch(struct wusb3801_chip *chip)
 	msleep(100);
         wusb3801_i2c_write8(chip->tcpc,
         WUSB3801_REG_TEST_02, 0x00);
+		/* HQ-134474 K19A typec mode by langjunjun at 2021/6/1 start */
+		wusb3801_i2c_write8(chip->tcpc, WUSB3801_REG_TEST_09, 0x00);
+		/* HQ-134474 K19A typec mode by langjunjun at 2021/6/1 end */
 	msleep(100);
 	rc_reg_08 = wusb3801_i2c_read8(chip->tcpc, WUSB3801_REG_TEST_02);
 	i++;
@@ -355,14 +369,41 @@ static void wusb3801_irq_work_handler(struct kthread_work *work)
 	tcpci_unlock_typec(tcpc);
 }
 
+/* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 start */
+void wusb3801_intr_handler_resume(void)
+{
+	if (g_irq_3801_flag == true) {
+		g_irq_3801_flag = false;
+		pr_err("%s:ljj  g_irq_3801_flag is true\n", __func__);
+		__pm_wakeup_event(&g_3801_chip->irq_wake_lock, WUSB3801_IRQ_WAKE_TIME);
+		kthread_queue_work(&g_3801_chip->irq_worker, &g_3801_chip->irq_work);
+	}
+	return;
+}
+/* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 end */
 
 static irqreturn_t wusb3801_intr_handler(int irq, void *data)
 {
 	struct wusb3801_chip *chip = data;
+#ifdef CONFIG_CHARGER_BQ2589X_CHARGER
+	/* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 start */
+	if (bq2589x_get_cdp_status() == true) {
+		pr_err("%s:ljj  bq2589x_get_cdp_status is true,returned!!!\n", __func__);
+		g_irq_3801_flag = true;
+		g_3801_chip = chip;
+	/* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 end */
 
+	} else {
+		__pm_wakeup_event(&chip->irq_wake_lock, WUSB3801_IRQ_WAKE_TIME);
+
+		kthread_queue_work(&chip->irq_worker, &chip->irq_work);
+	}
+#else
 	__pm_wakeup_event(&chip->irq_wake_lock, WUSB3801_IRQ_WAKE_TIME);
 
 	kthread_queue_work(&chip->irq_worker, &chip->irq_work);
+#endif
+
 	return IRQ_HANDLED;
 }
 
