@@ -49,6 +49,7 @@
 /* Huaqin modify for HQ-131657 by liunianliang at 2021/06/16 end */
 
 #define NVT_DEBUG 0
+#define NVT_NDEBUG 1
 /*BSP.Tp - 2020.11.05 -add NVT_LOCKDOWN - start*/
 #define NVT_LOCKDOWN 0
 /*BSP.Tp - 2020.11.05 -add NVT_LOCKDOWN, end*/
@@ -75,7 +76,11 @@ void nvt_lockdown_proc_deinit(void);
 #if NVT_DEBUG
 #define NVT_LOG(fmt, args...)    pr_err("[%s] %s %d: " fmt, NVT_SPI_NAME, __func__, __LINE__, ##args)
 #else
+#if NVT_NDEBUG
+#define NVT_LOG(fmt, args...) ((void)0)
+#else
 #define NVT_LOG(fmt, args...)    pr_debug("[%s] %s %d: " fmt, NVT_SPI_NAME, __func__, __LINE__, ##args)
+#endif
 #endif
 #define NVT_ERR(fmt, args...)    pr_err("[%s] %s %d: " fmt, NVT_SPI_NAME, __func__, __LINE__, ##args)
 
