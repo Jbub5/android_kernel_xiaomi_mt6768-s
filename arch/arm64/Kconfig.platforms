@@ -320,6 +320,11 @@ config MACH_MT6768
 	select EXT4_FS
 	select EXT4_FS_SECURITY
 	select EXT4_ENCRYPTION
+	select F2FS_FS
+	select F2FS_FS_ENCRYPTION
+	select F2FS_FS_SECURITY
+	select F2FS_FS_XATTR
+	select DM_BOW
 	select PINCTRL
 	select PINCTRL_MT6768
 	select MFD_SYSCON
