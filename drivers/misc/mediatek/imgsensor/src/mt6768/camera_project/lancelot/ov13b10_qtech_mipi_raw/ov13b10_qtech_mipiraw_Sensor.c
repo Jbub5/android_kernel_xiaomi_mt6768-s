@@ -1652,8 +1652,8 @@ static int  ov13b10_read_data_from_eeprom(kal_uint8 slave, kal_uint32 start_add,
 */
 static kal_uint32 return_sensor_id(void)
 {
-	return ((read_cmos_sensor(0x300a) << 16) |
-		(read_cmos_sensor(0x300b) << 8) | read_cmos_sensor(0x300c));
+	return (3 + ((read_cmos_sensor(0x300a) << 16) |
+		(read_cmos_sensor(0x300b) << 8) | read_cmos_sensor(0x300c)));
 }
 
 //#include "../imgsensor_i2c.h"
