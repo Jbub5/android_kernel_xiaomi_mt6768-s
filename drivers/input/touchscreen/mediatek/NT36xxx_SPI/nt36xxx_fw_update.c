@@ -877,7 +877,6 @@ fail:
 		if (unlikely(retry > 2)) {
 			NVT_ERR("error, retry=%d\n", retry);
 			nvt_read_bld_hw_crc();
-/* Huaqin modify for HQ-144782 by caogaojie at 2021/07/05 start */
 			break;
 		}
 	}
@@ -886,7 +885,6 @@ fail:
 
 	return ret;
 }
-/* Huaqin modify for HQ-144782 by caogaojie at 2021/07/05 end */
 /*******************************************************
 Description:
 	Novatek touchscreen Download_Firmware function. It's

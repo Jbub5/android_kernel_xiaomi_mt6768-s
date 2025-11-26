@@ -1,0 +1,10 @@
+#
+# Novatek NT36xxx SPI touchscreen driver configuration
+#
+config TOUCHSCREEN_NT36xxx_SPI
+	bool "Novatek NT36xxx SPI driver"
+	default n
+	help
+	  Say Y here if you have a Novatek NT36xxx to your system by SPI bus.
+
+	  If unsure, say N.
