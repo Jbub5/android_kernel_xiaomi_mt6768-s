@@ -817,17 +817,23 @@ void get_tp_info(void)
 {
 	nvt_get_fw_info();
 
+#ifdef CONFIG_TARGET_PRODUCT_MERLINCOMMON
+	sprintf(tp_version_info, "[Vendor]Tianma,[TP-IC]:NT36672A,[FW]0x%x,PID=%04X\n", tp_fw_version, ts->nvt_pid);
+#else
 	if (is_ft_lcm == 0) {
 		sprintf(tp_version_info, "[Vendor]Tianma,[TP-IC]:NT36672,[FW]0x%x,PID=%04X\n", tp_fw_version, ts->nvt_pid);
 	} else if (is_ft_lcm == 1) {
 		sprintf(tp_version_info, "[Vendor]Dijing,[TP-IC]:NT36672,[FW]0x%x,PID=%04X\n", tp_fw_version, ts->nvt_pid);
 	} else if (is_ft_lcm == 3) {
 		sprintf(tp_version_info, "[Vendor]Dijing,[TP-IC]:NT36672D,[FW]0x%x,PID=%04X\n", tp_fw_version, ts->nvt_pid);
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
 	} else if (is_ft_lcm == 4) {
 		sprintf(tp_version_info, "[Vendor]Tianma,[TP-IC]:NT36672C,[FW]0x%x,PID=%04X\n", tp_fw_version, ts->nvt_pid);
 	} else if (is_ft_lcm == 5) {
 		sprintf(tp_version_info, "[Vendor]Truly,[TP-IC]:NT36672C,[FW]0x%x,PID=%04X\n", tp_fw_version, ts->nvt_pid);
+#endif
 	}
+#endif
 
 	printk("[%s]: tp_version %s\n", __func__, tp_version_info);
 
@@ -1761,20 +1767,39 @@ int tp_compare_ic(void)
 {
 	NVT_LOG("tp_compare_ic in!!");
 	if (is_ft_lcm == 0) {
+#ifndef CONFIG_TARGET_PRODUCT_MERLINCOMMON
 		BOOT_UPDATE_FIRMWARE_NAME = "nvt_tm_fw.bin";
 		MP_UPDATE_FIRMWARE_NAME = "nvt_tm_mp.bin";
 		NVT_LOG("match nt36672A_fhdp_dsi_vdo_tianma_j19_lcm_drv");
+#else
+		BOOT_UPDATE_FIRMWARE_NAME = "novatek_ts_fw.bin";
+		MP_UPDATE_FIRMWARE_NAME = "novatek_ts_mp.bin";
+		NVT_LOG("match nt36672A_fhdp_dsi_vdo_tianma_lcm_drv");
+#endif
 		return 0;
 	} else if (is_ft_lcm == 1) {
+#ifndef CONFIG_TARGET_PRODUCT_MERLINCOMMON
 		BOOT_UPDATE_FIRMWARE_NAME = "nvt_dj_fw.bin";
 		MP_UPDATE_FIRMWARE_NAME = "nvt_dj_mp.bin";
 		NVT_LOG("match nt36672A_fhdp_dsi_vdo_dijing_j19_lcm_drv");
+#else
+		BOOT_UPDATE_FIRMWARE_NAME = "novatek_ts_g6_fw.bin";
+		MP_UPDATE_FIRMWARE_NAME = "novatek_ts_g6_mp.bin";
+		NVT_LOG("match nt36672A_fhdp_dsi_vdo_tianma_lcm_drv_G6");
+#endif
 		return 0;
 	} else if (is_ft_lcm == 3) {
+#ifndef CONFIG_TARGET_PRODUCT_MERLINCOMMON
 		BOOT_UPDATE_FIRMWARE_NAME = "nvt_dj_72d_fw.bin";
 		MP_UPDATE_FIRMWARE_NAME = "nvt_dj_72d_mp.bin";
 		NVT_LOG("match nt36672D_fhdp_dsi_vdo_dijing_j19_lcm_drv");
+#else
+		BOOT_UPDATE_FIRMWARE_NAME = "novatek_ts_72d_fw.bin";
+		MP_UPDATE_FIRMWARE_NAME = "novatek_ts_72d_mp.bin";
+		NVT_LOG("match nt36672D_fhdp_dsi_vdo_tianma_lcm_drv");
+#endif
 		return 0;
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
 	} else if (is_ft_lcm == 4) {
 		BOOT_UPDATE_FIRMWARE_NAME = "nt36672c_tm_01_ts_fw.bin";
 		MP_UPDATE_FIRMWARE_NAME = "nt36672c_tm_01_ts_mp.bin";
@@ -1785,6 +1810,7 @@ int tp_compare_ic(void)
 		MP_UPDATE_FIRMWARE_NAME = "nt36672c_tr_02_ts_mp.bin";
 		NVT_LOG("match dsi_panel_k19a_43_02_0b_dsc_vdo_lcm_drv");
 		return 0;
+#endif
 	} else {
 		NVT_ERR("failed to compare firmware\n");
 		return -1;
@@ -2788,7 +2814,11 @@ static const struct spi_device_id nvt_ts_id[] = {
 
 #ifdef CONFIG_OF
 static struct of_device_id nvt_match_table[] = {
+#if defined(CONFIG_TARGET_PRODUCT_LANCELOTCOMMON) || defined(CONFIG_TARGET_PRODUCT_SHIVACOMMON)
+	{ .compatible = "novatek36672,NVT-ts-spi",},
+#else
 	{ .compatible = "novatek,NVT-ts-spi",},
+#endif
 	{ },
 };
 #endif
@@ -2810,18 +2840,35 @@ static struct spi_driver nvt_spi_driver = {
 /* Huaqin modify for HQ-123470 by shujiawang at 2021/03/29 start */
 int __init is_lcm_detect(char *str)
 {
+#ifndef CONFIG_TARGET_PRODUCT_MERLINCOMMON
 	if (!(strcmp(str, "nt36672A_fhdp_dsi_vdo_tianma_j19_lcm_drv"))) {
+#else
+	if (!(strcmp(str, "nt36672A_fhdp_dsi_vdo_tianma_lcm_drv"))) {
+#endif
 		is_ft_lcm = 0;
 		NVT_LOG("Func:%s is_ft 0:%d", __func__, is_ft_lcm);
+#ifndef CONFIG_TARGET_PRODUCT_MERLINCOMMON
 	}else if (!(strcmp(str, "nt36672A_fhdp_dsi_vdo_dijing_j19_lcm_drv"))) {
+#else
+	}else if (!(strcmp(str, "nt36672A_fhdp_dsi_vdo_tianma_lcm_drv_G6"))) {
+#endif
 		is_ft_lcm = 1;
 		NVT_LOG("Func:%s is_ft 1:%d", __func__, is_ft_lcm);
+#ifndef CONFIG_TARGET_PRODUCT_MERLINCOMMON
 	}else if (!(strcmp(str, "ft8719_fhdp_dsi_vdo_huaxing_j19_lcm_drv"))) {
+#else
+	}else if (!(strcmp(str, "ft8719_fhdp_dsi_vdo_xinli_lcm_drv"))) {
+#endif
 		is_ft_lcm = 2;
 		NVT_LOG("Func:%s is_ft 2:%d", __func__, is_ft_lcm);
+#ifndef CONFIG_TARGET_PRODUCT_MERLINCOMMON
 	}else if (!(strcmp(str, "nt36672D_fhdp_dsi_vdo_dijing_j19_lcm_drv"))) {
+#else
+	}else if (!(strcmp(str, "nt36672D_fhdp_dsi_vdo_tianma_lcm_drv"))) {
+#endif
 		is_ft_lcm = 3;
 		NVT_LOG("Func:%s is_ft 3:%d", __func__, is_ft_lcm);
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
 	}else if (!(strcmp(str, "dsi_panel_k19a_36_02_0a_dsc_vdo_lcm_drv"))) {
 		is_ft_lcm = 4;
 		NVT_LOG("Func:%s is_ft 4:%d", __func__, is_ft_lcm);
@@ -2833,6 +2880,7 @@ int __init is_lcm_detect(char *str)
 		is_ft_lcm = 6;
 		NVT_LOG("Func:%s is_ft 6:%d", __func__, is_ft_lcm);
 /* Huaqin add for HQ-148560 by caogaojie at 2021/9/30 end */
+#endif
 	}
 	printk("Func:%s is_lcm_detect:%s", __func__, str);
 	return 0;
@@ -2861,10 +2909,14 @@ static int32_t __init nvt_driver_init(void)
 	int32_t ret = 0;
 
 	NVT_LOG("start\n");
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
 /*K19A coad for HQ-147450 by feiwen at 2021/7/23 start*/
 	if ((4 != is_ft_lcm) && (5 != is_ft_lcm)){
 /*K19A coad for HQ-147450 by feiwen at 2021/7/23 end*/
-		printk("%s result  is_ft:%d", __func__, is_ft_lcm);
+#else
+	if (2 == is_ft_lcm){
+#endif
+		NVT_LOG("%s result  is_ft:%d", __func__, is_ft_lcm);
 		return -1;
 	}
 
