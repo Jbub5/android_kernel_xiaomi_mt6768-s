@@ -151,12 +151,16 @@ spm_go_to_sleep_ex(unsigned int ex_flag)
 {
 	unsigned int bRet = 0;
 
+#if SLP_SLEEP_DPIDLE_EN
 	if ((ex_flag & SPM_SUSPEND_PLAT_SLP_DP) != 0)
 		printk_deferred(
 			"[name:spm&][%s:%d] - Spm suspend sleep dpidle not support!!\n"
 			, __func__, __LINE__);
 	else
 		bRet = spm_go_to_sleep();
+#else
+	bRet = spm_go_to_sleep();
+#endif
 	return bRet;
 }
 
@@ -234,19 +238,18 @@ static int slp_suspend_ops_enter(suspend_state_t state)
 #if SLP_SLEEP_DPIDLE_EN
 #if defined(CONFIG_MTK_SND_SOC_NEW_ARCH) \
 || defined(CONFIG_SND_SOC_MTK_SMART_PHONE)
-	if (slp_ck26m_on | fm_radio_is_playing) {
+	if (slp_ck26m_on | fm_radio_is_playing)
 #else
-	if (slp_ck26m_on) {
+	if (slp_ck26m_on)
 #endif /* CONFIG_MTK_SND_SOC_NEW_ARCH */
 		slp_wake_reason = spm_go_to_sleep_ex(
 			SPM_SUSPEND_PLAT_SLP_DP);
 		slp_dp_cnt[smp_processor_id()]++;
-	} else {
+	else
 #endif
 		mtk_suspend_cond_info();
 
 		slp_wake_reason = spm_go_to_sleep_ex(0);
-	}
 
 	mcdi_task_pause(false);
 
