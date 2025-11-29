@@ -1596,9 +1596,17 @@ static int8_t nvt_ts_check_chip_ver_trim(uint32_t chip_ver_trim_addr)
 
 		nvt_bootloader_reset();
 
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
 		nvt_set_page(chip_ver_trim_addr);
+#else
+		nvt_set_page(0x1F64E);
+#endif
 
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
 		buf[0] = chip_ver_trim_addr & 0x7F;
+#else
+		buf[0] = 0x4E;
+#endif
 		buf[1] = 0x00;
 		buf[2] = 0x00;
 		buf[3] = 0x00;
