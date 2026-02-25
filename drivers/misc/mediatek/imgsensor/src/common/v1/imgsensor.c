@@ -1262,10 +1262,26 @@ static inline int adopt_CAMERA_HW_FeatureControl(void *pBuf)
 		return -EFAULT;
 	}
 
+	unsigned int curr_idx = pFeatureCtrl->InvokeCamera;
 	psensor = imgsensor_sensor_get_inst(pFeatureCtrl->InvokeCamera);
 	if (psensor == NULL) {
 		pr_err("[%s] NULL psensor.\n", __func__);
 		return -EFAULT;
+	} else {
+		pr_err("HACK: adopt_CAMERA_HW_Control: id: %u\n", curr_idx);
+#if 0
+		// HACK
+		if (curr_idx == target) {
+			curr_idx = spoofed;
+		}
+		psensor = imgsensor_sensor_get_inst(curr_idx);
+		// HACK
+
+		if (psensor == NULL) {
+			pr_err("[%s] NULL psensor.\n", __func__);
+			return -EFAULT;
+		}
+#endif
 	}
 
 	if (pFeatureCtrl->FeatureId == SENSOR_FEATURE_SINGLE_FOCUS_MODE ||
@@ -1311,7 +1327,7 @@ static inline int adopt_CAMERA_HW_FeatureControl(void *pBuf)
 	{
 		MINT32 drv_idx;
 
-		psensor->inst.sensor_idx = pFeatureCtrl->InvokeCamera;
+		psensor->inst.sensor_idx = curr_idx; // HACK
 		drv_idx = imgsensor_set_driver(psensor);
 		memcpy(pFeaturePara, &drv_idx, FeatureParaLen);
 
@@ -2130,7 +2146,7 @@ static inline int adopt_CAMERA_HW_FeatureControl(void *pBuf)
 		if (gimgsensor.mclk_set_drive_current != NULL) {
 			gimgsensor.mclk_set_drive_current(
 			gimgsensor.hw.pdev[IMGSENSOR_HW_ID_MCLK]->pinstance,
-				pFeatureCtrl->InvokeCamera,
+				curr_idx, // HACK
 				__current);
 		} else {
 			pr_debug(
