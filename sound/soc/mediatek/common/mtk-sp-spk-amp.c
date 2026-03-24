@@ -402,6 +402,17 @@ int mtk_spk_update_dai_link(struct snd_soc_card *card,
 		 dai_link->codec_name,
 		 dai_link->cpu_dai_name);
 
+#ifdef CONFIG_SND_SOC_CS35L41
+	if (spk_dai_link_idx >= 0) {
+        dai_link = &card->dai_link[spk_dai_link_idx];
+        if (dai_link->cpu_dai_name && strcmp(dai_link->cpu_dai_name, "I2S3") == 0) {
+            dai_link->codec_name = "spi3.0";
+            dai_link->codec_dai_name = "cs35l41-pcm";
+            dai_link->no_pcm = 1;
+            dai_link->dpcm_playback = 1;
+	   }
+	}
+#endif
 
 	return 0;
 }
