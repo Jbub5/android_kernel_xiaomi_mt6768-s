@@ -30,7 +30,9 @@ extern int IMM_GetOneChannelValue(int dwChannel, int data[4], int *rawdata);
 static bool read_pcba_config(void);
 
 static bool read_pcba_config(void);
+
 int hq_selene_pcba_config;
+
 typedef struct {
 	int voltage_min;
 	int voltage_max;
@@ -125,13 +127,15 @@ static const board_id_map_t j15n_board_id_map_ext[] = {
 
 static int __init get_pcba_config(char *p)
 {
-	char pcba[10];
+    int ret;
 
-	strlcpy(pcba, p, sizeof(pcba));
+    ret = kstrtoint(p, 10, &pcba_config);
+    if (ret) {
+        printk("[%s]: invalid pcba_config: %s\n", __func__, p);
+        return -EINVAL;
+    }
 
-	printk("[%s]: pcba = %s\n", __func__, pcba);
-
-	pcba_config = pcba[0] - '0';
+    printk("[%s]: pcba_config = %d\n", __func__, pcba_config);
 
 	return 0;
 }
@@ -229,12 +233,13 @@ static bool read_pcba_config_j19(void)
 #elif defined(TARGET_PRODUCT_SELENE)
 static int __init get_selene_pcba_config(char *p)
 {
-	char pcba[10];
+	int ret;
 
-	strlcpy(pcba, p, sizeof(pcba));
-
-	if (kstrtoint(pcba, 10, &selene_pcba_config))
-		return -1;
+	ret = kstrtoint(p, 10, &selene_pcba_config);
+	if (ret) {
+		printk("[%s]: invalid pcba_config: %s\n", __func__, p);
+		return -EINVAL;
+	}
 
 	printk("[%s]: pcba config = %d\n", __func__, selene_pcba_config);
 
