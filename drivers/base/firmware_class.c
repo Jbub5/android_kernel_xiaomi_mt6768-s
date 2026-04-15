@@ -369,8 +369,11 @@ static void fw_free_buf(struct firmware_buf *buf)
 static char fw_path_para[256];
 static const char * const fw_path[] = {
 	fw_path_para,
-#if defined(CONFIG_SND_SOC_AW87519)
+#if defined(CONFIG_SND_SOC_AW87519) || defined(CONFIG_SND_SOC_AW87559) || defined(CONFIG_SND_SOC_FS16XX)
 	"/system/vendor/firmware",
+#endif
+#if defined(CONFIG_SND_SOC_AW87559) || defined(CONFIG_SND_SOC_FS16XX)
+	"/system/etc/firmware",
 #endif
 	"/lib/firmware/updates/" UTS_RELEASE,
 	"/lib/firmware/updates",
