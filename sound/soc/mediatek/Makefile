@@ -141,3 +141,9 @@ endif
 
 #for AWINIC AW87519 Smart K PA
 obj-$(CONFIG_SND_SOC_AW87519) += aw87519_audio.o
+
+#for AWINIC AW87XXX Smart K PA
+obj-$(CONFIG_SND_SOC_AW87559) += aw87559/
+
+#for fs1815n Smart K PA
+obj-$(CONFIG_SND_SOC_FS16XX) += fs1815n/
