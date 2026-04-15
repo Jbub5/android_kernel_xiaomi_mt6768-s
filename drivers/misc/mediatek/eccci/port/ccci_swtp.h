@@ -14,20 +14,34 @@
 
 #ifndef __SWTP_H__
 #define __SWTP_H__
+#define MAX_PIN_NUM 1
 
 #define SWTP_COMPATIBLE_DEVICE_ID "mediatek, swtp-eint"
 
 #define SWTP_EINT_PIN_PLUG_IN        (1)
 #define SWTP_EINT_PIN_PLUG_OUT       (0)
 
+#define SWTP_DO_TX_POWER	(0)
+#define SWTP_NO_TX_POWER	(1)
+
+
 struct swtp_t {
 	unsigned int	md_id;
+#ifndef CONFIG_TARGET_PRODUCT_SELENECOMMON
 	unsigned int	irq;
 	unsigned int	gpiopin;
 	unsigned int	setdebounce;
 	unsigned int	eint_type;
 	unsigned int	curr_mode;
 	unsigned int	retry_cnt;
+#else
+	unsigned int	irq[MAX_PIN_NUM];
+	unsigned int	gpiopin[MAX_PIN_NUM];
+	unsigned int	setdebounce[MAX_PIN_NUM];
+	unsigned int	eint_type[MAX_PIN_NUM];
+	unsigned int	gpio_state[MAX_PIN_NUM];
+	int	tx_power_mode;
+#endif
 	spinlock_t		spinlock;
 	struct delayed_work delayed_work;
     struct delayed_work delayed_work_swtp;
