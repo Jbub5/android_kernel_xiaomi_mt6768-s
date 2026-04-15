@@ -1,5 +1,6 @@
 #
 # Copyright (C) 2015 MediaTek Inc.
+# Copyright (C) 2021 XiaoMi, Inc.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -47,4 +48,7 @@ ifeq ($(CONFIG_TARGET_PRODUCT_MERLINCOMMON),y)
 KBUILD_CFLAGS += -DMERLIN_MSM_CAMERA_HW_INFO
 else ifeq ($(CONFIG_TARGET_PRODUCT_LANCELOTCOMMON),y)
 KBUILD_CFLAGS += -DLANCELOT_MSM_CAMERA_HW_INFO
+else ifeq ($(CONFIG_TARGET_PRODUCT_SELENECOMMON),y)
+KBUILD_CFLAGS += -DSELENE_MSM_CAMERA_HW_INFO
+KBUILD_CFLAGS += -D__SELENE_COMMON__
 endif
