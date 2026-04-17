@@ -109,6 +109,7 @@ int force_temp;
 int otg_limit = -1;
 int otg_ibat_limit = -1;
 extern int my_battery_id_voltage;
+
 static int adc_cali_slop[14] = {
 	1000, 1000, 1000, 1000, 1000, 1000,
 	1000, 1000, 1000, 1000, 1000, 1000,
@@ -121,6 +122,7 @@ static int battery_out_data[1] = { 0 };
 static bool g_ADC_Cali;
 struct delayed_work	otg_boost_current_work;
 int cycle_count;
+
 static enum power_supply_property battery_props[] = {
 	POWER_SUPPLY_PROP_STATUS,
 	POWER_SUPPLY_PROP_HEALTH,

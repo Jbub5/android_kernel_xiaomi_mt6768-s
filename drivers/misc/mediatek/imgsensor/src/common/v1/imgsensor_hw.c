@@ -122,7 +122,6 @@ static enum IMGSENSOR_RETURN imgsensor_hw_power_sequence(
 	if (ppwr_seq->name == NULL)
 		return IMGSENSOR_RETURN_ERROR;
 
-
 	ppwr_info = ppwr_seq->pwr_info;
 
 	while (ppwr_info->pin != IMGSENSOR_HW_PIN_NONE &&

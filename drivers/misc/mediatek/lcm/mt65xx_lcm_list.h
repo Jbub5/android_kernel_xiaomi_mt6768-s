@@ -352,6 +352,9 @@ extern struct LCM_DRIVER nt36672A_fhdp_dsi_vdo_tianma_lcm_drv_G6;
 extern struct LCM_DRIVER nt36672A_fhdp_dsi_vdo_tianma_j19_lcm_drv;
 extern struct LCM_DRIVER ft8719_fhdp_dsi_vdo_huaxing_j19_lcm_drv;
 extern struct LCM_DRIVER nt36672A_fhdp_dsi_vdo_dijing_j19_lcm_drv;
+extern struct LCM_DRIVER nt36672D_fhdp_dsi_vdo_dijing_j19_lcm_drv;
+extern struct LCM_DRIVER nt36672D_fhdp_dsi_vdo_tianma_lcm_drv;
+
 extern struct LCM_DRIVER ft8201_wuxga_dsi_vdo_boe_lcm_drv;
 extern struct LCM_DRIVER ft8756_fhdp_dsi_vdo_auo_rt4801_lcm_drv;
 extern struct LCM_DRIVER hx83102p_wuxga2000_dsi_vdo_boe_lcm_drv;
@@ -361,9 +364,6 @@ extern struct LCM_DRIVER nt36672c_fhdp_dsi_vdo_90hz_shenchao_6382_lcm_drv;
 extern struct LCM_DRIVER nt36672c_fhdp_dsi_vdo_120hz_shenchao_6382_lcm_drv;
 extern struct LCM_DRIVER r66451_fhdp_dsi_cmd_tianma_lcm_drv;
 extern struct LCM_DRIVER hx83102p_wxga_vdo_incell_boe_lcm_drv;
-
-extern struct LCM_DRIVER nt36672D_fhdp_dsi_vdo_dijing_j19_lcm_drv;
-extern struct LCM_DRIVER nt36672D_fhdp_dsi_vdo_tianma_lcm_drv;
 
 #ifdef BUILD_LK
 extern void mdelay(unsigned long msec);

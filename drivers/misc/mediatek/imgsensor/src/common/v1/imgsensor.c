@@ -607,6 +607,7 @@ int imgsensor_set_driver(struct IMGSENSOR_SENSOR *psensor)
 					    psensor->inst.sensor_idx,
 					    drv_idx,
 					    psensor_inst->psensor_name);
+
 #if defined(MERLIN_MSM_CAMERA_HW_INFO) || defined(LANCELOT_MSM_CAMERA_HW_INFO) \
 || defined(GALAHAD_MSM_CAMERA_HW_INFO)
 					hq_imgsensor_sensor_hw_register(psensor, psensor_inst);

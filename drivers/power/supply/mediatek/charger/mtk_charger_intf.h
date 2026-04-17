@@ -434,7 +434,7 @@ struct charger_manager {
 	bool charger_thread_polling;
 
 	/* kpoc */
-	atomic_t  enable_kpoc_shdn;
+	atomic_t enable_kpoc_shdn;
 
 	/* ATM */
 	bool atm_enabled;

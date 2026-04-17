@@ -141,6 +141,7 @@ struct charger_ops {
 	int (*enable_discharge)(struct charger_device *dev, bool en);
 	int (*set_boost_current_limit)(struct charger_device *dev, u32 uA);
 	int (*set_otg_current)(struct charger_device *chg_dev, u32 uA);
+
 	/* charger type detection */
 	int (*enable_chg_type_det)(struct charger_device *dev, bool en);
 

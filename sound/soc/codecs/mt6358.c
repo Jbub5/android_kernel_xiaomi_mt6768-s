@@ -7091,8 +7091,6 @@ static int mt6358_codec_init_reg(struct mt6358_priv *priv)
 			   RG_EINTCOMPVTH_MASK_SFT,
 			   0x1 << RG_EINTCOMPVTH_SFT);
 
-	/* gpio miso driving set to 4mA */
-	/* regmap_write(priv->regmap, MT6358_DRV_CON3, 0x8888);*/
 	/* gpio miso driving set to 8mA */
 	regmap_write(priv->regmap, MT6358_DRV_CON3, 0xaaaa);
 

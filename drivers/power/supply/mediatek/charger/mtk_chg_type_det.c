@@ -50,6 +50,7 @@
 #include <mt-plat/mtk_charger.h>
 #include <pmic.h>
 #include <tcpm.h>
+
 #include "../../../../misc/mediatek/typec/tcpc/inc/tcpci_core.h"
 #include "mtk_charger_intf.h"
 
@@ -70,7 +71,6 @@ extern bool usb_otg;
 extern enum hvdcp_status hvdcp_type_tmp;
 int call_mode = -1;
 uint8_t  typec_cc_orientation;
-
 
 void __attribute__((weak)) fg_charger_in_handler(void)
 {
@@ -97,7 +97,6 @@ struct chg_type_info {
 	bool ignore_usb;
 	bool plugin;
 };
-
 #endif
 
 #ifdef CONFIG_FPGA_EARLY_PORTING
@@ -207,6 +206,7 @@ static int mt_charger_online(struct mt_charger *mtk_chg)
 	int ret = 0;
 	int boot_mode = 0;
 	int vbus = 0;
+
 	if (!mtk_chg->chg_online) {
 		boot_mode = get_boot_mode();
 		if (boot_mode == KERNEL_POWER_OFF_CHARGING_BOOT ||
@@ -646,7 +646,7 @@ static int pd_tcp_notifier_call(struct notifier_block *pnb,
 {
 	struct tcp_notify *noti = data;
 	struct chg_type_info *cti = container_of(pnb,
-	struct chg_type_info, pd_nb);
+		struct chg_type_info, pd_nb);
 
 	static struct charger_device *primary_charger;
 	primary_charger = get_charger_by_name("primary_chg");
@@ -938,6 +938,7 @@ static int mt_charger_resume(struct device *dev)
 	power_supply_changed(mt_charger->ac_psy);
 	power_supply_changed(mt_charger->usb_psy);
 	power_supply_changed(mt_charger->main_psy);
+
 	return 0;
 }
 #endif
