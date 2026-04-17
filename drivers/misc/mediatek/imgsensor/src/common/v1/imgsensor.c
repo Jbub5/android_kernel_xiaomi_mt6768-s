@@ -1262,11 +1262,14 @@ static inline int adopt_CAMERA_HW_FeatureControl(void *pBuf)
 		return -EFAULT;
 	}
 
+#ifdef CONFIG_TARGET_PRODUCT_LANCELOTCOMMON
 	unsigned int curr_idx = pFeatureCtrl->InvokeCamera;
+#endif
 	psensor = imgsensor_sensor_get_inst(pFeatureCtrl->InvokeCamera);
 	if (psensor == NULL) {
 		pr_err("[%s] NULL psensor.\n", __func__);
 		return -EFAULT;
+#ifdef CONFIG_TARGET_PRODUCT_LANCELOTCOMMON
 	} else {
 		// HACK
 		if (curr_idx == IMGSENSOR_SENSOR_IDX_MAIN2) {
@@ -1279,6 +1282,7 @@ static inline int adopt_CAMERA_HW_FeatureControl(void *pBuf)
 			pr_err("[%s] NULL psensor.\n", __func__);
 			return -EFAULT;
 		}
+#endif
 	}
 
 	if (pFeatureCtrl->FeatureId == SENSOR_FEATURE_SINGLE_FOCUS_MODE ||
@@ -1324,7 +1328,11 @@ static inline int adopt_CAMERA_HW_FeatureControl(void *pBuf)
 	{
 		MINT32 drv_idx;
 
+#ifdef CONFIG_TARGET_PRODUCT_LANCELOTCOMMON
 		psensor->inst.sensor_idx = curr_idx; // HACK
+#else
+		psensor->inst.sensor_idx = pFeatureCtrl->InvokeCamera;
+#endif
 		drv_idx = imgsensor_set_driver(psensor);
 		memcpy(pFeaturePara, &drv_idx, FeatureParaLen);
 
@@ -2143,7 +2151,11 @@ static inline int adopt_CAMERA_HW_FeatureControl(void *pBuf)
 		if (gimgsensor.mclk_set_drive_current != NULL) {
 			gimgsensor.mclk_set_drive_current(
 			gimgsensor.hw.pdev[IMGSENSOR_HW_ID_MCLK]->pinstance,
+#ifdef CONFIG_TARGET_PRODUCT_LANCELOTCOMMON
 				curr_idx, // HACK
+#else
+				pFeatureCtrl->InvokeCamera,
+#endif
 				__current);
 		} else {
 			pr_debug(
