@@ -51,7 +51,6 @@
 #define	BTS_BLKNTC_RAP_PULL_UP_VOLTAGE		1800	/*1.8v PULL UP VOLTAGE*/
 #define	BTS_BLKNTC_RAP_NTC_TABLE		7	/*default is ncp 15wf104f03rc 100k*/
 
-
 extern int IMM_GetOneChannelValue(int dwChannel, int data[4], int *rawdata);
 extern int IMM_IsAdcInitReady(void);
 

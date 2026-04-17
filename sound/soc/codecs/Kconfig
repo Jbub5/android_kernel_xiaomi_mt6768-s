@@ -433,6 +433,7 @@ config SND_SOC_CS35L34
 config SND_SOC_CS35L35
 	tristate "Cirrus Logic CS35L35 CODEC"
 	depends on I2C
+
 config SND_SOC_CS35L41
 	tristate "Cirrus Logic CS35L41 CODEC"
 

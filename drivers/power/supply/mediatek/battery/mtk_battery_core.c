@@ -81,6 +81,7 @@
 #include <mtk_battery_table.h>
 #include "simulator_kernel.h"
 #endif
+
 #include <linux/iio/consumer.h>
 #include <linux/of_platform.h> /*of_find_node_by_name*/
 
@@ -90,6 +91,7 @@
 /* ============================================================ */
 struct mtk_battery gm;
 int mtk_qmax_aging;
+
 /* ============================================================ */
 /* gauge hal interface */
 /* ============================================================ */
@@ -659,7 +661,6 @@ void fgauge_get_profile_id(void)
 		__func__, gm.battery_id, id_volt);
 
 }
-
 #elif defined(MTK_GET_BATTERY_ID_BY_GPIO)
 void fgauge_get_profile_id(void)
 {
@@ -1104,6 +1105,7 @@ static void fg_custom_parse_table(const struct device_node *np,
 		struct FUELGAUGE_PROFILE_STRUCT *profile_struct, int column)
 {
 	int mah, voltage, resistance, idx, saddles, resistance2;
+
 	struct FUELGAUGE_PROFILE_STRUCT *profile_p;
 
 	profile_p = profile_struct;

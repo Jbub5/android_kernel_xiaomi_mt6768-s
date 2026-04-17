@@ -47,7 +47,6 @@ static void mtk_cl_backlight_set_max_brightness_limit(void)
 	if (g_backlight_last_level != g_backlight_level) {
 		mtk_cooler_backlight_dprintk("set brightness level = %d\n",
 				g_backlight_level);
-
 #ifdef FACTORY_VERSION_ENABLE
 		switch (g_backlight_level) {
 		case 0:

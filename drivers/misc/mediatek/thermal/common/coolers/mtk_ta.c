@@ -210,6 +210,7 @@ void atm_ctrl_cmd_from_user(void *nl_data, struct tad_nl_msg_t *ret_msg)
 		{
 			memcpy(&g_tad_ttj, &msg->tad_data[0],
 						sizeof(g_tad_ttj));
+
 			tsta_dprintk(
 				"[%s] g_tad_ttj = %d\n", __func__,
 								g_tad_ttj);

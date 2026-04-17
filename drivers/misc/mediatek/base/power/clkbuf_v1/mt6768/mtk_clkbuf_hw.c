@@ -1635,7 +1635,6 @@ void clk_buf_post_init(void)
 #endif
 #endif
 
-//#ifndef CONFIG_NFC_CHIP_SUPPORT
 #if 0
 	/* no need to use XO_NFC if no NFC */
 	clk_buf_ctrl_internal(CLK_BUF_NFC, CLK_BUF_FORCE_OFF);

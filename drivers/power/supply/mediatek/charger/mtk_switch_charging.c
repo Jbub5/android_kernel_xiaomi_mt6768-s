@@ -402,7 +402,7 @@ static void swchg_select_cv(struct charger_manager *info)
 	/* dynamic cv*/
 	constant_voltage = info->data.battery_cv;
 	mtk_get_dynamic_cv(info, &constant_voltage);
-	pr_err("dhx--set constant_voltage:%d\n", constant_voltage);
+
 	charger_dev_set_constant_voltage(info->chg1_dev, constant_voltage);
 }
 
@@ -759,7 +759,3 @@ int mtk_switch_charging_init(struct charger_manager *info)
 
 	return 0;
 }
-
-
-
-

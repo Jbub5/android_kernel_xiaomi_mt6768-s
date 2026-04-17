@@ -89,6 +89,7 @@ struct wm_adsp {
 	struct device *dev;
 	struct regmap *regmap;
 	struct snd_soc_codec *codec;
+
 	unsigned int base;
 	int cal_z;
 	int ambient;
@@ -115,6 +116,7 @@ struct wm_adsp {
 	bool preloaded;
 	bool booted;
 	bool running;
+
 	bool tuning_has_prefix;
 	int num_firmwares;
 	struct wm_adsp_fw_defs *firmwares;
@@ -144,6 +146,7 @@ struct wm_adsp {
 	char *wmfw_file_name;
 	char *bin_file_name;
 #endif
+
 };
 
 #define WM_ADSP1(wname, num) \
