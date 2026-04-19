@@ -22,7 +22,6 @@ subdir-ccflags-y += -I$(srctree)/drivers/spi/trustzone/spi/Tlspi/inc
 	include $(srctree)/drivers/misc/mediatek/gud/Makefile.include
 endif
 
-#obj-$(CONFIG_GOODIX_FINGERPRINT)	+= gf_spi_tee.o gf_spi_factory.o
-obj-y += gf_spi_tee.o gf_spi_factory.o
+obj-$(CONFIG_GOODIX_FINGERPRINT) += gf_spi_tee.o gf_spi_factory.o
 
 
