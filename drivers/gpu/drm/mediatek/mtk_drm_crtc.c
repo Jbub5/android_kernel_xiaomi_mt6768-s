@@ -60,7 +60,6 @@
 #ifdef CONFIG_MTK_SVP_ON_MTEE_SUPPORT
 #include "tz_m4u.h"
 #endif
-
 /* *****Panel_Master*********** */
 #include "mtk_fbconfig_kdebug.h"
 #include "mtk_layering_rule_base.h"
@@ -292,7 +291,8 @@ void mtk_drm_crtc_dump(struct drm_crtc *crtc)
 		mtk_drm_crtc_addon_dump(crtc, addon_data);
 	}
 
-	if (panel_ext && panel_ext->dsc_params.enable) {
+	if (panel_ext &&
+		panel_ext->output_mode == MTK_PANEL_DSC_SINGLE_PORT) {
 		comp = priv->ddp_comp[DDP_COMPONENT_DSC0];
 		mtk_dump_reg(comp);
 	}
@@ -1406,7 +1406,8 @@ void mtk_crtc_ddp_prepare(struct mtk_drm_crtc *mtk_crtc)
 			}
 		}
 	}
-	if (panel_ext && panel_ext->dsc_params.enable) {
+	if (panel_ext &&
+		panel_ext->output_mode == MTK_PANEL_DSC_SINGLE_PORT) {
 		comp = priv->ddp_comp[DDP_COMPONENT_DSC0];
 		mtk_ddp_comp_clk_prepare(comp);
 	}
@@ -1469,7 +1470,7 @@ void mtk_crtc_ddp_unprepare(struct mtk_drm_crtc *mtk_crtc)
 			}
 		}
 	}
-	if (panel_ext && panel_ext->dsc_params.enable) {
+	if (panel_ext && panel_ext->output_mode == MTK_PANEL_DSC_SINGLE_PORT) {
 		comp = priv->ddp_comp[DDP_COMPONENT_DSC0];
 		mtk_ddp_comp_clk_unprepare(comp);
 	}
@@ -2363,9 +2364,7 @@ static void mtk_crtc_disp_mode_switch_begin(struct drm_crtc *crtc,
 	unsigned int _idle_timeout = 50;/*ms*/
 	int en = 1;
 	struct mtk_ddp_comp *output_comp;
-#ifdef CONFIG_MTK_MT6382_BDG
-	unsigned int crtc_id = 0;
-#endif
+
 	/* Check if disp_mode_idx change */
 	if (old_mtk_state->prop_val[CRTC_PROP_DISP_MODE_IDX] ==
 		mtk_state->prop_val[CRTC_PROP_DISP_MODE_IDX])
@@ -2436,11 +2435,8 @@ static void mtk_crtc_disp_mode_switch_begin(struct drm_crtc *crtc,
 		mtk_drm_set_idle_check_interval(crtc, _idle_timeout);
 
 	mtk_drm_idlemgr_kick(__func__, crtc, 0);
+
 	mtk_drm_trace_end();
-#ifdef CONFIG_MTK_MT6382_BDG
-	crtc_id = drm_crtc_index(crtc);
-	CRTC_MMP_EVENT_END(crtc_id, mode_switch, 0, 0);
-#endif
 }
 
 bool already_free;
@@ -3625,9 +3621,9 @@ void mtk_crtc_start_trig_loop(struct drm_crtc *crtc)
 
 		/*Trigger*/
 		mtk_disp_mutex_enable_cmdq(mtk_crtc->mutex[0], cmdq_handle,
-			mtk_crtc->gce_obj.base);
+					   mtk_crtc->gce_obj.base);
 		mtk_crtc_comp_trigger(mtk_crtc, cmdq_handle,
-			MTK_TRIG_FLAG_TRIGGER);
+				      MTK_TRIG_FLAG_TRIGGER);
 
 		cmdq_pkt_wfe(cmdq_handle,
 			     mtk_crtc->gce_obj.event[EVENT_CMD_EOF]);
@@ -3807,7 +3803,6 @@ int mtk_crtc_attach_addon_path_comp(struct drm_crtc *crtc,
 int mtk_crtc_attach_ddp_comp(struct drm_crtc *crtc, int ddp_mode,
 			     bool is_attach)
 {
-	struct mtk_panel_params *panel_ext = mtk_drm_get_lcm_ext_params(crtc);
 	struct mtk_drm_crtc *mtk_crtc = to_mtk_crtc(crtc);
 	struct mtk_ddp_comp *comp;
 	int i, j;
@@ -3821,12 +3816,7 @@ int mtk_crtc_attach_ddp_comp(struct drm_crtc *crtc, int ddp_mode,
 		else
 			comp->mtk_crtc = NULL;
 	}
-	if (panel_ext && panel_ext->dsc_params.enable) {
-		struct mtk_drm_private *priv = mtk_crtc->base.dev->dev_private;
-		struct mtk_ddp_comp *dsc_comp = priv->ddp_comp[DDP_COMPONENT_DSC0];
 
-		dsc_comp->mtk_crtc = is_attach ? mtk_crtc : NULL;
-	}
 	return 0;
 }
 
@@ -3850,7 +3840,8 @@ static void mtk_crtc_addon_connector_disconnect(struct drm_crtc *crtc,
 	struct mtk_ddp_comp *dsc_comp;
 	struct mtk_drm_private *priv = mtk_crtc->base.dev->dev_private;
 
-	if (panel_ext && panel_ext->dsc_params.enable) {
+	if (panel_ext &&
+		panel_ext->output_mode == MTK_PANEL_DSC_SINGLE_PORT) {
 		dsc_comp = priv->ddp_comp[DDP_COMPONENT_DSC0];
 #if defined(CONFIG_MACH_MT6885) || defined(CONFIG_MACH_MT6893)
 		mtk_ddp_remove_dsc_prim_MT6885(mtk_crtc, handle);
@@ -3898,7 +3889,8 @@ static void mtk_crtc_addon_connector_connect(struct drm_crtc *crtc,
 	struct mtk_drm_private *priv = mtk_crtc->base.dev->dev_private;
 	struct mtk_ddp_comp *output_comp;
 
-	if (panel_ext && panel_ext->dsc_params.enable) {
+	if (panel_ext &&
+		panel_ext->output_mode == MTK_PANEL_DSC_SINGLE_PORT) {
 		struct mtk_ddp_config cfg;
 
 		dsc_comp = priv->ddp_comp[DDP_COMPONENT_DSC0];
@@ -6746,7 +6738,6 @@ static void mtk_crtc_get_output_comp_name(struct mtk_drm_crtc *mtk_crtc,
 		  __func__, drm_crtc_index(&mtk_crtc->base));
 	memset(buf, 0, buf_len);
 }
-
 static void mtk_crtc_get_event_name(struct mtk_drm_crtc *mtk_crtc, char *buf,
 				    int buf_len, int event_id)
 {
