@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0
 //
 // Copyright (C) 2018 MediaTek Inc.
+// Copyright (C) 2021 XiaoMi, Inc.
 
 #include <linux/module.h>
 #include <linux/kernel.h>
@@ -14,7 +15,6 @@
 #if defined(CONFIG_SND_SOC_MTK_AUDIO_DSP)
 #include "audio_task.h"
 #include "../audio_dsp/mtk-dsp-common_define.h"
-#include "../audio_dsp/mtk-dsp-mem-control.h"
 #include "audio_messenger_ipi.h"
 #endif
 
@@ -327,11 +327,13 @@ int mtk_spk_update_dai_link(struct snd_soc_card *card,
 		return -ENODEV;
 	}
 
+#ifdef CONFIG_TARGET_PRODUCT_MERLINCOMMON
 	if (mtk_spk_type == MTK_SPK_NOT_SMARTPA) {
 		dev_info(&pdev->dev, "%s(), no need to update dailink\n",
 			 __func__);
 		return 0;
 	}
+#endif
 
 	/* find dai link of i2s in and i2s out */
 	for (i = 0; i < card->num_links; i++) {
@@ -422,16 +424,8 @@ int mtk_spk_send_ipi_buf_to_dsp(void *data_buffer, uint32_t data_size)
 	int task_scene;
 
 	memset((void *)&ipi_msg, 0, sizeof(struct ipi_msg_t));
-	if (get_task_attr(AUDIO_TASK_CALL_FINAL_ID,
-			ADSP_TASK_ATTR_RUNTIME) > 0)
-		task_scene = TASK_SCENE_CALL_FINAL;
-	else if (get_task_attr(AUDIO_TASK_PLAYBACK_ID,
-			ADSP_TASK_ATTR_RUNTIME) > 0)
-		task_scene = TASK_SCENE_AUDPLAYBACK;
-	else {
-		pr_info("%s(), callfinal and playback are not enable\n", __func__);
-		return result;
-	}
+	task_scene = mtk_get_speech_status() ?
+		     TASK_SCENE_CALL_FINAL : TASK_SCENE_AUDPLAYBACK;
 
 	result = audio_send_ipi_buf_to_dsp(&ipi_msg, task_scene,
 					   AUDIO_DSP_TASK_AURISYS_SET_BUF,
@@ -451,16 +445,8 @@ int mtk_spk_recv_ipi_buf_from_dsp(int8_t *buffer,
 	int task_scene;
 
 	memset((void *)&ipi_msg, 0, sizeof(struct ipi_msg_t));
-	if (get_task_attr(AUDIO_TASK_CALL_FINAL_ID,
-			ADSP_TASK_ATTR_RUNTIME) > 0)
-		task_scene = TASK_SCENE_CALL_FINAL;
-	else if (get_task_attr(AUDIO_TASK_PLAYBACK_ID,
-			ADSP_TASK_ATTR_RUNTIME) > 0)
-		task_scene = TASK_SCENE_AUDPLAYBACK;
-	else {
-		pr_info("%s(), callfinal and playback are not enable\n", __func__);
-		return result;
-	}
+	task_scene = mtk_get_speech_status() ?
+		     TASK_SCENE_CALL_FINAL : TASK_SCENE_AUDPLAYBACK;
 
 	result = audio_recv_ipi_buf_from_dsp(&ipi_msg,
 					     task_scene,
