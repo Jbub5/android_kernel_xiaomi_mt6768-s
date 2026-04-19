@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note
 /*
  *
- * (C) COPYRIGHT 2011-2021 ARM Limited. All rights reserved.
+ * (C) COPYRIGHT 2011-2022 ARM Limited. All rights reserved.
  *
  * This program is free software and is provided to you under the terms of the
  * GNU General Public License version 2 as published by the Free Software
@@ -584,6 +584,8 @@ int kbasep_js_kctx_init(struct kbase_context *const kctx)
 	kbdev = kctx->kbdev;
 	KBASE_DEBUG_ASSERT(kbdev != NULL);
 
+	kbase_ctx_sched_init_ctx(kctx);
+
 	for (i = 0; i < BASE_JM_MAX_NR_SLOTS; ++i)
 		INIT_LIST_HEAD(&kctx->jctx.sched_info.ctx.ctx_list_entry[i]);
 
@@ -660,6 +662,8 @@ void kbasep_js_kctx_term(struct kbase_context *kctx)
 		kbase_backend_ctx_count_changed(kbdev);
 		mutex_unlock(&kbdev->js_data.runpool_mutex);
 	}
+
+	kbase_ctx_sched_remove_ctx(kctx);
 }
 
 /**
@@ -2550,6 +2554,8 @@ struct kbase_jd_atom *kbase_js_pull(struct kbase_context *kctx, int js)
 
 	kbase_ctx_sched_retain_ctx_refcount(kctx);
 
+	katom->atom_flags |= KBASE_KATOM_FLAG_HOLDING_CTX_REF;
+
 	katom->ticks = 0;
 
 	dev_dbg(kbdev->dev, "JS: successfully pulled atom %pK from kctx %pK (s:%d)\n",
@@ -2888,6 +2894,7 @@ static void js_return_worker(struct work_struct *data)
 		mutex_unlock(&kctx->jctx.lock);
 	}
 
+	katom->atom_flags &= ~KBASE_KATOM_FLAG_HOLDING_CTX_REF;
 	dev_dbg(kbdev->dev, "JS: retained state %s finished",
 		kbasep_js_has_atom_finished(&retained_state) ?
 		"has" : "hasn't");
@@ -3807,13 +3814,15 @@ base_jd_prio kbase_js_priority_check(struct kbase_device *kbdev, base_jd_prio pr
 {
 	struct priority_control_manager_device *pcm_device = kbdev->pcm_dev;
 	int req_priority, out_priority;
-	base_jd_prio out_jd_priority = priority;
 
-	if (pcm_device)	{
-		req_priority = kbasep_js_atom_prio_to_sched_prio(priority);
-		out_priority = pcm_device->ops.pcm_scheduler_priority_check(pcm_device, current, req_priority);
-		out_jd_priority = kbasep_js_sched_prio_to_atom_prio(out_priority);
-	}
-	return out_jd_priority;
+	req_priority = kbasep_js_atom_prio_to_sched_prio(priority);
+	out_priority = req_priority;
+	/* Does not use pcm defined priority check if PCM not defined or if
+	 * kbasep_js_atom_prio_to_sched_prio returns an error
+	 * (KBASE_JS_ATOM_SCHED_PRIO_INVALID).
+	 */
+	if (pcm_device && (req_priority != KBASE_JS_ATOM_SCHED_PRIO_INVALID))
+		out_priority = pcm_device->ops.pcm_scheduler_priority_check(pcm_device, current,
+									    req_priority);
+	return kbasep_js_sched_prio_to_atom_prio(out_priority);
 }
-
