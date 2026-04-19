@@ -333,7 +333,7 @@ page_owner=on loop.max_part=7";
 		reserve-memory-scp_share {
 			compatible = "mediatek,reserve-memory-scp_share";
 			no-map;
-			size = <0 0x00320000>;
+			size = <0 0x00300000>;
 			alignment = <0 0x1000000>;
 			alloc-ranges = <0 0x40000000 0 0x50000000>;
 		};
@@ -2871,12 +2871,6 @@ page_owner=on loop.max_part=7";
 		};
 	};
 
-	snd_scp_ultra: snd_scp_ultra {
-		compatible = "mediatek,snd_scp_ultra";
-		scp_ultra_dl_memif_id = <0x7>;
-		scp_ultra_ul_memif_id = <0xe>;
-	};
-
 	/* feature : $enable $dl_mem $ul_mem $ref_mem $size */
 	snd_audio_dsp: snd_audio_dsp {
 		compatible = "mediatek,snd_audio_dsp";
@@ -4542,6 +4536,14 @@ page_owner=on loop.max_part=7";
 		compatible = "mediatek, dsi_te-eint";
 		status = "disabled";
 	};
+
+	mt6382_eint: mt6382_eint {
+		compatible = "mediatek, mt6382_eint";
+		interrupt-parent = <&pio>;
+		interrupts = <5 IRQ_TYPE_LEVEL_HIGH 5 0>;
+		status = "okay";
+	};
+
 	mt6382_nfc: mt6382_nfc {
 		compatible = "mediatek, mt6382_nfc-eint";
 		interrupt-parent = <&pio>;
