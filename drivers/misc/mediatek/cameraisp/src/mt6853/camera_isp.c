@@ -7933,7 +7933,7 @@ static int ISP_resume(struct platform_device *pDev)
 	ISP_EnableClock(module, MTRUE);
 
 	if (SuspnedRecord[module]) {
-		LOG_INF("%s_resume,enable VF,wakelock:%d,clk:%p,devct:%d\n",
+		LOG_INF("%s_resume,enable VF,wakelock:%d,clk:0x%x,devct:%d\n",
 			moduleName, g_WaitLockCt, G_u4EnableClockCount,
 			atomic_read(&G_u4DevNodeCt));
 
@@ -7946,7 +7946,7 @@ static int ISP_resume(struct platform_device *pDev)
 		regVal = ISP_RD32(CAMX_REG_TG_VF_CON(module));
 		ISP_WR32(CAMX_REG_TG_VF_CON(module), (regVal | 0x01));
 	} else {
-		LOG_INF("%s_resume,wakelock:%d,clk:%p,devct:%d\n", moduleName,
+		LOG_INF("%s_resume,wakelock:%d,clk:0x%x,devct:%d\n", moduleName,
 			g_WaitLockCt, G_u4EnableClockCount,
 			atomic_read(&G_u4DevNodeCt));
 	}
@@ -12744,10 +12744,6 @@ static void ISP_BH_Switch_Workqueue(struct work_struct *pWork)
 		CAM_REG_CTL_SW_CTL(reg_module_array[i]), 0x0);
 	}
 
-	/* set CAM MUX & CAMSV */
-	Switch_Tg_For_Stagger(irq_module);
-	ISP_CAMSV_Config(irq_module);
-
 	/* 4. restore CQ base address */
 	for (i = 0; i < reg_module_count; i++) {
 		index = reg_module_array[i] - ISP_CAM_A_IDX;
@@ -12844,6 +12840,10 @@ static void ISP_BH_Switch_Workqueue(struct work_struct *pWork)
 		LOG_NOTICE(
 		"en double buf CAM%d for seamless switch", reg_module_array[i]);
 	}
+
+	/* set CAM MUX & CAMSV */
+	Switch_Tg_For_Stagger(irq_module);
+	ISP_CAMSV_Config(irq_module);
 
 	/* 7. enable TG CMOS & viewFinder */
 	for (i = 0; i < reg_module_count; i++) {

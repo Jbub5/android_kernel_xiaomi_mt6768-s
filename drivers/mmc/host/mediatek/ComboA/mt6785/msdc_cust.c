@@ -1416,9 +1416,9 @@ int msdc_of_parse(struct platform_device *pdev, struct mmc_host *mmc)
 	struct msdc_host *host = mmc_priv(mmc);
 	int ret = 0;
 	int len = 0;
-	u8 id = 0;
+	u8 id;
 	const char *dup_name; /*use to solve UAF issue :ALPS04094268*/
-	int boot_type = 0;
+	int boot_type;
 
 	np = mmc->parent->of_node; /* mmcx node in project dts */
 
