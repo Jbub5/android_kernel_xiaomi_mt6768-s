@@ -46,5 +46,4 @@ ifeq ($(CONFIG_MTK_LENS_DW9714VAF_SUPPORT), y)
 obj-y += common/dw9714vaf/
 endif
 
-
 endif
