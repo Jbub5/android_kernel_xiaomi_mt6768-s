@@ -28,10 +28,6 @@
 #include <linux/delay.h>
 #include <linux/pinctrl/consumer.h>
 #include <linux/leds.h>
-
-
-
-
 #include <linux/kobject.h>
 #include <linux/sysfs.h>
 
@@ -91,7 +87,6 @@ static int g_flash_channel_idx;
 
 static char node_one_buf[20] = {"0"};
 static unsigned int flash_enable;
-
 
 /* platform data */
 struct led191_platform_data {

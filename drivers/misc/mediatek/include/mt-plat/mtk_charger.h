@@ -124,9 +124,6 @@ extern int charger_manager_is_input_suspend(void);
 extern int charger_manager_get_prop_system_temp_level(void);
 extern int charger_manager_get_prop_system_temp_level_max(void);
 extern void charger_manager_set_prop_system_temp_level(int temp_level);
-
-
-
 extern int charger_manager_check_ra_detected(void);
 extern void charger_manager_set_ra_detected(int val);
 extern int charger_manager_pd_is_online(void);

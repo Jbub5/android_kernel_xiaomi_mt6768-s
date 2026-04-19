@@ -302,7 +302,6 @@
 #define S5K5E9_SENSOR_INDIA_ID 0x559d
 #define S5K5E9_SUNNY_SENSOR_INDIA_ID 0x559e
 #define S5KHM2SP_SENSOR_ID                      0x1AD2
-
 /*HI*/
 #define HI841_SENSOR_ID                         0x0841
 #define HI707_SENSOR_ID                         0x00b8

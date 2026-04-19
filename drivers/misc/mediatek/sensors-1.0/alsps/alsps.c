@@ -21,6 +21,7 @@ struct alsps_context *alsps_context_obj /* = NULL*/;
 struct platform_device *pltfm_dev;
 int last_als_report_data = -1;
 static int g_screen_info;
+
 /* AAL default delay timer(nano seconds)*/
 #define AAL_DELAY 200000000
 
