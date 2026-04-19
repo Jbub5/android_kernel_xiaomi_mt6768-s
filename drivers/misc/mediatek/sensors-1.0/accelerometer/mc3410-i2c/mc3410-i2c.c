@@ -1363,7 +1363,6 @@ static int MC3XXX_Init(struct i2c_client *client, int reset_cali)
 static int MC3XXX_ReadChipInfo(struct i2c_client *client, char *buf,
 			       int bufsize)
 {
-	int ret = 0;
 	if ((buf == NULL) || (bufsize <= 30))
 		return -1;
 
@@ -1372,9 +1371,7 @@ static int MC3XXX_ReadChipInfo(struct i2c_client *client, char *buf,
 		return -2;
 	}
 
-	ret = sprintf(buf, "MC3XXX Chip");
-	if (ret < 0)
-		pr_debug("%s:Chipname sprintf fail:%d\n", __func__, ret);
+	sprintf(buf, "MC3XXX Chip");
 	return 0;
 }
 
@@ -1472,16 +1469,15 @@ static int MC3XXX_ReadRawData(struct i2c_client *client, char *buf)
 #else
 	{
 		s16 sensor_data[3] = { 0 };
+
 		res = MC3XXX_ReadData(client, sensor_data);
 		if (res) {
 			pr_err_ratelimited("[Gsensor]%s:I2C error: ret value=%d",
 				__func__, res);
 			return -EIO;
 		}
-		res = sprintf(buf, "%04x %04x %04x", sensor_data[MC3XXX_AXIS_X],
+		sprintf(buf, "%04x %04x %04x", sensor_data[MC3XXX_AXIS_X],
 			sensor_data[MC3XXX_AXIS_Y], sensor_data[MC3XXX_AXIS_Z]);
-		if (res < 0)
-			pr_debug("%s: sprintf failed: %d\n", __func__, res);
 	}
 #endif
 
@@ -1723,8 +1719,6 @@ static ssize_t show_power_status(struct device_driver *ddri, char *buf)
 	MC3XXX_i2c_read_block(obj->client, MC3XXX_REG_MODE_FEATURE, &uData, 1);
 
 	res = snprintf(buf, PAGE_SIZE, "0x%04X\n", uData);
-	if (res < 0)
-		pr_debug("%s: snprintf failed: %d\n", __func__, res);
 	return res;
 }
 

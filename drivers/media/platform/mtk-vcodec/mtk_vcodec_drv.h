@@ -197,7 +197,6 @@ struct mtk_dec_params {
 	u64	timestamp;
 	unsigned int	total_frame_bufq_count;
 	unsigned int	queued_frame_buf_count;
-	int		priority;
 };
 
 /**

@@ -1939,7 +1939,6 @@ static void ffs_epfiles_destroy(struct ffs_epfile *epfiles, unsigned count)
 	}
 
 	kfree(epfiles);
-	epfiles = NULL;
 }
 
 static void ffs_func_eps_disable(struct ffs_function *func)
@@ -1992,7 +1991,7 @@ static int ffs_func_eps_enable(struct ffs_function *func)
 		ret = usb_ep_enable(ep->ep);
 		if (likely(!ret)) {
 			if (epfile == NULL) {
-				pr_info("%s - UAF fix\n", __func__);
+				pr_info("% - UAF fix\n", __func__);
 				break;
 			}
 			epfile->ep = ep;
@@ -3273,12 +3272,6 @@ static int ffs_func_set_alt(struct usb_function *f,
 	struct ffs_function *func = ffs_func_from_usb(f);
 	struct ffs_data *ffs = func->ffs;
 	int ret = 0, intf;
-
-	pr_info("%s - ffs->state:%d\n", __func__, ffs->state);
-	if (ffs->epfiles == NULL) {
-		pr_info("%s - UAF fix\n", __func__);
-		return -ENODEV;
-	}
 
 	if (alt != (unsigned)-1) {
 		intf = ffs_func_revmap_intf(func, interface);

@@ -95,7 +95,7 @@ struct lcm_setting_table {
 	unsigned char para_list[256];
 };
 
-#define MM_CLK			270 //fpga=26
+#define MM_CLK			405 //fpga=26
 #define NS_TO_CYCLE(n, c)	((n) / (c) + (((n) % (c)) ? 1 : 0))
 
 #define DSI_MODULE_to_ID(x)	(x == DISP_BDG_DSI0 ? 0 : 1)
@@ -4651,7 +4651,7 @@ void output_debug_signal(void)
 	//GPIO Mode
 	mtk_spi_write(0x00007300, 0x77701111);
 #endif
-	mtk_spi_write(0x00007310, 0x11111111);
+	mtk_spi_write(0x00007310, 0x31111111);
 
 }
 void bdg_first_init(void)
@@ -4695,9 +4695,11 @@ int bdg_common_init(enum DISP_BDG_ENUM module,
 	struct LCM_DSI_PARAMS *tx_params;
 
 	DISPFUNCSTART();
+	DISPMSG("%s: enter\n", __func__);
 	clk_buf_disp_ctrl(true);
+	mdelay(2);
 	bdg_tx_pull_6382_reset_pin();
-	mdelay(1);
+	mdelay(2);
 	spislv_init();
 	spislv_switch_speed_hz(SPI_TX_LOW_SPEED_HZ, SPI_RX_LOW_SPEED_HZ);
 
@@ -4803,6 +4805,7 @@ int bdg_common_init(enum DISP_BDG_ENUM module,
 		bdg_mipi_clk_change_for_resume(0, 1);
 
 	DISPFUNCEND();
+	DISPMSG("%s: end\n", __func__);
 
 	return ret;
 }

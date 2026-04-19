@@ -16,9 +16,6 @@
 #include "eeprom_i2c_custom_driver.h"
 #include "kd_imgsensor.h"
 
-
-
-
 struct stCAM_CAL_LIST_STRUCT g_camCalList[] = {
 	/*Below is commom sensor */
 	{IMX519_SENSOR_ID, 0xA0, Common_read_region},
@@ -34,10 +31,6 @@ struct stCAM_CAL_LIST_STRUCT g_camCalList[] = {
 	{IMX386_MONO_SENSOR_ID, 0xA0, Common_read_region},
 	/*B+B. No Cal data for main2 OV8856*/
 	{S5K2P7_SENSOR_ID, 0xA0, Common_read_region},
-#ifdef SUPPORT_S5K4H7
-	{S5K4H7_SENSOR_ID, 0xA0, zte_s5k4h7_read_region},
-	{S5K4H7SUB_SENSOR_ID, 0xA0, zte_s5k4h7_sub_read_region},
-#endif
 	/*  ADD before this line */
 	{0, 0, 0}       /*end of list */
 };

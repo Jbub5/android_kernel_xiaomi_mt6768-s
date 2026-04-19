@@ -20,7 +20,6 @@
 #include <linux/platform_device.h>
 #include <linux/slab.h>
 #include <linux/workqueue.h>
-#include <linux/of.h>
 
 #include "extcon_usb.h"
 
@@ -29,7 +28,6 @@ struct usb_extcon_info {
 	struct extcon_dev *edev;
 	unsigned int dr; /* data role */
 	struct workqueue_struct *extcon_workq;
-	bool support_u3;
 };
 
 struct mt_usb_work {
@@ -196,11 +194,6 @@ void mt_vbus_off(void)
 }
 EXPORT_SYMBOL_GPL(mt_vbus_off);
 
-bool tcpc_is_support_u3(void)
-{
-	return g_extcon_info->support_u3;
-}
-
 static int usb_extcon_probe(struct platform_device *pdev)
 {
 	struct device *dev = &pdev->dev;
@@ -234,10 +227,6 @@ static int usb_extcon_probe(struct platform_device *pdev)
 	mt_usb_dual_role_init(g_extcon_info->dev);
 #endif
 #endif
-
-	g_extcon_info->support_u3 = of_property_read_bool(pdev->dev.of_node, "support_u3");
-	if (!g_extcon_info->support_u3)
-		dev_info(dev, "platform does not support U3\n");
 
 	/* Perform initial detection */
 	/* issue_connection_work(DUAL_PROP_DR_NONE); */

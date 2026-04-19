@@ -427,16 +427,30 @@ void md_cd_dump_md_bootup_status(struct ccci_modem *md)
 void md_cd_get_md_bootup_status(struct ccci_modem *md, unsigned int *buff,
 	int length)
 {
-	struct md_sys1_info *md_info = (struct md_sys1_info *)md->private_data;
-	struct md_pll_reg *md_reg = md_info->md_pll_base;
+	struct md_sys1_info *md_info = NULL;
+	struct md_pll_reg *md_reg = NULL;
+
+	if (md == NULL) {
+		CCCI_NOTICE_LOG(-1, TAG, "md is null!!!\n");
+		return;
+	}
 
 	CCCI_NOTICE_LOG(md->index, TAG, "md_boot_stats len %d\n", length);
 
-	if (md_info == NULL || md_reg == NULL) {
+	md_info = (struct md_sys1_info *)md->private_data;
+	if (md_info == NULL) {
 		CCCI_NOTICE_LOG(md->index, TAG,
-		 "md_info or md_reg not init skip get md boot status\n");
+			"md_info not init skip get md boot status\n");
 		return;
 	}
+
+	md_reg = md_info->md_pll_base;
+	if (md_reg == NULL) {
+		CCCI_NOTICE_LOG(md->index, TAG,
+			"md_reg not init skip get md boot status\n");
+		return;
+	}
+
 	if (length < 2) {
 		md_cd_dump_md_bootup_status(md);
 		return;
@@ -1552,3 +1566,42 @@ void ccci_modem_sysresume(void)
 	if (md != NULL)
 		ccci_modem_restore_reg(md);
 }
+
+/* no support atf-1.4, so write scp smem addr to scp reg direct */
+void ccci_notify_set_scpmem(void)
+{
+	unsigned long long key = 0;
+	struct device_node *node = NULL;
+	void __iomem *ap_ccif2_base;
+	unsigned long long scp_smem_addr = 0;
+	int size = 0;
+
+	node = of_find_compatible_node(NULL, NULL, "mediatek,ap_ccif2");
+	if (node) {
+		ap_ccif2_base = of_iomap(node, 0);
+		if (!ap_ccif2_base) {
+			CCCI_ERROR_LOG(-1, TAG, "ap_ccif2_base fail\n");
+			return;
+		}
+	} else {
+		CCCI_ERROR_LOG(-1, TAG, "can't find node ccif2 !\n");
+		return;
+	}
+	scp_smem_addr = (unsigned long long) get_smem_phy_start_addr(MD_SYS1,
+		SMEM_USER_CCISM_SCP, &size);
+	if (scp_smem_addr) {
+		ccci_write32(ap_ccif2_base, 0x100, (unsigned int)SCP_SMEM_KEY);
+		ccci_write32(ap_ccif2_base, 0x104, (unsigned int)(SCP_SMEM_KEY >> 32));
+		ccci_write32(ap_ccif2_base, 0x108, (unsigned int)scp_smem_addr);
+		ccci_write32(ap_ccif2_base, 0x10c, (unsigned int)(scp_smem_addr >> 32));
+
+		key = (unsigned long long) ccci_read32(ap_ccif2_base, 0x104);
+		key = (key << 32 ) |
+			((unsigned long long) ccci_read32(ap_ccif2_base, 0x100));
+		CCCI_NORMAL_LOG(MD_SYS1, TAG,
+			"%s: scp_smem_addr 0x%llx size: 0x%x  magic key: 0x%llx\n",
+			__func__, scp_smem_addr, size, key);
+	} else
+		CCCI_ERROR_LOG(MD_SYS1, TAG, "%s get_smem fail\n", __func__);
+}
+

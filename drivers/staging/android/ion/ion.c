@@ -164,7 +164,7 @@ void ion_client_buf_sub(struct ion_heap *heap, struct ion_client *client,
 		atomic64_sub_return(size, &client->total_size[SECURE_HEAP]);
 		if (total_size < 0) {
 			IONMSG(
-			       "heap_id:%u underflow!, total_now[%lld--%lld]\n",
+			       "heap_id:%u underflow!, total_now[%lld--%ld]\n",
 			heap->id, total_size,
 			atomic64_read(&client->total_size[SECURE_HEAP]));
 			atomic64_set(&client->total_size[SECURE_HEAP], 0);
@@ -174,7 +174,7 @@ void ion_client_buf_sub(struct ion_heap *heap, struct ion_client *client,
 		atomic64_sub_return(size, &client->total_size[SYSTEM_HEAP]);
 		if (total_size < 0) {
 			IONMSG(
-			       "heap_id:%u underflow!, total_now[%lld--%lld]\n",
+			       "heap_id:%u underflow!, total_now[%lld--%ld]\n",
 			heap->id, total_size,
 			atomic64_read(&client->total_size[SYSTEM_HEAP]));
 			atomic64_set(&client->total_size[SYSTEM_HEAP], 0);
@@ -184,7 +184,7 @@ void ion_client_buf_sub(struct ion_heap *heap, struct ion_client *client,
 		atomic64_sub_return(size, &client->total_size[NORMAL_HEAP]);
 		if (total_size < 0) {
 			IONMSG(
-			       "heap_id:%u underflow!, total_now[%lld--%lld]\n",
+			       "heap_id:%u underflow!, total_now[%lld--%ld]\n",
 			heap->id, total_size,
 			atomic64_read(&client->total_size[NORMAL_HEAP]));
 			atomic64_set(&client->total_size[NORMAL_HEAP], 0);
@@ -2763,32 +2763,21 @@ struct ion_buffer *ion_drv_file_to_buffer(struct file *file)
 {
 	struct dma_buf *dmabuf;
 	struct ion_buffer *buffer = NULL;
-	const char *pathname = NULL;
 
-	if (!file)
-		goto file2buf_exit;
-	if (!(file->f_path.dentry))
-		goto file2buf_exit;
+	if (!file || !is_dma_buf_file(file))
+		return ERR_PTR(-EINVAL);
 
-	pathname = file->f_path.dentry->d_name.name;
-	if (!pathname)
-		goto file2buf_exit;
-
-	if (strstr(pathname, "dmabuf")) {
-		dmabuf = file->private_data;
-		if (!dmabuf) {
-			IONMSG("%s warnning, dmabuf is NULL\n", __func__);
-			goto file2buf_exit;
-		}
-		if (dmabuf->ops == &dma_buf_ops)
-			buffer = dmabuf->priv;
+	dmabuf = file->private_data;
+	if (!dmabuf) {
+		IONMSG("%s warnning, dmabuf is NULL\n", __func__);
+		return ERR_PTR(-EINVAL);
+	}
+	if (dmabuf->ops == &dma_buf_ops) {
+		buffer = dmabuf->priv;
+		return buffer;
 	}
 
-file2buf_exit:
-	if (buffer)
-		return buffer;
-	else
-		return ERR_PTR(-EINVAL);
+	return ERR_PTR(-EINVAL);
 }
 
 /* ===================================== */

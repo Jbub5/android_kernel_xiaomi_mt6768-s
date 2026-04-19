@@ -1364,6 +1364,11 @@ static ssize_t gt9896s_sysfs_fwimage_store(struct file *file,
 	struct fw_update_ctrl *fw_ctrl;
 	struct firmware_data *fw_data;
 
+	if(IS_ERR_OR_NULL(attr) || IS_ERR_OR_NULL(kobj)) {
+		ts_err("attr or kobj is invalid or NULL!!!\n");
+		return -EINVAL;
+	}
+
 	fw_ctrl = container_of(attr, struct fw_update_ctrl,
 			attr_fwimage);
 	fw_data = &fw_ctrl->fw_data;
@@ -1381,14 +1386,8 @@ static ssize_t gt9896s_sysfs_fwimage_store(struct file *file,
 	if (pos + count > fw_data->firmware->size)
 		return -EFAULT;
 
-	if (IS_ERR_OR_NULL(&fw_ctrl->mutex)) {
-		ts_err("ERROR:fw_ctrl->mutex is NULL!!!\n");
-		return -ENOMEM;
-	}
-
-	if (IS_ERR_OR_NULL(&fw_data->firmware->data[pos])) {
-		ts_err("ERROR:fw_data->firmware->data[pos] is NULL!!! pos:%d,count:%d\n",
-			pos, count);
+	if(IS_ERR_OR_NULL(buf)) {
+		ts_err("The buf is invalid!!!\n");
 		return -ENOMEM;
 	}
 

@@ -26,7 +26,6 @@
 #include <linux/sched.h>
 #include <linux/sched/clock.h>
 #include <linux/sched/debug.h>
-#include <linux/sched/mm.h>
 #include <linux/sched/rt.h>
 #include <linux/sched/task.h>
 #include <uapi/linux/sched/types.h>
@@ -816,12 +815,13 @@ static int DumpThreadNativeMaps_log(pid_t pid, struct task_struct *current_task)
 		return -1;
 	}
 
-	if (!get_task_mm(current_task)) {
-		pr_info(" %s,%d:%s: current_task->mm == NULL", __func__, pid,
-				current_task->comm);
+	if (current_task->mm == NULL) {
+		pr_info(" %s,%d:%s: current_task->mm == NULL",
+			__func__, pid, current_task->comm);
 		return -1;
 	}
 
+	down_read(&current_task->mm->mmap_sem);
 	vma = current_task->mm->mmap;
 	pr_info("Dump native maps files:\n");
 	while (vma && (mapcount < current_task->mm->map_count)) {
@@ -869,9 +869,7 @@ static int DumpThreadNativeMaps_log(pid_t pid, struct task_struct *current_task)
 		vma = vma->vm_next;
 		mapcount++;
 	}
-	++oops_in_progress; /* sleeping function warn */
-	mmput(current_task->mm);
-	--oops_in_progress;
+	up_read(&current_task->mm->mmap_sem);
 
 	return 0;
 }
@@ -894,11 +892,12 @@ static int DumpThreadNativeInfo_By_tid_log(pid_t tid,
 		return ret;
 	}
 
-	if (!get_task_mm(current_task)) {
-		pr_info(" %s,%d:%s: current_task->mm == NULL", __func__, tid,
-				current_task->comm);
-		return -1;
+	if (current_task->mm == NULL) {
+		pr_info(" %s,%d:%s, current_task->mm == NULL",
+			__func__, tid, current_task->comm);
+		return ret;
 	}
+
 #ifndef __aarch64__		/* 32bit */
 {
 	unsigned int tmpfp, tmp, tmpLR;
@@ -923,6 +922,7 @@ static int DumpThreadNativeInfo_By_tid_log(pid_t tid,
 
 	userstack_start = (unsigned long)user_ret->ARM_sp;
 
+	down_read(&current_task->mm->mmap_sem);
 	vma = current_task->mm->mmap;
 	while (vma != NULL) {
 		if (vma->vm_start <= userstack_start &&
@@ -934,9 +934,7 @@ static int DumpThreadNativeInfo_By_tid_log(pid_t tid,
 		if (vma == current_task->mm->mmap)
 			break;
 	}
-	++oops_in_progress; /* sleeping function warn */
-	mmput(current_task->mm);
-	--oops_in_progress;
+	up_read(&current_task->mm->mmap_sem);
 
 	if (userstack_end == 0) {
 		pr_info(" %s,%d:%s,userstack_end == 0",
@@ -1022,7 +1020,7 @@ static int DumpThreadNativeInfo_By_tid_log(pid_t tid,
 		    (long)(user_ret->user_regs.regs[1]),
 		    (long)(user_ret->user_regs.regs[0]));
 		userstack_start = (unsigned long)user_ret->user_regs.regs[13];
-
+		down_read(&current_task->mm->mmap_sem);
 		vma = current_task->mm->mmap;
 		while (vma != NULL) {
 			if (vma->vm_start <= userstack_start &&
@@ -1034,9 +1032,7 @@ static int DumpThreadNativeInfo_By_tid_log(pid_t tid,
 			if (vma == current_task->mm->mmap)
 				break;
 		}
-		++oops_in_progress; /* sleeping function warn */
-		mmput(current_task->mm);
-		--oops_in_progress;
+		up_read(&current_task->mm->mmap_sem);
 
 		if (userstack_end == 0) {
 			pr_info("Dump native stack failed:\n");
@@ -1104,6 +1100,7 @@ static int DumpThreadNativeInfo_By_tid_log(pid_t tid,
 
 		userstack_start = (unsigned long)user_ret->user_regs.sp;
 
+		down_read(&current_task->mm->mmap_sem);
 		vma = current_task->mm->mmap;
 		while (vma != NULL) {
 			if (vma->vm_start <= userstack_start &&
@@ -1115,9 +1112,7 @@ static int DumpThreadNativeInfo_By_tid_log(pid_t tid,
 			if (vma == current_task->mm->mmap)
 				break;
 		}
-		++oops_in_progress; /* sleeping function warn */
-		mmput(current_task->mm);
-		--oops_in_progress;
+		up_read(&current_task->mm->mmap_sem);
 		if (userstack_end == 0) {
 			pr_info("Dump native stack failed:\n");
 			return ret;
@@ -1178,11 +1173,10 @@ void show_native_bt_by_pid(int task_pid)
 		/* change send ptrace_stop to send signal stop */
 		do_send_sig_info(SIGSTOP, SEND_SIG_FORCED, p, true);
 		do {
-			if (!t)
-				break;
-			get_task_struct(t);
-			if (try_get_task_stack(t)) {
+			if (t && try_get_task_stack(t)) {
 				pid_t tid = 0;
+
+				get_task_struct(t);
 				tid = task_pid_vnr(t);
 				state = t->state ? __ffs(t->state) + 1 : 0;
 				pr_info("%s sysTid=%d, pid=%d\n",
@@ -1190,17 +1184,18 @@ void show_native_bt_by_pid(int task_pid)
 				DumpThreadNativeInfo_By_tid_log(tid, t);
 				/* catch user-space bt */
 				put_task_stack(t);
+				put_task_struct(t);
 			}
-			put_task_struct(t);
 			if ((++count) % 5 == 4)
 				msleep(20);
 		} while_each_thread(p, t);
 		/* change send ptrace_stop to send signal stop */
 		if (stat_nam[state] != 'T')
 			do_send_sig_info(SIGCONT, SEND_SIG_FORCED, p, true);
-		put_task_stack(t);
+		put_task_stack(p);
 		put_task_struct(p);
-	}
+	} else if (p != NULL)
+		put_task_struct(p);
 	put_pid(pid);
 }
 EXPORT_SYMBOL(show_native_bt_by_pid);
@@ -1228,12 +1223,13 @@ static int DumpThreadNativeMaps(pid_t pid, struct task_struct *current_task)
 		return -1;
 	}
 
-	if (!get_task_mm(current_task)) {
+	if (!current_task->mm) {
 		pr_info(" %s,%d:%s: current_task->mm == NULL", __func__, pid,
 				current_task->comm);
 		return -1;
 	}
 
+	down_read(&current_task->mm->mmap_sem);
 	vma = current_task->mm->mmap;
 	Log2HangInfo("Dump native maps files:\n");
 	while (vma && (mapcount < current_task->mm->map_count)) {
@@ -1286,9 +1282,7 @@ static int DumpThreadNativeMaps(pid_t pid, struct task_struct *current_task)
 		vma = vma->vm_next;
 		mapcount++;
 	}
-	++oops_in_progress; /* sleeping function warn */
-	mmput(current_task->mm);
-	--oops_in_progress;
+	up_read(&current_task->mm->mmap_sem);
 
 	return 0;
 }
@@ -1333,6 +1327,7 @@ static int DumpThreadNativeInfo_By_tid(pid_t tid,
 
 	userstack_start = (unsigned long)user_ret->ARM_sp;
 
+	down_read(&current_task->mm->mmap_sem);
 	vma = current_task->mm->mmap;
 	while (vma != NULL) {
 		if (vma->vm_start <= userstack_start &&
@@ -1344,6 +1339,7 @@ static int DumpThreadNativeInfo_By_tid(pid_t tid,
 		if (vma == current_task->mm->mmap)
 			break;
 	}
+	up_read(&current_task->mm->mmap_sem);
 
 	if (userstack_end == 0) {
 		pr_info(" %s,%d:%s,userstack_end == 0", __func__,
@@ -1363,12 +1359,10 @@ static int DumpThreadNativeInfo_By_tid(pid_t tid,
 		Log2HangInfo("UserSP_start:%08x,Length:%x,End:%08x\n",
 				SPStart, length, SPEnd);
 		while (SPStart < SPEnd) {
-			++oops_in_progress; /* sleeping function warn */
 			copied =
 			    access_process_vm(current_task, SPStart,
 					&tempSpContent, sizeof(tempSpContent),
 					0);
-			--oops_in_progress;
 			if (copied != sizeof(tempSpContent)) {
 				pr_info(
 				  "access_process_vm  SPStart error,sizeof(tempSpContent)=%x\n"
@@ -1412,6 +1406,7 @@ static int DumpThreadNativeInfo_By_tid(pid_t tid,
 			(long)(user_ret->user_regs.regs[1]),
 			(long)(user_ret->user_regs.regs[0]));
 		userstack_start = (unsigned long)user_ret->user_regs.regs[13];
+		down_read(&current_task->mm->mmap_sem);
 		vma = current_task->mm->mmap;
 		while (vma != NULL) {
 			if (vma->vm_start <= userstack_start &&
@@ -1423,6 +1418,7 @@ static int DumpThreadNativeInfo_By_tid(pid_t tid,
 			if (vma == current_task->mm->mmap)
 				break;
 		}
+		up_read(&current_task->mm->mmap_sem);
 
 		if (userstack_end == 0) {
 			pr_info("Dump native stack failed:\n");
@@ -1441,11 +1437,9 @@ static int DumpThreadNativeInfo_By_tid(pid_t tid,
 			Log2HangInfo("UserSP_start:%x,Length:%x,End:%x\n",
 				SPStart, length, SPEnd);
 			while (SPStart < SPEnd) {
-				++oops_in_progress; /* sleeping function warn */
 				copied = access_process_vm(current_task,
 						SPStart, &tempSpContent,
 						sizeof(tempSpContent), 0);
-				--oops_in_progress;
 				if (copied != sizeof(tempSpContent)) {
 					pr_info(
 					  "access_process_vm  SPStart error,sizeof(tempSpContent)=%x\n",
@@ -1469,6 +1463,7 @@ static int DumpThreadNativeInfo_By_tid(pid_t tid,
 	} else {		/*K64+U64 */
 		userstack_start = (unsigned long)user_ret->user_regs.sp;
 
+		down_read(&current_task->mm->mmap_sem);
 		vma = current_task->mm->mmap;
 		while (vma != NULL) {
 			if (vma->vm_start <= userstack_start &&
@@ -1480,6 +1475,7 @@ static int DumpThreadNativeInfo_By_tid(pid_t tid,
 			if (vma == current_task->mm->mmap)
 				break;
 		}
+		up_read(&current_task->mm->mmap_sem);
 		if (userstack_end == 0) {
 			pr_info("Dump native stack failed:\n");
 			return ret;
@@ -1496,22 +1492,18 @@ static int DumpThreadNativeInfo_By_tid(pid_t tid,
 			frames = 2;
 			while (tmpfp < userstack_end &&
 					tmpfp > userstack_start) {
-				++oops_in_progress; /* sleeping function warn */
 				copied =
 				    access_process_vm(current_task,
 						    (unsigned long)tmpfp, &tmp,
 						      sizeof(tmp), 0);
-				--oops_in_progress;
 				if (copied != sizeof(tmp)) {
 					pr_info("access_process_vm  fp error\n");
 					return -EIO;
 				}
-				++oops_in_progress; /* sleeping function warn */
 				copied =
 				    access_process_vm(current_task,
 						    (unsigned long)tmpfp + 0x08,
 						      &tmpLR, sizeof(tmpLR), 0);
-				--oops_in_progress;
 				if (copied != sizeof(tmpLR)) {
 					pr_info("access_process_vm  pc error\n");
 					return -EIO;
@@ -1590,13 +1582,10 @@ static void show_bt_by_pid(int task_pid)
 		}
 
 		do {
-			if (!t)
-				break;
-
-			get_task_struct(t);
-			if (try_get_task_stack(t)) {
+			if (t && try_get_task_stack(t)) {
 				pid_t tid = 0;
 
+				get_task_struct(t);
 				tid = task_pid_vnr(t);
 				/* catch kernel bt */
 				show_thread_info(t, true);
@@ -1607,8 +1596,8 @@ static void show_bt_by_pid(int task_pid)
 				if (dump_native == 1)
 					DumpThreadNativeInfo_By_tid(tid, t);
 				put_task_stack(t);
+				put_task_struct(t);
 			}
-			put_task_struct(t);
 			if ((++count) % 5 == 4)
 				msleep(20);
 			Log2HangInfo("-\n");
@@ -1679,12 +1668,10 @@ static void hang_dump_backtrace(void)
 			continue;
 		}
 		for_each_thread(p, t) {
-			if (t) {
+			if (try_get_task_stack(t)) {
 				get_task_struct(t);
-				if (try_get_task_stack(t)) {
-					show_thread_info(t, false);
-					put_task_stack(t);
-				}
+				show_thread_info(t, false);
+				put_task_stack(t);
 				put_task_struct(t);
 			}
 		}

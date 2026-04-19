@@ -2379,16 +2379,11 @@ int rpmb_listenDci(void *data)
 
 		/* Received exception. */
 		boot_type = get_boot_type();
-#if defined(CONFIG_MMC_MTK_PRO)
 		if (boot_type == BOOTDEV_SDMMC)
 			mc_ret = rpmb_execute_emmc(cmdId);
-		else
-#endif
 #ifdef CONFIG_MTK_UFS_SUPPORT
-			if (boot_type == BOOTDEV_UFS)
-				mc_ret = rpmb_execute_ufs(cmdId);
-#else
-		return -EFAULT;
+		else if (boot_type == BOOTDEV_UFS)
+			mc_ret = rpmb_execute_ufs(cmdId);
 #endif
 
 		/* Notify the STH */
@@ -2516,16 +2511,11 @@ int rpmb_gp_listenDci(void *data)
 
 		/* Received exception. */
 		boot_type = get_boot_type();
-#if defined(CONFIG_MMC_MTK_PRO)
 		if (boot_type == BOOTDEV_SDMMC)
 			mc_ret = rpmb_gp_execute_emmc(cmdId);
-		else
-#endif
 #ifdef CONFIG_MTK_UFS_SUPPORT
-			if (boot_type == BOOTDEV_UFS)
-				mc_ret = rpmb_gp_execute_ufs(cmdId);
-#else
-		return -EFAULT;
+		else if (boot_type == BOOTDEV_UFS)
+			mc_ret = rpmb_gp_execute_ufs(cmdId);
 #endif
 
 		/* Notify the STH*/
