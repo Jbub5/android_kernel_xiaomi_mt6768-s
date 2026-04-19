@@ -121,21 +121,6 @@
 /************************************************************************
  *
  ************************************************************************/
-
-#define OV13B10_SENSOR_ID                       0x560D42
-#define SENSOR_DRVNAME_OV13B10_MIPI_RAW         "ov13b10_mipi_raw"
-#define OV13B10TXD_SENSOR_ID                    0x560D43
-#define SENSOR_DRVNAME_OV13B10TXD_MIPI_RAW      "ov13b10txd_mipi_raw"
-#define S5K4H7_SENSOR_ID                        0x487B
-#define SENSOR_DRVNAME_S5K4H7_MIPI_RAW          "s5k4h7_mipi_raw"
-#define S5K4H7SUB_SENSOR_ID                     0x487C
-#define SENSOR_DRVNAME_S5K4H7SUB_MIPI_RAW       "s5k4h7sub_mipi_raw"
-#define GC08A3MIPI_SENSOR_ID                    0x08a3
-#define SENSOR_DRVNAME_GC08A3_MIPI_RAW          "gc08a3_mipi_raw"
-#define GC08A3SUBMIPI_SENSOR_ID                 0x08a4
-#define SENSOR_DRVNAME_GC08A3SUB_MIPI_RAW       "gc08a3sub_mipi_raw"
-
-
 /* SENSOR CHIP VERSION */
 /*IMX*/
 #define IMX766_SENSOR_ID                        0x0766
@@ -411,6 +396,7 @@
 #define IMX616_SENSOR_ID                        0x0616
 #define OV48C_SENSOR_ID                         0x564843
 #define IMX355_SENSOR_ID                        0x0355
+#define OV13B10_SENSOR_ID                       0x560d42
 #define OV02B10_SENSOR_ID                       0x002b
 
 
@@ -683,6 +669,7 @@
 #define SENSOR_DRVNAME_GC02M1B_MIPI_MONO        "gc02m1b_mipi_mono"
 #define SENSOR_DRVNAME_OV48C_MIPI_RAW           "ov48c_mipi_raw"
 #define SENSOR_DRVNAME_IMX355_MIPI_RAW          "imx355_mipi_raw"
+#define SENSOR_DRVNAME_OV13B10_MIPI_RAW         "ov13b10_mipi_raw"
 #define SENSOR_DRVNAME_OV02B10_MIPI_RAW         "ov02b10_mipi_raw"
 
 /******************************************************************************
