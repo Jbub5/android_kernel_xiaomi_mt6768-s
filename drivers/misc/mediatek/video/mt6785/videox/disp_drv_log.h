@@ -71,8 +71,7 @@
 
 #define DISPDBG(string, args...)					\
 	do {								\
-		if (ddp_debug_dbg_log_level())				\
-			DISPMSG(string, ##args);			\
+		DISPMSG(string, ##args);			\
 	} while (0)
 
 #define DISPFUNC()							\
