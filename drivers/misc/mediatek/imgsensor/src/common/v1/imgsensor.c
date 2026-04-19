@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -11,6 +12,10 @@
  * See http://www.gnu.org/licenses/gpl-2.0.html for more details.
  */
 #include "imgsensor_cfg_table.h"
+#if defined(MERLIN_MSM_CAMERA_HW_INFO) || defined(LANCELOT_MSM_CAMERA_HW_INFO)\
+|| defined(GALAHAD_MSM_CAMERA_HW_INFO)
+#include "hq_imgsensor_hw_register_info.h"
+#endif
 #include <linux/platform_device.h>
 #include <linux/delay.h>
 #include <linux/cdev.h>
@@ -21,6 +26,7 @@
 #include <linux/workqueue.h>
 #include <linux/init.h>
 #include <linux/types.h>
+#include <linux/hqsysfs.h>
 
 #undef CONFIG_MTK_SMI_EXT
 #ifdef CONFIG_MTK_SMI_EXT
@@ -603,6 +609,10 @@ int imgsensor_set_driver(struct IMGSENSOR_SENSOR *psensor)
 					    drv_idx,
 					    psensor_inst->psensor_name);
 
+#if defined(MERLIN_MSM_CAMERA_HW_INFO) || defined(LANCELOT_MSM_CAMERA_HW_INFO) \
+|| defined(GALAHAD_MSM_CAMERA_HW_INFO)
+					hq_imgsensor_sensor_hw_register(psensor, psensor_inst);
+#endif
 					ret = drv_idx;
 					break;
 				}
@@ -1254,10 +1264,27 @@ static inline int adopt_CAMERA_HW_FeatureControl(void *pBuf)
 		return -EFAULT;
 	}
 
+#ifdef CONFIG_TARGET_PRODUCT_LANCELOTCOMMON
+	unsigned int curr_idx = pFeatureCtrl->InvokeCamera;
+#endif
 	psensor = imgsensor_sensor_get_inst(pFeatureCtrl->InvokeCamera);
 	if (psensor == NULL) {
 		pr_err("[%s] NULL psensor.\n", __func__);
 		return -EFAULT;
+#ifdef CONFIG_TARGET_PRODUCT_LANCELOTCOMMON
+	} else {
+		// HACK
+		if (curr_idx == IMGSENSOR_SENSOR_IDX_MAIN2) {
+			curr_idx = IMGSENSOR_SENSOR_IDX_SUB;
+		}
+		psensor = imgsensor_sensor_get_inst(curr_idx);
+		// HACK
+
+		if (psensor == NULL) {
+			pr_err("[%s] NULL psensor.\n", __func__);
+			return -EFAULT;
+		}
+#endif
 	}
 
 	if (pFeatureCtrl->FeatureId == SENSOR_FEATURE_SINGLE_FOCUS_MODE ||
@@ -1282,11 +1309,11 @@ static inline int adopt_CAMERA_HW_FeatureControl(void *pBuf)
 			FeatureParaLen > FEATURE_CONTROL_MAX_DATA_SIZE)
 			return -EINVAL;
 
-		pFeaturePara = kmalloc(FeatureParaLen, GFP_KERNEL);
+		pFeaturePara = kmalloc(FeatureParaLen + 32, GFP_KERNEL);
 		if (pFeaturePara == NULL)
 			return -ENOMEM;
 
-		memset(pFeaturePara, 0x0, FeatureParaLen);
+		memset(pFeaturePara, 0x0, FeatureParaLen + 32);
 	}
 
 	/* copy from user */
@@ -1303,7 +1330,11 @@ static inline int adopt_CAMERA_HW_FeatureControl(void *pBuf)
 	{
 		MINT32 drv_idx;
 
+#ifdef CONFIG_TARGET_PRODUCT_LANCELOTCOMMON
+		psensor->inst.sensor_idx = curr_idx; // HACK
+#else
 		psensor->inst.sensor_idx = pFeatureCtrl->InvokeCamera;
+#endif
 		drv_idx = imgsensor_set_driver(psensor);
 		memcpy(pFeaturePara, &drv_idx, FeatureParaLen);
 
@@ -2050,7 +2081,11 @@ static inline int adopt_CAMERA_HW_FeatureControl(void *pBuf)
 		if (gimgsensor.mclk_set_drive_current != NULL) {
 			gimgsensor.mclk_set_drive_current(
 			gimgsensor.hw.pdev[IMGSENSOR_HW_ID_MCLK]->pinstance,
+#ifdef CONFIG_TARGET_PRODUCT_LANCELOTCOMMON
+				curr_idx, // HACK
+#else
 				pFeatureCtrl->InvokeCamera,
+#endif
 				__current);
 		} else {
 			pr_debug(

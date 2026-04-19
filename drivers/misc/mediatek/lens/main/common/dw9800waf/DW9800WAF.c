@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -127,6 +128,23 @@ static inline int getAFInfo(__user struct stAF_MotorInfo *pstMotorInfo)
 	return 0;
 }
 
+static int s4AF_WriteReg_Directly(u16 a_u2Data)
+{
+	int i4RetValue = 0;
+
+	char puSendCmd[2] = {(char)(a_u2Data >> 8), (char)(a_u2Data & 0xFF)};
+
+	g_pstAF_I2Cclient->addr = AF_I2C_SLAVE_ADDR;
+	g_pstAF_I2Cclient->addr = g_pstAF_I2Cclient->addr >> 1;
+
+	i4RetValue = i2c_master_send(g_pstAF_I2Cclient, puSendCmd, 2);
+	if (i4RetValue < 0) {
+			LOG_INF("I2C send Reg failed!!\n");
+			return -1;
+	}
+	return 0;
+}
+
 static int initdrv(void)
 {
 	int i4RetValue = 0;
@@ -227,7 +245,7 @@ static inline int setAFMacro(unsigned long a_u4Position)
 }
 
 /* ////////////////////////////////////////////////////////////// */
-long DW9800WAF_Ioctl_Main(struct file *a_pstFile,
+long DW9800WAF_Ioctl(struct file *a_pstFile,
 		unsigned int a_u4Command, unsigned long a_u4Param)
 {
 	long i4RetValue = 0;
@@ -264,7 +282,7 @@ long DW9800WAF_Ioctl_Main(struct file *a_pstFile,
 /* 2.Shut down the device on last close. */
 /* 3.Only called once on last time. */
 /* Q1 : Try release multiple times. */
-int DW9800WAF_Release_Main(struct inode *a_pstInode, struct file *a_pstFile)
+int DW9800WAF_Release(struct inode *a_pstInode, struct file *a_pstFile)
 {
 	LOG_INF("Start\n");
 
@@ -284,7 +302,7 @@ int DW9800WAF_Release_Main(struct inode *a_pstInode, struct file *a_pstFile)
 	return 0;
 }
 
-int DW9800WAF_SetI2Cclient_Main(struct i2c_client *pstAF_I2Cclient,
+int DW9800WAF_SetI2Cclient(struct i2c_client *pstAF_I2Cclient,
 		spinlock_t *pAF_SpinLock, int *pAF_Opened)
 {
 	g_pstAF_I2Cclient = pstAF_I2Cclient;
@@ -294,7 +312,7 @@ int DW9800WAF_SetI2Cclient_Main(struct i2c_client *pstAF_I2Cclient,
 	return 1;
 }
 
-int DW9800WAF_GetFileName_Main(unsigned char *pFileName)
+int DW9800WAF_GetFileName(unsigned char *pFileName)
 {
 	#if SUPPORT_GETTING_LENS_FOLDER_NAME
 	char FilePath[256];
@@ -310,4 +328,13 @@ int DW9800WAF_GetFileName_Main(unsigned char *pFileName)
 	pFileName[0] = '\0';
 	#endif
 	return 1;
+}
+void DW9800WAF_SetI2Cclient_first(struct i2c_client *pstAF_I2Cclient,
+			  spinlock_t *pAF_SpinLock)
+{
+	g_pstAF_I2Cclient = pstAF_I2Cclient;
+	LOG_INF("Start DW9800w Power down mode!\n");
+	s4AF_WriteReg_Directly(0x0201);
+	LOG_INF("End DW9800w Power down mode!\n");
+	LOG_INF("End\n");
 }
