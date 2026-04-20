@@ -419,6 +419,30 @@ void nicRxFillRFB(IN struct ADAPTER *prAdapter,
 			__func__);
 }
 
+/**
+ * nicRxProcessRxv() - function to parse RXV for rate information
+ * @prAdapter: pointer to adapter
+ * @prSwRfb: RFB of received frame
+ *
+ * If parsed data will be saved in
+ * prAdapter->arStaRec[prSwRfb->ucStaRecIdx].u4RxVector[*], then can be used
+ * for calling wlanGetRxRate().
+ */
+static void nicRxProcessRxv(IN struct ADAPTER *prAdapter,
+		IN struct SW_RFB *prSwRfb)
+{
+#if (CFG_SUPPORT_MSP == 1)
+	struct mt66xx_chip_info *prChipInfo;
+
+	prChipInfo = prAdapter->chip_info;
+
+	if (!prChipInfo || !prChipInfo->asicRxProcessRxvforMSP)
+		return;
+
+	prChipInfo->asicRxProcessRxvforMSP(prAdapter, prSwRfb);
+#endif /* CFG_SUPPORT_MSP == 1 */
+}
+
 #if CFG_TCP_IP_CHKSUM_OFFLOAD || CFG_TCP_IP_CHKSUM_OFFLOAD_NDIS_60
 /*----------------------------------------------------------------------------*/
 /*!
@@ -1602,6 +1626,8 @@ void nicRxProcessMonitorPacket(IN struct ADAPTER *prAdapter,
 	uint8_t ucMcs;
 	uint8_t ucFrMode;
 	uint8_t ucShortGI;
+	uint8_t ucGroupid;
+	uint8_t ucNsts;
 	uint32_t u4PhyRate;
 	struct RX_DESC_OPS_T *prRxDescOps;
 	enum ENUM_BAND eBand = 0;
@@ -1682,23 +1708,33 @@ void nicRxProcessMonitorPacket(IN struct ADAPTER *prAdapter,
 		rMonitorRadiotap.ucFlags |= BIT(6);
 
 	/* Bit Number 2 RATE */
-	if ((ucRxMode == RX_VT_LEGACY_CCK)
-	    || (ucRxMode == RX_VT_LEGACY_OFDM)) {
+	if (ucRxMode == RX_VT_LEGACY_CCK || ucRxMode == RX_VT_LEGACY_OFDM) {
 		/* Bit[2:0] for Legacy CCK, Bit[3:0] for Legacy OFDM */
-		ucRxRate = ((prRxStatusGroup3)->u4RxVector[0] & BITS(0, 3));
+		ucRxRate = prRxStatusGroup3->u4RxVector[0] & BITS(0, 3);
 		rMonitorRadiotap.ucRate = nicGetHwRateByPhyRate(ucRxRate);
 	} else {
-		ucMcs = ((prRxStatusGroup3)->u4RxVector[0] &
-			 RX_VT_RX_RATE_AC_MASK);
+		ucMcs = prRxStatusGroup3->u4RxVector[0] & RX_VT_RX_RATE_AC_MASK;
 		/* VHTA1 B0-B1 */
-		ucFrMode = (((prRxStatusGroup3)->u4RxVector[0] &
-			     RX_VT_FR_MODE_MASK) >> RX_VT_FR_MODE_OFFSET);
-		ucShortGI = ((prRxStatusGroup3)->u4RxVector[0] &
-			     RX_VT_SHORT_GI) ? 1 : 0;	/* VHTA2 B0 */
+		ucFrMode = (prRxStatusGroup3->u4RxVector[0] &
+				RX_VT_FR_MODE_MASK) >> RX_VT_FR_MODE_OFFSET;
+		ucShortGI = (prRxStatusGroup3->u4RxVector[0] &
+				RX_VT_SHORT_GI) ? 1 : 0;	/* VHTA2 B0 */
+		ucNsts = (prRxStatusGroup3->u4RxVector[1] &
+				RX_VT_NSTS_MASK) >> RX_VT_NSTS_OFFSET;
+		ucGroupid = (prRxStatusGroup3->u4RxVector[1] &
+				RX_VT_GROUP_ID_MASK) >> RX_VT_GROUP_ID_OFFSET;
 
+		if (ucNsts == 0)
+			ucNsts = 1;
+		if (!ucGroupid || ucGroupid == 63)
+			ucNsts += 1;
+
+		if (ucRxMode == RX_VT_MIXED_MODE)
+			ucMcs %= 8;
 		/* ucRate(500kbs) = u4PhyRate(100kbps) / 5, max ucRate = 0xFF */
-		u4PhyRate = nicGetPhyRateByMcsRate(ucMcs, ucFrMode,
-						   ucShortGI);
+		u4PhyRate = nicGetPhyRateByMcsRate(ucMcs, ucFrMode, ucShortGI);
+		if (ucRxMode == RX_VT_MIXED_MODE)
+			u4PhyRate *= ucNsts;
 		if (u4PhyRate > 1275)
 			rMonitorRadiotap.ucRate = 0xFF;
 		else
@@ -1839,9 +1875,10 @@ void nicRxPerfIndProcessRXV(IN struct ADAPTER *prAdapter,
 	struct mt66xx_chip_info *prChipInfo;
 
 	prChipInfo = prAdapter->chip_info;
-	if (prChipInfo->asicRxPerfIndProcessRXV)
-		prChipInfo->asicRxPerfIndProcessRXV(
-			prAdapter, prSwRfb, ucBssIndex);
+	if (!prChipInfo || !prChipInfo->asicRxPerfIndProcessRXV)
+		return;
+
+	prChipInfo->asicRxPerfIndProcessRXV(prAdapter, prSwRfb, ucBssIndex);
 	/* else { */
 		/* print too much, remove for system perfomance */
 		/* DBGLOG(RX, ERROR, "%s: no asicRxPerfIndProcessRXV ??\n", */
@@ -1949,6 +1986,10 @@ void nicRxGetNoiseLevelAndLastRate(IN struct ADAPTER *prAdapter,
 	uint8_t ucMcs;
 	uint8_t ucFrMode;
 	uint8_t ucShortGI;
+	uint8_t ucGroupid;
+	uint8_t ucNsts;
+	uint32_t u4PhyRate;
+	struct HW_MAC_RX_STS_GROUP_3 *prRxStatusGroup3;
 
 	if (prAdapter == NULL || prSwRfb == NULL)
 		return;
@@ -1957,8 +1998,8 @@ void nicRxGetNoiseLevelAndLastRate(IN struct ADAPTER *prAdapter,
 	if (prStaRec == NULL)
 		return;
 
-	noise_level = ((prSwRfb->prRxStatusGroup3->u4RxVector[5] &
-		RX_VT_NF0_MASK) >> 1);
+	prRxStatusGroup3 = prSwRfb->prRxStatusGroup3;
+	noise_level = (prRxStatusGroup3->u4RxVector[5] & RX_VT_NF0_MASK) >> 1);
 
 	if (noise_level == 0) {
 		DBGLOG(RX, TRACE, "Invalid noise level\n");
@@ -1973,27 +2014,38 @@ void nicRxGetNoiseLevelAndLastRate(IN struct ADAPTER *prAdapter,
 		prStaRec->ucNoise_avg, noise_level);
 
 	/* Rx rate */
-	ucRxMode = ((prSwRfb->prRxStatusGroup3->u4RxVector[0] &
-				RX_VT_RX_MODE_MASK) >> RX_VT_RX_MODE_OFFSET);
+	ucRxMode = (prRxStatusGroup3->u4RxVector[0] & RX_VT_RX_MODE_MASK)
+						>> RX_VT_RX_MODE_OFFSET;
 
 	/* Bit Number 2 RATE */
 	if (ucRxMode == RX_VT_LEGACY_CCK || ucRxMode == RX_VT_LEGACY_OFDM) {
 		/* Bit[2:0] for Legacy CCK, Bit[3:0] for Legacy OFDM */
-		ucRxRate =
-		(prSwRfb->prRxStatusGroup3->u4RxVector[0] & BITS(0, 3));
+		ucRxRate = prRxStatusGroup3->u4RxVector[0] & BITS(0, 3);
 		prStaRec->u4LastPhyRate = nicGetHwRateByPhyRate(ucRxRate) * 5;
 	} else {
-		ucMcs = (prSwRfb->prRxStatusGroup3->u4RxVector[0] &
-			RX_VT_RX_RATE_AC_MASK);
+		ucMcs = prRxStatusGroup3->u4RxVector[0] & RX_VT_RX_RATE_AC_MASK;
 		/* VHTA1 B0-B1 */
-		ucFrMode = ((prSwRfb->prRxStatusGroup3->u4RxVector[0] &
-			RX_VT_FR_MODE_MASK) >> RX_VT_FR_MODE_OFFSET);
-		ucShortGI = (prSwRfb->prRxStatusGroup3->u4RxVector[0] &
-			RX_VT_SHORT_GI) ? 1 : 0;
+		ucFrMode = (prRxStatusGroup3->u4RxVector[0] &
+				RX_VT_FR_MODE_MASK) >> RX_VT_FR_MODE_OFFSET;
+		ucShortGI = (prRxStatusGroup3->u4RxVector[0] &
+				RX_VT_SHORT_GI) ? 1 : 0;
+		ucNsts = (prRxStatusGroup3->u4RxVector[1] &
+				RX_VT_NSTS_MASK) >> RX_VT_NSTS_OFFSET;
+		ucGroupid = (prRxStatusGroup3->u4RxVector[1] &
+				RX_VT_GROUP_ID_MASK) >> RX_VT_GROUP_ID_OFFSET;
 
-		/* ucRate(500kbs) = u4PhyRate(100kbps) / 5,max ucRate = 0xFF */
-		prStaRec->u4LastPhyRate = nicGetPhyRateByMcsRate(ucMcs,
-				ucFrMode, ucShortGI);
+		if (ucNsts == 0)
+			ucNsts = 1;
+		if (!ucGroupid || ucGroupid == 63)
+			ucNsts += 1;
+
+		if (ucRxMode == RX_VT_MIXED_MODE)
+			ucMcs %= 8;
+		/* ucRate(500kbs) = u4PhyRate(100kbps) / 5, max ucRate = 0xFF */
+		u4PhyRate = nicGetPhyRateByMcsRate(ucMcs, ucFrMode, ucShortGI);
+		if (ucRxMode == RX_VT_MIXED_MODE)
+			u4PhyRate *= ucNsts;
+		prStaRec->u4LastPhyRate = u4PhyRate;
 	}
 }
 #endif /* fos_change end */
@@ -2011,12 +2063,13 @@ void nicRxIndicatePackets(IN struct ADAPTER *prAdapter,
 	prRetSwRfb = prSwRfbListHead;
 
 	while (prRetSwRfb) {
-#if (CFG_SUPPORT_MSP == 1)
-		/* collect RXV information */
-		if (prChipInfo->asicRxProcessRxvforMSP)
-			prChipInfo->asicRxProcessRxvforMSP(
-				prAdapter, prRetSwRfb);
-#endif /* CFG_SUPPORT_MSP == 1 */
+		/**
+		 * Collect RXV information,
+		 * prAdapter->arStaRec[i].u4RxVector[*] updated.
+		 * wlanGetRxRate() can get new rate values
+		 */
+		nicRxProcessRxv(prAdapter, prRetSwRfb);
+
 /* fos_change begin */
 #if CFG_SUPPORT_STAT_STATISTICS
 		nicRxGetNoiseLevelAndLastRate(prAdapter, prRetSwRfb);

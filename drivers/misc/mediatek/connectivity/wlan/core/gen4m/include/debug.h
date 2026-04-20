@@ -107,14 +107,14 @@ extern struct MIB_INFO_STAT g_arMibInfo[ENUM_BAND_NUM];
 #define DBG_CLASS_MASK          BITS(0, 7)
 
 #define DBG_LOG_LEVEL_DEFAULT \
-	(DBG_CLASS_ERROR)
-#define DBG_LOG_LEVEL_MORE \
-	(DBG_LOG_LEVEL_DEFAULT | \
-	DBG_CLASS_TRACE | \
+	(DBG_CLASS_ERROR | \
 	DBG_CLASS_WARN | \
 	DBG_CLASS_STATE | \
 	DBG_CLASS_EVENT | \
 	DBG_CLASS_INFO)
+#define DBG_LOG_LEVEL_MORE \
+	(DBG_LOG_LEVEL_DEFAULT | \
+	DBG_CLASS_TRACE)
 #define DBG_LOG_LEVEL_EXTREME \
 	(DBG_LOG_LEVEL_MORE | \
 	DBG_CLASS_LOUD)
@@ -141,6 +141,7 @@ extern struct MIB_INFO_STAT g_arMibInfo[ENUM_BAND_NUM];
 
 #define HIF_CHK_TX_HANG         BIT(1)
 #define HIF_DRV_SER             BIT(2)
+#define HIF_TRIGGER_FW_DUMP     BIT(3)
 
 #define DUMP_MEM_SIZE 64
 
@@ -518,6 +519,7 @@ struct CHIP_DBG_OPS {
 #ifdef CFG_SUPPORT_LINK_QUALITY_MONITOR
 	int (*get_rx_rate_info)(
 		struct ADAPTER *prAdapter,
+		uint8_t ucBssIdx,
 		uint32_t *pu4Rate,
 		uint32_t *pu4Nss,
 		uint32_t *pu4RxMode,
@@ -858,6 +860,7 @@ int32_t halShowStatInfo(struct ADAPTER *prAdapter,
 			u_int8_t fgResetCnt, uint32_t u4StatGroup);
 #ifdef CFG_SUPPORT_LINK_QUALITY_MONITOR
 int connac_get_rx_rate_info(struct ADAPTER *prAdapter,
+	uint8_t ucBssIdx,
 	uint32_t *pu4Rate,
 	uint32_t *pu4Nss,
 	uint32_t *pu4RxMode,
@@ -949,6 +952,7 @@ void connac2x_DumpCrRange(
 #ifdef CFG_SUPPORT_LINK_QUALITY_MONITOR
 int connac2x_get_rx_rate_info(
 	struct ADAPTER *prAdapter,
+	uint8_t ucBssIdx,
 	uint32_t *pu4Rate,
 	uint32_t *pu4Nss,
 	uint32_t *pu4RxMode,

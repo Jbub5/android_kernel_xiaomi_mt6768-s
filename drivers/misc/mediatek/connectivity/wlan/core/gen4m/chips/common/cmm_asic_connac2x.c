@@ -359,6 +359,10 @@ void asicConnac2xWfdmaReInit(
 	prBusInfo = prAdapter->chip_info->bus_info;
 	prSwWfdmaInfo = &prBusInfo->rSwWfdmaInfo;
 
+	/* for bus hang debug purpose */
+	if (prAdapter->chip_info->checkbushang)
+		prAdapter->chip_info->checkbushang((void *) prAdapter, TRUE);
+
 	/*WFDMA re-init flow after chip deep sleep*/
 	asicConnac2xWfdmaDummyCrRead(prAdapter, &fgResult);
 	if (fgResult) {
@@ -1753,6 +1757,7 @@ void asicConnac2xRxProcessRxvforMSP(IN struct ADAPTER *prAdapter,
 
 	prGroup3 =
 		(struct HW_MAC_RX_STS_GROUP_3_V2 *)prRetSwRfb->prRxStatusGroup3;
+
 	if (prRetSwRfb->ucGroupVLD & BIT(RX_GROUP_VLD_3)) {
 		/* P-RXV1[0:31] */
 		prAdapter->arStaRec[
@@ -1884,35 +1889,61 @@ void asicConnac2xRxPerfIndProcessRXV(IN struct ADAPTER *prAdapter,
 			       IN struct SW_RFB *prSwRfb,
 			       IN uint8_t ucBssIndex)
 {
+	struct GLUE_INFO *prGlueInfo;
 	struct HW_MAC_RX_STS_GROUP_3 *prRxStatusGroup3;
 	uint8_t ucRCPI0 = 0, ucRCPI1 = 0;
+	uint32_t u4PhyRate;
+	uint16_t u2Rate = 0; /* Unit 500 Kbps */
+	struct RateInfo rRateInfo = {0};
+	int status;
 
 	ASSERT(prAdapter);
 	ASSERT(prSwRfb);
 	/* REMOVE DATA RATE Parsing Logic:Workaround only for 6885*/
 	/* Since MT6885 can not get Rx Data Rate dur to RXV HW Bug*/
 
-	if (ucBssIndex >= BSSID_NUM)
+	prGlueInfo = prAdapter->prGlueInfo;
+	status = wlanGetRxRate(prGlueInfo, ucBssIndex, &u4PhyRate, NULL,
+				&rRateInfo);
+	/* ucRate(500kbs) = u4PhyRate(100kbps) */
+	if (status < 0 || u4PhyRate == 0)
 		return;
+	u2Rate = u4PhyRate / 5;
 
-	/* can't parse radiotap info if no rx vector */
-	if (((prSwRfb->ucGroupVLD & BIT(RX_GROUP_VLD_2)) == 0)
-		|| ((prSwRfb->ucGroupVLD & BIT(RX_GROUP_VLD_3)) == 0)) {
-		return;
+	if (rRateInfo.u4Nss == 1) {
+		if (prGlueInfo->PerfIndCache.ucCurRxNss[ucBssIndex] < 0xff)
+			prGlueInfo->PerfIndCache.ucCurRxNss[ucBssIndex]++;
+	} else if (rRateInfo.u4Nss == 2) {
+		if (prGlueInfo->PerfIndCache.ucCurRxNss2[ucBssIndex] < 0xff)
+			prGlueInfo->PerfIndCache.ucCurRxNss2[ucBssIndex]++;
 	}
 
-	prRxStatusGroup3 = prSwRfb->prRxStatusGroup3;
-
 	/* RCPI */
+	prRxStatusGroup3 = prSwRfb->prRxStatusGroup3;
 	ucRCPI0 = HAL_RX_STATUS_GET_RCPI0(prRxStatusGroup3);
 	ucRCPI1 = HAL_RX_STATUS_GET_RCPI1(prRxStatusGroup3);
 
-	/* Record peak rate to Traffic Indicator*/
-	prAdapter->prGlueInfo->PerfIndCache.
-		ucCurRxRCPI0[ucBssIndex] = ucRCPI0;
-	prAdapter->prGlueInfo->PerfIndCache.
-		ucCurRxRCPI1[ucBssIndex] = ucRCPI1;
+	/* DBGLOG(SW4, WARN, "rxvec0=[0x%x] rxmode=[%u], rate=[%u],
+	* bw=[%u], sgi=[%u], nsts=[%u], nss=[%u],
+	* cnt_nss1=[%d], cnt_nss2=[%d]\n",
+	* u4RxVector0, ucRxMode, ucMcs,
+	* ucFrMode, ucShortGI, ucNsts, ucNss,
+	* prAdapter->prGlueInfo->
+	* PerfIndCache.ucCurRxNss[ucBssIndex],
+	* prAdapter->prGlueInfo->
+	* PerfIndCache.ucCurRxNss2[ucBssIndex]);
+	*/
 
+	/* Record peak rate to Traffic Indicator*/
+	if (u2Rate > prAdapter->prGlueInfo
+		->PerfIndCache.u2CurRxRate[ucBssIndex]) {
+		prAdapter->prGlueInfo->PerfIndCache.
+			u2CurRxRate[ucBssIndex] = u2Rate;
+		prAdapter->prGlueInfo->PerfIndCache.
+			ucCurRxRCPI0[ucBssIndex] = ucRCPI0;
+		prAdapter->prGlueInfo->PerfIndCache.
+			ucCurRxRCPI1[ucBssIndex] = ucRCPI1;
+	}
 }
 #endif
 

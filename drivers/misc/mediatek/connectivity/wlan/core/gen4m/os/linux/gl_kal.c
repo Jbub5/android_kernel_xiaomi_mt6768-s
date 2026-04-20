@@ -257,7 +257,7 @@ static void kalDumpMsduReportStats(IN struct ADAPTER *prAdapter);
 #define  KGIDT_VALUE(v) v
 #endif
 
-const struct firmware *wifi_fw_entry;
+const struct firmware *fw_entry;
 
 /* Default */
 static uint8_t *apucFwName[] = {
@@ -331,7 +331,7 @@ uint32_t kalFirmwareOpen(IN struct GLUE_INFO *prGlueInfo,
 		 *               "/firmware/image"
 		 * Linux path: "/lib/firmware", "/lib/firmware/update"
 		 */
-		ret = _kalRequestFirmware(&wifi_fw_entry, apucNameTable[ucNameIdx],
+		ret = _kalRequestFirmware(&fw_entry, apucNameTable[ucNameIdx],
 				       prGlueInfo->prDev);
 
 		if (ret) {
@@ -377,7 +377,7 @@ error_open:
 /*----------------------------------------------------------------------------*/
 uint32_t kalFirmwareClose(IN struct GLUE_INFO *prGlueInfo)
 {
-	release_firmware(wifi_fw_entry);
+	release_firmware(fw_entry);
 
 	return WLAN_STATUS_SUCCESS;
 }
@@ -402,12 +402,12 @@ uint32_t kalFirmwareLoad(IN struct GLUE_INFO *prGlueInfo,
 	ASSERT(pu4Size);
 	ASSERT(prBuf);
 
-	if ((wifi_fw_entry == NULL) || (wifi_fw_entry->size == 0)
-	    || (wifi_fw_entry->data == NULL)) {
+	if ((fw_entry == NULL) || (fw_entry->size == 0)
+	    || (fw_entry->data == NULL)) {
 		goto error_read;
 	} else {
-		memcpy(prBuf, wifi_fw_entry->data, wifi_fw_entry->size);
-		*pu4Size = wifi_fw_entry->size;
+		memcpy(prBuf, fw_entry->data, fw_entry->size);
+		*pu4Size = fw_entry->size;
 	}
 
 	return WLAN_STATUS_SUCCESS;
@@ -435,7 +435,7 @@ uint32_t kalFirmwareSize(IN struct GLUE_INFO *prGlueInfo,
 	ASSERT(prGlueInfo);
 	ASSERT(pu4Size);
 
-	*pu4Size = wifi_fw_entry->size;
+	*pu4Size = fw_entry->size;
 
 	return WLAN_STATUS_SUCCESS;
 }
@@ -1098,6 +1098,55 @@ uint32_t kalRxIndicatePkts(IN struct GLUE_INFO *prGlueInfo,
 }
 
 #if CFG_SUPPORT_RX_GRO
+#if KERNEL_VERSION(4, 15, 0) <= CFG80211_VERSION_CODE
+void kalGROTimerFunc(struct timer_list *timer)
+#else
+void kalGROTimerFunc(unsigned long data)
+#endif
+{
+#if KERNEL_VERSION(4, 15, 0) <= CFG80211_VERSION_CODE
+	struct ADAPTER *prAdapter =
+		from_timer(prAdapter, timer, rRxGROTimer);
+	struct GLUE_INFO *prGlueInfo = prAdapter->prGlueInfo;
+#else
+	struct GLUE_INFO *prGlueInfo = (struct GLUE_INFO *)data;
+#endif
+	kalSetGROEvent2Rx(prGlueInfo);
+}
+
+static inline void kalGROTimerStart(
+	struct ADAPTER *prAdapter, uint32_t u4Timeout)
+{
+	mod_timer(&prAdapter->rRxGROTimer,
+		jiffies + MSEC_TO_JIFFIES(
+		u4Timeout));
+}
+
+static inline void kalGROTimerStop(struct ADAPTER *prAdapter)
+{
+	del_timer_sync(&prAdapter->rRxGROTimer);
+}
+
+void kalGROTimerInit(struct ADAPTER *prAdapter)
+{
+#if KERNEL_VERSION(4, 15, 0) <= CFG80211_VERSION_CODE
+	timer_setup(&prAdapter->rRxGROTimer,
+			kalGROTimerFunc,
+			0);
+#else
+	init_timer(&prAdapter->rRxGROTimer);
+	prAdapter->rRxGROTimer.data =
+			(unsigned long)prAdapter->prGlueInfo;
+	prAdapter->rRxGROTimer.function =
+			kalGROTimerFunc;
+#endif
+}
+
+void kalGROTimerUninit(struct ADAPTER *prAdapter)
+{
+	kalGROTimerStop(prAdapter);
+}
+
 /*----------------------------------------------------------------------------*/
 /*!
  * \brief To indicate Tput is higher than ucGROEnableTput or not.
@@ -1178,15 +1227,15 @@ void kal_gro_flush(struct ADAPTER *prAdapter, struct net_device *prDev)
 	if (CHECK_FOR_TIMEOUT(kalGetTimeTick(),
 		prNetDevPrivate->tmGROFlushTimeout,
 		prWifiVar->ucGROFlushTimeout)) {
-		napi_gro_flush(napi, false);
+		kalGROTimerStop(prAdapter);
+		napi_gro_flush_list(napi);
 		DBGLOG_LIMITED(INIT, TRACE, "napi_gro_flush:%p\n", prDev);
-#if KERNEL_VERSION(5, 4, 0) <= CFG80211_VERSION_CODE
-		prNetDevPrivate->u4PendingFlushNum = napi->rx_count;
-#else
 		prNetDevPrivate->u4PendingFlushNum = 0;
-#endif
-	} else
+	} else {
 		prNetDevPrivate->u4PendingFlushNum++;
+		kalGROTimerStart(prAdapter,
+			prWifiVar->ucGROFlushTimeout);
+	}
 
 	GET_CURRENT_SYSTIME(&prNetDevPrivate->tmGROFlushTimeout);
 }
@@ -1725,6 +1774,9 @@ kalIndicateStatusAndComplete(IN struct GLUE_INFO
 				aisGetConnSettings(prAdapter, ucBssIndex);
 			if (eStatus == WLAN_STATUS_ROAM_OUT_FIND_BEST) {
 #if KERNEL_VERSION(4, 12, 0) <= CFG80211_VERSION_CODE
+				uint8_t ucAuthorized = pvBuf ?
+					*(uint8_t *) pvBuf : FALSE;
+
 				rRoamInfo.bss = bss;
 				rRoamInfo.req_ie = prConnSettings->aucReqIe;
 				rRoamInfo.req_ie_len =
@@ -1732,11 +1784,16 @@ kalIndicateStatusAndComplete(IN struct GLUE_INFO
 				rRoamInfo.resp_ie = prConnSettings->aucRspIe;
 				rRoamInfo.resp_ie_len =
 					prConnSettings->u4RspIeLength;
-#if KERNEL_VERSION(4, 19, 0) > CFG80211_VERSION_CODE
-				rRoamInfo.authorized = *(uint8_t *) pvBuf;
+#if KERNEL_VERSION(4, 15, 0) > CFG80211_VERSION_CODE
+				rRoamInfo.authorized = ucAuthorized;
 #endif
 				cfg80211_roamed(prDevHandler,
 					&rRoamInfo, GFP_KERNEL);
+#if KERNEL_VERSION(4, 15, 0) <= CFG80211_VERSION_CODE
+				if (ucAuthorized)
+					cfg80211_port_authorized(prDevHandler,
+						arBssid, GFP_KERNEL);
+#endif
 #else
 				cfg80211_roamed_bss(
 					prDevHandler,
@@ -2916,6 +2973,7 @@ kalIPv6FrameClassifier(IN struct GLUE_INFO *prGlueInfo,
 	uint8_t ucIpv6Proto;
 	uint8_t *pucL3Hdr;
 	struct ADAPTER *prAdapter = NULL;
+	uint8_t ucSeqNo;
 
 	prAdapter = prGlueInfo->prAdapter;
 	ucIpv6Proto = pucIpv6Hdr[IPV6_HDR_IP_PROTOCOL_OFFSET];
@@ -2944,6 +3002,10 @@ kalIPv6FrameClassifier(IN struct GLUE_INFO *prGlueInfo,
 		}
 #endif /* CFG_TCP_IP_CHKSUM_OFFLOAD */
 #endif /* Automation */
+	} else if (ucIpv6Proto == IPV6_PROTOCOL_ICMPV6) { /* ICMPV6 */
+		ucSeqNo = nicIncreaseTxSeqNum(prGlueInfo->prAdapter);
+		GLUE_SET_PKT_SEQ_NO(prPacket, ucSeqNo);
+		prTxPktInfo->u2Flag |= BIT(ENUM_PKT_ICMPV6);
 	}
 
 	return TRUE;
@@ -3132,12 +3194,8 @@ kalQoSFrameClassifierAndPacketInfo(IN struct GLUE_INFO *prGlueInfo,
 		break;
 
 	case ETH_P_IPV6:
-#if CFG_SUPPORT_WIFI_SYSDVT
-#if (CFG_TCP_IP_CHKSUM_OFFLOAD)
 		kalIPv6FrameClassifier(prGlueInfo, prPacket,
 				       pucNextProtocol, prTxPktInfo);
-#endif
-#endif
 
 #if DSCP_SUPPORT
 		if (GLUE_GET_PKT_BSS_IDX(prSkb) != P2P_DEV_BSS_INDEX) {
@@ -4508,11 +4566,15 @@ int rx_thread(void *data)
 					->rWifiVar.u4WakeLockRxTimeout));
 				}
 			}
-#if CFG_SUPPORT_RX_GRO
-			kal_gro_flush_queue(prGlueInfo);
-#endif /* CFG_SUPPORT_RX_GRO */
 			kalTraceEnd(); /* RX_TO_OS */
 		}
+
+#if CFG_SUPPORT_RX_GRO
+		if (test_and_clear_bit(GLUE_FLAG_RX_GRO_TIMEOUT_BIT,
+				       &prGlueInfo->ulFlag)) {
+			kal_gro_flush_queue(prGlueInfo);
+		}
+#endif /* CFG_SUPPORT_RX_GRO */
 
 		kalTraceEnd(); /* rx_thread*/
 	}
@@ -5653,6 +5715,21 @@ void kalSetTxEvent2Rx(struct GLUE_INFO *pr)
 	wake_up_interruptible(&pr->waitq_rx);
 }
 
+#if CFG_SUPPORT_RX_GRO
+void kalSetGROEvent2Rx(struct GLUE_INFO *pr)
+{
+	if (!pr->rx_thread)
+		return;
+
+	KAL_WAKE_LOCK_TIMEOUT(pr->prAdapter, pr->rTimeoutWakeLock,
+			      MSEC_TO_JIFFIES(
+			      pr->prAdapter->rWifiVar.u4WakeLockThreadWakeup));
+
+	set_bit(GLUE_FLAG_RX_GRO_TIMEOUT_BIT, &pr->ulFlag);
+	wake_up_interruptible(&pr->waitq_rx);
+}
+#endif /* CFG_SUPPORT_RX_GRO */
+
 void kalSetTxCmdEvent2Hif(struct GLUE_INFO *pr)
 {
 	if (!pr->hif_thread)
@@ -6550,7 +6627,7 @@ void kalSchedScanStopped(IN struct GLUE_INFO *prGlueInfo,
 	 */
 	if (fgDriverTriggerd) {
 		DBGLOG(SCN, INFO, "start work queue to send event\n");
-		queue_delayed_work(system_power_efficient_wq, &sched_workq, 0);
+		schedule_delayed_work(&sched_workq, 0);
 		DBGLOG(SCN, INFO, "main_thread return from %s\n", __func__);
 	}
 }
@@ -7753,6 +7830,8 @@ void kalPerfIndReset(IN struct ADAPTER *prAdapter)
 		prAdapter->prGlueInfo->PerfIndCache.u2CurRxRate[i] = 0;
 		prAdapter->prGlueInfo->PerfIndCache.ucCurRxRCPI0[i] = 0;
 		prAdapter->prGlueInfo->PerfIndCache.ucCurRxRCPI1[i] = 0;
+		prAdapter->prGlueInfo->PerfIndCache.ucCurRxNss[i] = 0;
+		prAdapter->prGlueInfo->PerfIndCache.ucCurRxNss2[i] = 0;
 	}
 } /* kalPerfIndReset */
 
@@ -7793,6 +7872,8 @@ void kalSetPerfReport(IN struct ADAPTER *prAdapter)
 			prAdapter->prGlueInfo->PerfIndCache.ucCurRxRCPI1[i];
 		prCmdPerfReport->ucCurRxNss[i] =
 			prAdapter->prGlueInfo->PerfIndCache.ucCurRxNss[i];
+		prCmdPerfReport->ucCurRxNss2[i] =
+			prAdapter->prGlueInfo->PerfIndCache.ucCurRxNss2[i];
 		u4CurrentTp += (prCmdPerfReport->ulCurTxBytes[i] +
 			prCmdPerfReport->ulCurRxBytes[i]);
 	}
@@ -8478,10 +8559,14 @@ int32_t __weak kalGetFwFlavorByPlat(uint8_t *flavor)
 	return 0;
 }
 
-int32_t kalGetFwFlavor(struct ADAPTER *prAdapter, uint8_t *flavor)
+int32_t kalGetFwFlavor(uint8_t *flavor)
 {
-	if (prAdapter && prAdapter->fw_flavor) {
-		*flavor = prAdapter->fw_flavor[0];
+	struct mt66xx_hif_driver_data *prDriverData;
+
+	prDriverData = get_platform_driver_data();
+
+	if (prDriverData->fw_flavor) {
+		*flavor = prDriverData->fw_flavor[0];
 		return 1;
 	}
 

@@ -1741,6 +1741,7 @@ struct ADAPTER {
 	/* flag to report all networks in p2p scan */
 	u_int8_t p2p_scan_report_all_bss;
 	enum ENUM_NET_REG_STATE rP2PNetRegState;
+	enum ENUM_P2P_REG_STATE rP2PRegState;
 	/* BOOLEAN             fgIsWlanLaunched; */
 	struct P2P_INFO *prP2pInfo;
 #if CFG_SUPPORT_P2P_RSSI_QUERY
@@ -1969,6 +1970,7 @@ struct ADAPTER {
 
 	uint32_t u4HifDbgFlag;
 	uint32_t u4HifChkFlag;
+	uint32_t u4HifDbgParam;
 	uint32_t u4NoMoreRfb;
 
 	/* Only for PCIE DmaSchdl usage so far. */
@@ -2061,6 +2063,10 @@ struct ADAPTER {
 	u_int8_t fgEnRmacICS;
 #endif /* CFG_SUPPORT_ICS */
 
+#if CFG_SUPPORT_RX_GRO
+	struct timer_list rRxGROTimer;
+#endif /* CFG_SUPPORT_RX_GRO */
+
 #if (CFG_SUPPORT_POWER_THROTTLING == 1)
 	struct LINK rPwrLevelHandlerList;
 	uint32_t u4PwrLevel;
@@ -2075,10 +2081,6 @@ struct ADAPTER {
 	bool fgANTCtrl;
 	u_int8_t ucANTCtrlReason;
 	u_int8_t ucANTCtrlPendingCount;
-#endif
-
-#if (CFG_SUPPORT_WIFI_RNR == 1)
-	struct LINK rNeighborAPInfoList;
 #endif
 
 #ifdef CFG_MSCS_SUPPORT

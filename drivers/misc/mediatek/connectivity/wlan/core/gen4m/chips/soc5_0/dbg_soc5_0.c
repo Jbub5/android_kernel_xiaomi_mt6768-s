@@ -1030,6 +1030,7 @@ void soc5_0_dump_mac_info(IN struct ADAPTER *prAdapter)
 
 #ifdef CFG_SUPPORT_LINK_QUALITY_MONITOR
 int soc5_0_get_rx_rate_info(IN struct ADAPTER *prAdapter,
+		IN uint8_t ucBssIdx,
 		OUT uint32_t *pu4Rate, OUT uint32_t *pu4Nss,
 		OUT uint32_t *pu4RxMode, OUT uint32_t *pu4FrMode,
 		OUT uint32_t *pu4Sgi)
@@ -1044,7 +1045,7 @@ int soc5_0_get_rx_rate_info(IN struct ADAPTER *prAdapter,
 		(!pu4Sgi))
 		return -1;
 
-	prStaRec = aisGetStaRecOfAP(prAdapter, AIS_DEFAULT_INDEX);
+	prStaRec = aisGetStaRecOfAP(prAdapter, ucBssIdx);
 	if (prStaRec) {
 		ucWlanIdx = prStaRec->ucWlanIndex;
 	} else {
@@ -1161,7 +1162,7 @@ void soc5_0_get_rx_link_stats(IN struct ADAPTER *prAdapter,
 			rate.nss /= 2;
 	}
 
-	rate.rateMcsIdx = RXV_GET_RX_RATE(u4RxVector0);
+	rate.rateMcsIdx = RXV_GET_RX_RATE(u4RxVector0) & 0xF; /* 0 ~ 15 */
 
 	if (rate.preamble == LLS_MODE_CCK)
 		rate.rateMcsIdx &= 0x3; /* 0: 1M; 1: 2M; 2: 5.5M; 3: 11M  */

@@ -1660,7 +1660,8 @@ struct CMD_PERF_IND {
 	uint8_t ucCurRxRCPI0[4];
 	uint8_t ucCurRxRCPI1[4];
 	uint8_t ucCurRxNss[4];
-	uint32_t au4Reserve[63];
+	uint8_t ucCurRxNss2[4];
+	uint32_t au4Reserve[62];
 };
 
 #if CFG_SUPPORT_SMART_GEAR
@@ -2666,7 +2667,7 @@ struct CMD_SCHED_SCAN_REQ {
 	uint8_t ucMatchSsidNum;
 	uint8_t aucPadding_0;
 	uint16_t u2IELen;
-	struct PARAM_SSID auSsid[10];
+	struct PARAM_SSID auSsid[16];
 	struct SSID_MATCH_SETS auMatchSsid[16];
 	uint8_t ucChannelType;
 	uint8_t ucChnlNum;

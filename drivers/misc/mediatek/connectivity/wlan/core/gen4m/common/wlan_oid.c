@@ -1474,6 +1474,71 @@ wlanoidSetConnect(IN struct ADAPTER *prAdapter,
 
 /*----------------------------------------------------------------------------*/
 /*!
+ * \brief This interface aim to update the connect params.
+ *
+ * \param[in] prAdapter Pointer to the Adapter structure.
+ * \param[in] pvSetBuffer Pointer to the buffer that holds the data to be set.
+ * \param[in] u4SetBufferLen The length of the set buffer.
+ * \param[out] pu4SetInfoLen If the call is successful, returns the number of
+ *                           bytes read from the set buffer. If the call failed
+ *                           due to invalid length of the set buffer, returns
+ *                           the amount of storage needed.
+ *
+ * \retval WLAN_STATUS_SUCCESS
+ * \retval WLAN_STATUS_INVALID_DATA
+ * \retval WLAN_STATUS_ADAPTER_NOT_READY
+ * \retval WLAN_STATUS_INVALID_LENGTH
+ */
+/*----------------------------------------------------------------------------*/
+uint32_t
+wlanoidUpdateConnect(IN struct ADAPTER *prAdapter,
+		IN void *pvSetBuffer, IN uint32_t u4SetBufferLen,
+		OUT uint32_t *pu4SetInfoLen)
+{
+	struct CONNECTION_SETTINGS *prConnSettings;
+	uint8_t ucBssIndex = 0;
+	struct PARAM_CONNECT *pParamConn;
+
+	ucBssIndex = GET_IOCTL_BSSIDX(prAdapter);
+	prConnSettings = aisGetConnSettings(prAdapter, ucBssIndex);
+	pParamConn = (struct PARAM_CONNECT *) pvSetBuffer;
+
+	switch (prConnSettings->eAuthMode) {
+	case AUTH_MODE_WPA3_OWE:
+		/*Should update Diffie-Hallmen params*/
+		if (prConnSettings->assocIeLen > 0) {
+			kalMemFree(prConnSettings->pucAssocIEs, VIR_MEM_TYPE,
+				prConnSettings->assocIeLen);
+			prConnSettings->assocIeLen = 0;
+		}
+
+		if (pParamConn->u4IesLen > 0) {
+			prConnSettings->assocIeLen = pParamConn->u4IesLen;
+			prConnSettings->pucAssocIEs =
+				kalMemAlloc(prConnSettings->assocIeLen,
+					    VIR_MEM_TYPE);
+			/* skip memory leak checking */
+			kmemleak_ignore(prConnSettings->pucAssocIEs);
+
+			if (prConnSettings->pucAssocIEs) {
+				kalMemCopy(prConnSettings->pucAssocIEs,
+					    pParamConn->pucIEs,
+					    prConnSettings->assocIeLen);
+			} else {
+				DBGLOG(INIT, INFO,
+					"allocate mem for prConnSettings->pucAssocIEs failed\n");
+					prConnSettings->assocIeLen = 0;
+			}
+		}
+		break;
+	default:
+		break;
+	}
+	return WLAN_STATUS_SUCCESS;
+}
+
+/*----------------------------------------------------------------------------*/
+/*!
  * \brief This routine is called to query the currently associated SSID.
  *
  * \param[in] prAdapter Pointer to the Adapter structure.
@@ -9629,12 +9694,15 @@ wlanoidSetNetworkAddress(IN struct ADAPTER *prAdapter,
 					sizeof(uint32_t));
 
 				DBGLOG(OID, INFO,
-				"%s:IPv4 Addr[%u]["IPV4STR"]Mask["IPV4STR"]\n",
+				"%s:IPv4 Addr[%u]["IPV4STR"]Mask["IPV4STR
+				"]BSS[%d] ver[%d]\n",
 				__func__,
 				u4IPv4AddrIdx,
 				IPV4TOSTR(prNetworkAddress->aucAddress),
 				IPV4TOSTR(prNetworkAddress->
-				aucAddress+sizeof(uint32_t)));
+				aucAddress+sizeof(uint32_t)),
+				prCmdNetworkAddressList->ucBssIndex,
+				prCmdNetworkAddressList->ucVersion);
 
 				u4IPv4AddrIdx++;
 			}
@@ -9650,12 +9718,6 @@ wlanoidSetNetworkAddress(IN struct ADAPTER *prAdapter,
 	} else {
 		prCmdNetworkAddressList->ucAddressCount = 0;
 	}
-
-	DBGLOG(OID, INFO,
-	       "%s: Set %u IPv4 address for BSS[%d] ver[%d]\n", __func__,
-		u4IPv4AddrCount,
-		prCmdNetworkAddressList->ucBssIndex,
-		prCmdNetworkAddressList->ucVersion);
 
 	/* 4 <5> Send command */
 	rStatus = wlanSendSetQueryCmd(prAdapter,
@@ -9776,11 +9838,12 @@ wlanoidSetIPv6NetworkAddress(IN struct ADAPTER *prAdapter,
 				->arNetAddress[u4IPv6AddrCount].aucIpAddr,
 				prNetworkAddress->aucAddress,
 				sizeof(struct CMD_IPV6_NETWORK_ADDRESS));
-
 				DBGLOG(INIT, INFO,
-				       "%s: IPv6 Addr [%u][" IPV6STR "]\n",
-				       __func__, u4IPv6AddrCount,
-				       IPV6TOSTR(prNetworkAddress->aucAddress));
+					"%s: IPv6 Addr [%u][" IPV6STR
+					"]BSS[%d]\n",
+					__func__, u4IPv6AddrCount,
+					IPV6TOSTR(prNetworkAddress->aucAddress),
+				       prCmdIPv6NetworkAddressList->ucBssIndex);
 
 				u4IPv6AddrCount++;
 			}
@@ -9796,11 +9859,6 @@ wlanoidSetIPv6NetworkAddress(IN struct ADAPTER *prAdapter,
 	} else {
 		prCmdIPv6NetworkAddressList->ucAddressCount = 0;
 	}
-
-	DBGLOG(INIT, INFO,
-	       "Set %u IPv6 address for BSS[%u]\n",
-	       u4IPv6AddrCount,
-	       prCmdIPv6NetworkAddressList->ucBssIndex);
 
 	/* 4 <5> Send command */
 	rStatus = wlanSendSetQueryCmd(prAdapter,
@@ -16056,15 +16114,9 @@ uint32_t wlanoidUpdateFtIes(struct ADAPTER *prAdapter, void *pvSetBuffer,
 	}
 	prFtContinueMsg->rMsgHdr.eMsgId = MID_OID_SAA_FSM_CONTINUE;
 	prFtContinueMsg->prStaRec = prStaRec;
-	/* ToDo: for Resource Request Protocol, we need to check if RIC request
-	** is included.
-	*/
-	if (prFtIes->prMDIE && (prFtIes->prMDIE->ucBitMap & BIT(1)))
-		prFtContinueMsg->fgFTRicRequest = TRUE;
-	else
-		prFtContinueMsg->fgFTRicRequest = FALSE;
-	DBGLOG(OID, INFO, "FT: continue to do auth/assoc, Ft Request %d\n",
-	       prFtContinueMsg->fgFTRicRequest);
+	/* We don't support resource request protocol */
+	prFtContinueMsg->fgFTRicRequest = FALSE;
+	DBGLOG(OID, INFO, "FT: continue to do auth/assoc\n");
 	mboxSendMsg(prAdapter, MBOX_ID_0, (struct MSG_HDR *)prFtContinueMsg,
 		    MSG_SEND_METHOD_BUF);
 	return WLAN_STATUS_SUCCESS;

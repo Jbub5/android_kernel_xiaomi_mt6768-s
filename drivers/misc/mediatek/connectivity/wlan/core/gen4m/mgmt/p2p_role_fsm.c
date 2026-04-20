@@ -1442,6 +1442,13 @@ void p2pRoleFsmRunEventStartAP(IN struct ADAPTER *prAdapter,
 #endif
 	}
 
+	/* Clear current AP's STA_RECORD_T and current AID to prevent
+	 * using previous p2p connection state. This is needed because
+	 * upper layer may add keys before we start SAP/GO.
+	 */
+	prP2pBssInfo->prStaRecOfAP = (struct STA_RECORD *) NULL;
+	prP2pBssInfo->u2AssocId = 0;
+
 	/* Clear list to ensure no client staRec */
 	if (bssGetClientCount(prAdapter, prP2pBssInfo) != 0) {
 		DBGLOG(P2P, WARN,
@@ -1651,6 +1658,7 @@ void p2pRoleFsmRunEventDelIface(IN struct ADAPTER *prAdapter,
 
 		nicDeactivateNetwork(prAdapter, prP2pRoleFsmInfo->ucBssIndex);
 		nicUpdateBss(prAdapter, prP2pRoleFsmInfo->ucBssIndex);
+		prP2pBssInfo->eCurrentOPMode = OP_MODE_INFRASTRUCTURE;
 	}
 
 error:
@@ -1995,6 +2003,15 @@ void p2pRoleFsmRunEventSetNewChannel(IN struct ADAPTER *prAdapter,
 	prP2pBssInfo = GET_BSS_INFO_BY_INDEX(prAdapter,
 		prMsgP2pSetNewChannelMsg->ucBssIndex);
 
+	if (prP2pBssInfo &&
+		kalP2pIsStoppingAp(prAdapter,
+		prP2pBssInfo)) {
+		DBGLOG(P2P, ERROR,
+			"BSS %d is disabled.\n",
+			prP2pBssInfo->ucBssIndex);
+		goto error;
+	}
+
 	prP2pRoleFsmInfo =
 		P2P_ROLE_INDEX_2_ROLE_FSM_INFO(prAdapter,
 			prMsgP2pSetNewChannelMsg->ucRoleIdx);
@@ -2061,6 +2078,10 @@ void p2pRoleFsmRunEventCsaDone(IN struct ADAPTER *prAdapter,
 		if (prAdapter->rWifiVar.eDbdcMode != ENUM_DBDC_MODE_DISABLED &&
 			prP2pBssInfo->eBand !=
 				prP2pRoleFsmInfo->rChnlReqInfo.eBand) {
+			/* Indicate PM abort to sync BSS state with FW */
+			nicPmIndicateBssAbort(prAdapter,
+				prP2pBssInfo->ucBssIndex);
+
 			nicDeactivateNetwork(prAdapter,
 				prP2pBssInfo->ucBssIndex);
 			nicUpdateBss(prAdapter,
@@ -2248,6 +2269,8 @@ void p2pRoleFsmRunEventConnectionRequest(IN struct ADAPTER *prAdapter,
 			p2pRoleFsmDeauthComplete(prAdapter, prStaRec);
 		}
 	}
+	/* Reset intended OP mode */
+	prP2pBssInfo->eIntendOPMode = OP_MODE_P2P_DEVICE;
 	/* Make sure the state is in IDLE state. */
 	if (prP2pRoleFsmInfo->eCurrentState != P2P_ROLE_STATE_IDLE)
 		p2pRoleFsmRunEventAbort(prAdapter, prP2pRoleFsmInfo);
@@ -2510,6 +2533,19 @@ void p2pRoleFsmRunEventConnectionAbort(IN struct ADAPTER *prAdapter,
 				cnmTimerStartTimer(prAdapter,
 					&(prCurrStaRec->rDeauthTxDoneTimer),
 					P2P_DEAUTH_TIMEOUT_TIME_MS);
+#if CFG_SUPPORT_802_11W
+			} else if (prP2pBssInfo
+				->u4RsnSelectedAKMSuite ==
+				RSN_AKM_SUITE_SAE) {
+				if (!completion_done(
+					&prP2pBssInfo->rDeauthComp)) {
+					DBGLOG(P2P, TRACE,
+						"Complete rDeauthComp\n");
+					complete(&prP2pBssInfo->rDeauthComp);
+				}
+				prP2pBssInfo
+					->encryptedDeauthIsInProcess = FALSE;
+#endif
 			}
 #if 0
 			LINK_FOR_EACH(prLinkEntry, prStaRecOfClientList) {
@@ -4446,7 +4482,13 @@ u_int8_t indicateApAcsOverwrite(
 			ucPrimaryCh = prAdapter->rWifiVar.ucApAcsChannel[0];
 			eChnlBw = prAdapter->rWifiVar.ucAp2gBandwidth;
 		} else if (p2pFuncIsDualAPMode(prAdapter)) {
-			ucPrimaryCh = AP_DEFAULT_CHANNEL_2G;
+			struct BSS_INFO *bss =
+				aisGetConnectedBssInfo(prAdapter);
+
+			if (!bss)
+				ucPrimaryCh = AP_DEFAULT_CHANNEL_2G;
+			else if (bss->eBand == BAND_2G4)
+				ucPrimaryCh = bss->ucPrimaryChannel;
 			eChnlBw = prAdapter->rWifiVar.ucAp2gBandwidth;
 		}
 	} else if ((eBand == BAND_5G) &&
@@ -4545,7 +4587,10 @@ void p2pRoleFsmRunEventAcs(IN struct ADAPTER *prAdapter,
 
 		prAisBssInfo = aisGetAisBssInfo(prAdapter,
 			AIS_DEFAULT_INDEX);
-		if (prAisBssInfo->eConnectionState == MEDIA_STATE_CONNECTED) {
+		if (prAisBssInfo->eConnectionState == MEDIA_STATE_CONNECTED &&
+			(!p2pFuncIsDualAPMode(prAdapter) ||
+			(p2pFuncIsDualAPMode(prAdapter) &&
+			prAisBssInfo->eBand > BAND_2G4))) {
 			/* Force SCC, indicate channel directly */
 			indicateAcsResultByAisCh(prAdapter, prAcsReqInfo,
 				prAisBssInfo);

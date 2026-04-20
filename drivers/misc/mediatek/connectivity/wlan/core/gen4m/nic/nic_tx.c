@@ -2536,6 +2536,9 @@ uint32_t nicTxCmd(IN struct ADAPTER *prAdapter,
 	wlanTraceTxCmd(prCmdInfo);
 #endif
 
+	if (!halTxIsCmdBufEnough(prAdapter))
+		return WLAN_STATUS_RESOURCES;
+
 	if (prCmdInfo->eCmdType == COMMAND_TYPE_SECURITY_FRAME ||
 		prCmdInfo->eCmdType == COMMAND_TYPE_DATA_FRAME) {
 		prMsduInfo = prCmdInfo->prMsduInfo;
@@ -3011,6 +3014,8 @@ u_int8_t nicTxFillMsduInfo(IN struct ADAPTER *prAdapter,
 			prMsduInfo->ucPktType = ENUM_PKT_TDLS;
 		else if (GLUE_TEST_PKT_FLAG(prPacket, ENUM_PKT_DNS))
 			prMsduInfo->ucPktType = ENUM_PKT_DNS;
+		else if (GLUE_TEST_PKT_FLAG(prPacket, ENUM_PKT_ICMPV6))
+			prMsduInfo->ucPktType = ENUM_PKT_ICMPV6;
 
 #if (CFG_SUPPORT_DMASHDL_SYSDVT)
 		if (prMsduInfo->ucPktType != ENUM_PKT_ICMP) {

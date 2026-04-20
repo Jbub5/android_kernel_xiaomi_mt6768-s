@@ -155,6 +155,25 @@ static bool halIsFwReadyDump(struct ADAPTER *prAdapter)
 	return (u4Val == DBG_PLE_INT_FW_READY) || (u4Val == 0);
 }
 
+static void halTriggerTxHangFwDebugSop(
+	struct ADAPTER *prAdapter, uint32_t u4BssIndex)
+{
+	struct CHIP_DBG_OPS *prDbgOps = prAdapter->chip_info->prDebugOps;
+
+	if (prDbgOps && prDbgOps->setFwDebug) {
+		/* trigger tx debug sop */
+		prDbgOps->setFwDebug(
+			prAdapter,
+			true,
+			0xffff,
+			DBG_PLE_INT_TX_MASK |
+			(1 << DBG_PLE_INT_VER_SHIFT) |
+			(u4BssIndex << DBG_PLE_INT_BAND_BSS_SHIFT)
+			);
+		DBGLOG(HAL, INFO, "Trigger Fw Debug SOP[%d]\n", u4BssIndex);
+	}
+}
+
 static void halDumpTxHangLog(struct ADAPTER *prAdapter, uint32_t u4TokenId)
 {
 	struct CHIP_DBG_OPS *prDbgOps;
@@ -198,17 +217,7 @@ static void halDumpTxHangLog(struct ADAPTER *prAdapter, uint32_t u4TokenId)
 		DBGLOG(HAL, ERROR, "Fw not ready to dump log\n");
 	}
 
-	if (prDbgOps && prDbgOps->setFwDebug) {
-		/* trigger tx debug sop */
-		prDbgOps->setFwDebug(
-			prAdapter,
-			true,
-			0xffff,
-			DBG_PLE_INT_TX_MASK |
-			(1 << DBG_PLE_INT_VER_SHIFT) |
-			(prToken->ucBssIndex << DBG_PLE_INT_BAND_BSS_SHIFT)
-			);
-	}
+	halTriggerTxHangFwDebugSop(prAdapter, prToken->ucBssIndex);
 }
 
 static void halCheckHifState(struct ADAPTER *prAdapter)
@@ -242,7 +251,11 @@ static void halCheckHifState(struct ADAPTER *prAdapter)
 	if (prAdapter->u4HifChkFlag & HIF_DRV_SER)
 		halSetDrvSer(prAdapter);
 
+	if (prAdapter->u4HifChkFlag & HIF_TRIGGER_FW_DUMP)
+		halTriggerTxHangFwDebugSop(prAdapter, prAdapter->u4HifDbgParam);
+
 	prAdapter->u4HifChkFlag = 0;
+	prAdapter->u4HifDbgParam = 0;
 }
 
 static void halDumpHifDebugLog(struct ADAPTER *prAdapter)
@@ -601,13 +614,13 @@ void kalDumpTxRing(struct GLUE_INFO *prGlueInfo,
 
 void kalDumpRxRing(struct GLUE_INFO *prGlueInfo,
 		   struct RTMP_RX_RING *prRxRing,
-		   uint32_t u4Num, bool fgDumpContent)
+		   uint32_t u4Num, bool fgDumpContent,
+		   uint32_t u4DumpLen)
 {
 	struct GL_HIF_INFO *prHifInfo = NULL;
 	struct HIF_MEM_OPS *prMemOps;
 	struct RTMP_DMACB *pRxCell;
 	struct RXD_STRUCT *pRxD;
-	uint32_t u4DumpLen = 64;
 
 	ASSERT(prGlueInfo);
 	prHifInfo = &prGlueInfo->rHifInfo;
@@ -817,12 +830,12 @@ void halShowPdmaInfo(IN struct ADAPTER *prAdapter)
 		prRxRing = &prHifInfo->RxRing[i];
 		SwIdx = wfmda_rx_group[i].didx;
 		kalDumpRxRing(prAdapter->prGlueInfo, prRxRing,
-			      SwIdx, true);
+			      SwIdx, true, 64);
 		SwIdx = wfmda_rx_group[i].didx == 0 ?
 				wfmda_rx_group[i].cnt - 1 :
 				wfmda_rx_group[i].didx - 1;
 		kalDumpRxRing(prAdapter->prGlueInfo, prRxRing,
-			      SwIdx, true);
+			      SwIdx, true, 64);
 	}
 
 	/* PDMA Busy Status */

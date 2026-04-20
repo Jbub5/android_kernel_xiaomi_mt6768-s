@@ -3097,13 +3097,16 @@ void connac2x_show_wfdma_desc(IN struct ADAPTER *prAdapter)
 		DBGLOG(HAL, INFO, "Dump WFDMA Rx Ring[%s]\n", prGroup->name);
 		prRxRing = &prHifInfo->RxRing[i];
 		u4SwIdx = prGroup->didx;
-		kalDumpRxRing(prAdapter->prGlueInfo, prRxRing, u4SwIdx, true);
+		kalDumpRxRing(prAdapter->prGlueInfo, prRxRing,
+					  u4SwIdx, true, 64);
 		u4SwIdx = prGroup->didx == 0 ?
 			prGroup->cnt - 1 : prGroup->didx - 1;
-		kalDumpRxRing(prAdapter->prGlueInfo, prRxRing, u4SwIdx, true);
+		kalDumpRxRing(prAdapter->prGlueInfo, prRxRing,
+					  u4SwIdx, true, 64);
 		u4SwIdx = prGroup->didx == prGroup->cnt - 1 ?
 			0 : prGroup->didx + 1;
-		kalDumpRxRing(prAdapter->prGlueInfo, prRxRing, u4SwIdx, true);
+		kalDumpRxRing(prAdapter->prGlueInfo, prRxRing,
+					  u4SwIdx, true, 64);
 	}
 }
 
@@ -4127,6 +4130,7 @@ void connac2x_DumpCrRange(
 
 #ifdef CFG_SUPPORT_LINK_QUALITY_MONITOR
 int connac2x_get_rx_rate_info(IN struct ADAPTER *prAdapter,
+		IN uint8_t ucBssIdx,
 		OUT uint32_t *pu4Rate, OUT uint32_t *pu4Nss,
 		OUT uint32_t *pu4RxMode, OUT uint32_t *pu4FrMode,
 		OUT uint32_t *pu4Sgi)
@@ -4141,7 +4145,7 @@ int connac2x_get_rx_rate_info(IN struct ADAPTER *prAdapter,
 		(!pu4Sgi))
 		return -1;
 
-	prStaRec = aisGetStaRecOfAP(prAdapter, AIS_DEFAULT_INDEX);
+	prStaRec = aisGetStaRecOfAP(prAdapter, ucBssIdx);
 	if (prStaRec) {
 		ucWlanIdx = prStaRec->ucWlanIndex;
 	} else {

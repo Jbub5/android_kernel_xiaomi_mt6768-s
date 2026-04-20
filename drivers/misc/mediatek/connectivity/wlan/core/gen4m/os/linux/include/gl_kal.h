@@ -150,7 +150,8 @@ extern bool fgIsTxPowerDecreased;
 	GLUE_FLAG_NOTIFY_MD_CRASH | \
 	GLUE_FLAG_DRV_INT)
 
-#define GLUE_FLAG_RX_PROCESS (GLUE_FLAG_HALT | GLUE_FLAG_RX_TO_OS)
+#define GLUE_FLAG_RX_PROCESS (GLUE_FLAG_HALT | GLUE_FLAG_RX_TO_OS | \
+	GLUE_FLAG_RX_GRO_TIMEOUT)
 #else
 /* All flags for single thread driver */
 #define GLUE_FLAG_TX_PROCESS  0xFFFFFFFF
@@ -1848,7 +1849,7 @@ void kalSetDrvEmiMpuProtection(phys_addr_t emiPhyBase, uint32_t offset,
 #endif
 int32_t kalSetCpuNumFreq(uint32_t u4CoreNum,
 			 uint32_t u4Freq);
-int32_t kalGetFwFlavor(struct ADAPTER *prAdapter, uint8_t *flavor);
+int32_t kalGetFwFlavor(uint8_t *flavor);
 int32_t kalGetFwFlavorByPlat(uint8_t *flavor);
 int32_t kalGetConnsysVerId(void);
 int32_t kalPerMonSetForceEnableFlag(uint8_t uFlag);
@@ -1898,6 +1899,14 @@ kalChannelFormatSwitch(IN struct cfg80211_chan_def *channel_def,
 		IN struct RF_CHANNEL_INFO *prRfChnlInfo);
 
 #if CFG_SUPPORT_RX_GRO
+void kalSetGROEvent2Rx(struct GLUE_INFO *pr);
+#if KERNEL_VERSION(4, 15, 0) <= CFG80211_VERSION_CODE
+void kalGROTimerFunc(struct timer_list *timer);
+#else
+void kalGROTimerFunc(unsigned long data);
+#endif
+void kalGROTimerInit(struct ADAPTER *prAdapter);
+void kalGROTimerUninit(struct ADAPTER *prAdapter);
 uint32_t kal_is_skb_gro(struct ADAPTER *prAdapter, uint8_t ucBssIdx);
 void kal_gro_flush(struct ADAPTER *prAdapter, struct net_device *prDev);
 #endif

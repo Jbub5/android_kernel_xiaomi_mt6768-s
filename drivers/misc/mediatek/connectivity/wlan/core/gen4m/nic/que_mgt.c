@@ -6617,7 +6617,8 @@ enum ENUM_FRAME_ACTION qmGetFrameAction(IN struct ADAPTER *prAdapter,
 	DEBUGFUNC("qmGetFrameAction");
 
 	prBssInfo = GET_BSS_INFO_BY_INDEX(prAdapter, ucBssIndex);
-	prStaRec = QM_GET_STA_REC_PTR_FROM_INDEX(prAdapter, ucStaRecIdx);
+	prStaRec = cnmGetStaRecByIndexWithoutInUseCheck(prAdapter,
+			ucStaRecIdx);
 
 	do {
 		/* 4 <1> Tx, if FORCE_TX is set */
@@ -6693,7 +6694,6 @@ enum ENUM_FRAME_ACTION qmGetFrameAction(IN struct ADAPTER *prAdapter,
 				}
 			}
 		}
-
 	} while (FALSE);
 
 	/* <5> Resource CHECK! */

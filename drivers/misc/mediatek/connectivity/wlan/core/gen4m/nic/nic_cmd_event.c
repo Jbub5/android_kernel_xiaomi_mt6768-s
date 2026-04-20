@@ -380,9 +380,6 @@ void nicCmdEventPfmuTagRead(IN struct ADAPTER *prAdapter,
 	g_rPfmuTag1 = prPfumTagRead->ru4TxBfPFMUTag1;
 	g_rPfmuTag2 = prPfumTagRead->ru4TxBfPFMUTag2;
 
-	kalOidComplete(prGlueInfo, prCmdInfo,
-		       u4QueryInfoLen, WLAN_STATUS_SUCCESS);
-
 	DBGLOG(INIT, INFO,
 	       "========================== (R)Tag1 info ==========================\n");
 
@@ -918,8 +915,9 @@ void nicCmdEventQueryLinkSpeedEx(IN struct ADAPTER *prAdapter,
 	struct EVENT_LINK_QUALITY *prLinkQuality;
 	struct PARAM_LINK_SPEED_EX *pu4LinkSpeed;
 	struct GLUE_INFO *prGlueInfo;
-	uint32_t u4CurRxRate, u4MaxRxRate, u4CurRxBw;
+	uint32_t u4CurRxRate, u4MaxRxRate;
 	uint32_t u4QueryInfoLen;
+	struct RateInfo rRateInfo = {0};
 	uint32_t i;
 
 	ASSERT(prAdapter);
@@ -941,13 +939,11 @@ void nicCmdEventQueryLinkSpeedEx(IN struct ADAPTER *prAdapter,
 
 			/*Fill Rx Rate in unit of 100bps*/
 			if (IS_BSS_INDEX_AIS(prAdapter, i) &&
-				(wlanGetRxRate(prGlueInfo, i,
-							  &u4CurRxRate,
-							  &u4MaxRxRate,
-							  &u4CurRxBw) == 0)) {
+			    wlanGetRxRate(prGlueInfo, i, &u4CurRxRate,
+				    &u4MaxRxRate, &rRateInfo) == 0) {
 				pu4LinkSpeed->rLq[i].u2RxLinkSpeed =
 					u4CurRxRate * 1000;
-				pu4LinkSpeed->rLq[i].u4RxBw = u4CurRxBw;
+				pu4LinkSpeed->rLq[i].u4RxBw = rRateInfo.u4Bw;
 			} else {
 				pu4LinkSpeed->rLq[i].u2RxLinkSpeed = 0;
 				pu4LinkSpeed->rLq[i].u4RxBw = 0;
@@ -4506,7 +4502,7 @@ void nicEventRddSendPulse(IN struct ADAPTER *prAdapter,
 void nicEventUpdateCoexPhyrate(IN struct ADAPTER *prAdapter,
 			       IN struct WIFI_EVENT *prEvent)
 {
-	uint8_t i;
+	uint8_t i, j;
 	struct EVENT_UPDATE_COEX_PHYRATE *prEventUpdateCoexPhyrate;
 
 	ASSERT(prAdapter);
@@ -4516,11 +4512,19 @@ void nicEventUpdateCoexPhyrate(IN struct ADAPTER *prAdapter,
 	prEventUpdateCoexPhyrate = (struct EVENT_UPDATE_COEX_PHYRATE
 				    *)(prEvent->aucBuffer);
 
+	/* This event indicate HW BSS, need to covert to SW BSS */
 	for (i = 0; i < (prAdapter->ucHwBssIdNum + 1); i++) {
-		prAdapter->aprBssInfo[i]->u4CoexPhyRateLimit =
-			prEventUpdateCoexPhyrate->au4PhyRateLimit[i];
-		DBGLOG_LIMITED(NIC, TRACE, "Coex:BSS[%d]R:%d\n", i,
-		       prAdapter->aprBssInfo[i]->u4CoexPhyRateLimit);
+		for (j = 0; j < (MAX_BSSID_NUM + 1); j++) {
+			if (prAdapter->aprBssInfo[j]->ucOwnMacIndex == i) {
+				prAdapter->aprBssInfo[j]->u4CoexPhyRateLimit =
+				  prEventUpdateCoexPhyrate->au4PhyRateLimit[i];
+
+				DBGLOG_LIMITED(NIC, INFO,
+				  "Coex:BSS[%d]R:%d, OwnMacID:%d\n", j,
+				  prAdapter->aprBssInfo[j]->u4CoexPhyRateLimit,
+				  prAdapter->aprBssInfo[j]->ucOwnMacIndex);
+			}
+		}
 	}
 
 	prAdapter->ucSmarGearSupportSisoOnly =

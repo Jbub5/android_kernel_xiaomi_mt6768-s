@@ -725,6 +725,7 @@ static struct cfg80211_ops mtk_cfg_ops = {
 #endif /* CFG_SUPPORT_SCHED_SCAN */
 
 	.connect = mtk_cfg_connect,
+	.update_connect_params = mtk_cfg_update_connect_params,
 	.disconnect = mtk_cfg_disconnect,
 	.join_ibss = mtk_cfg_join_ibss,
 	.leave_ibss = mtk_cfg_leave_ibss,
@@ -1793,7 +1794,7 @@ static void wlanSetMulticastList(struct net_device *prDev)
 	DBGLOG(INIT, TRACE, "flags: 0x%x\n", prDev->flags);
 	prDev->flags |= (IFF_MULTICAST | IFF_ALLMULTI);
 	gPrDev = prDev;
-	queue_delayed_work(system_power_efficient_wq, &workq, 0);
+	schedule_delayed_work(&workq, 0);
 }
 
 /* FIXME: Since we cannot sleep in the wlanSetMulticastList, we arrange
@@ -2320,8 +2321,11 @@ static int wlanStop(struct net_device *prDev)
 	if (prGlueInfo->prScanRequest) {
 		DBGLOG(INIT, INFO, "wlanStop abort scan!\n");
 		kalCfg80211ScanDone(prGlueInfo->prScanRequest, TRUE);
-		aisFsmStateAbort_SCAN(prGlueInfo->prAdapter,
-					wlanGetBssIdx(prDev));
+		if ((!prGlueInfo) || (prGlueInfo->u4ReadyFlag == 0))
+			DBGLOG(INIT, WARN, "driver is not ready\n");
+		else
+			aisFsmStateAbort_SCAN(prGlueInfo->prAdapter,
+						wlanGetBssIdx(prDev));
 		prGlueInfo->prScanRequest = NULL;
 	}
 	GLUE_RELEASE_SPIN_LOCK(prGlueInfo, SPIN_LOCK_NET_DEV);
@@ -4401,7 +4405,7 @@ enum ENUM_ICS_LOG_LEVEL_T {
 };
 
 static uint32_t u4IcsLogOnOffCache;
-static uint32_t u4IcsLogLevelCache = ENUM_ICS_LOG_LEVEL_MAC;
+static uint32_t u4IcsLogLevelCache = ENUM_ICS_LOG_LEVEL_DISABLE;
 #endif /* CFG_SUPPORT_ICS */
 
 static uint32_t u4LogOnOffCache;
@@ -4562,23 +4566,6 @@ static void ics_log_event_notification(int cmd, int value)
 	DBGLOG(INIT, INFO, "gPrDev=%p, cmd=%d, value=%d\n",
 		gPrDev, cmd, value);
 
-	if (kalIsHalted() || !prDev) {
-		DBGLOG(INIT, INFO, "device not ready return");
-		return;
-	}
-
-	prGlueInfo = *((struct GLUE_INFO **) netdev_priv(prDev));
-	if (!prGlueInfo) {
-		DBGLOG(INIT, INFO, "prGlueInfo is NULL return");
-		return;
-	}
-
-	prAdapter = prGlueInfo->prAdapter;
-	if (!prAdapter) {
-		DBGLOG(INIT, INFO, "prAdapter is NULL return");
-		return;
-	}
-
 	/*
 	 * Special code that matches App behavior:
 	 * 1. set ics log level
@@ -4600,6 +4587,23 @@ static void ics_log_event_notification(int cmd, int value)
 			DBGLOG(INIT, INFO, "IcsLv set to MAC ICS.\n");
 			u4IcsLogOnOffCache = 1;
 		}
+	}
+
+	if (kalIsHalted() || !prDev) {
+		DBGLOG(INIT, INFO, "device not ready return");
+		return;
+	}
+
+	prGlueInfo = *((struct GLUE_INFO **) netdev_priv(prDev));
+	if (!prGlueInfo) {
+		DBGLOG(INIT, INFO, "prGlueInfo is NULL return");
+		return;
+	}
+
+	prAdapter = prGlueInfo->prAdapter;
+	if (!prAdapter) {
+		DBGLOG(INIT, INFO, "prAdapter is NULL return");
+		return;
 	}
 
 	if (cmd == ICS_LOG_CMD_ON_OFF || cmd == ICS_LOG_CMD_SET_LEVEL) {
@@ -4902,6 +4906,10 @@ void wlanOnPostAdapterStart(struct ADAPTER *prAdapter,
 			prAdapter->fgTxDirectInited = TRUE;
 		}
 	}
+
+#if CFG_SUPPORT_RX_GRO
+	kalGROTimerInit(prAdapter);
+#endif /* CFG_SUPPORT_RX_GRO */
 }
 
 static int32_t wlanOnPreNetRegister(struct GLUE_INFO *prGlueInfo,
@@ -5400,6 +5408,10 @@ static int32_t wlanOffAtReset(void)
 	flush_work(&prGlueInfo->rTxMsduFreeWork);
 
 	wlanOffStopWlanThreads(prGlueInfo);
+
+#if CFG_SUPPORT_RX_GRO
+	kalGROTimerUninit(prAdapter);
+#endif /* CFG_SUPPORT_RX_GRO */
 
 	wlanAdapterStop(prAdapter, TRUE);
 
@@ -6332,6 +6344,7 @@ static int initWlan(void)
 
 #ifdef CONFIG_MTK_CONNSYS_DEDICATED_LOG_PATH
 	wifi_fwlog_event_func_register(consys_log_event_notification);
+	wifi_fwlog_get_fw_ver_register(wlanReadRamCodeReleaseManifest);
 #if (CFG_SUPPORT_ICS == 1)
 	wifi_ics_event_func_register(ics_log_event_notification);
 #endif /* CFG_SUPPORT_ICS */
@@ -6415,6 +6428,10 @@ static void exitWlan(void)
 #endif
 #if defined(UT_TEST_MODE) && defined(CFG_BUILD_X86_PLATFORM)
 	kfree((const void *)gConEmiPhyBase);
+#endif
+
+#ifdef CONFIG_MTK_CONNSYS_DEDICATED_LOG_PATH
+	wifi_fwlog_get_fw_ver_register(NULL);
 #endif
 
 #if CFG_MTK_MDDP_SUPPORT

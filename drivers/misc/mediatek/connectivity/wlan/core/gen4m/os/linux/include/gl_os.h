@@ -296,9 +296,13 @@ extern uint8_t g_aucNvram_OnlyPreCal[];
 
 #ifdef CONFIG_MTK_CONNSYS_DEDICATED_LOG_PATH
 typedef void (*wifi_fwlog_event_func_cb)(int, int);
+typedef void (*wifi_fwlog_get_fw_ver_func_cb)(uint8_t *, uint32_t *, uint32_t);
 /* adaptor ko */
 extern int  wifi_fwlog_onoff_status(void);
 extern void wifi_fwlog_event_func_register(wifi_fwlog_event_func_cb pfFwlog);
+
+extern void
+	wifi_fwlog_get_fw_ver_register(wifi_fwlog_get_fw_ver_func_cb pfFwVer);
 #if (CFG_SUPPORT_ICS == 1)
 typedef void (*ics_fwlog_event_func_cb)(int, int);
 extern ssize_t wifi_ics_fwlog_write(char *buf, size_t count);
@@ -380,6 +384,9 @@ extern void update_driver_loaded_status(uint8_t loaded);
 #define GLUE_FLAG_CNS_PWR_TEMP			BIT(22)
 #endif
 
+#define GLUE_FLAG_RX_GRO_TIMEOUT_BIT		(25)
+#define GLUE_FLAG_RX_GRO_TIMEOUT		BIT(25)
+
 #define GLUE_BOW_KFIFO_DEPTH        (1024)
 /* #define GLUE_BOW_DEVICE_NAME        "MT6620 802.11 AMP" */
 #define GLUE_BOW_DEVICE_NAME        "ampc0"
@@ -451,6 +458,14 @@ enum ENUM_NET_REG_STATE {
 	ENUM_NET_REG_STATE_UNREGISTERING,
 	ENUM_NET_REG_STATE_NUM
 };
+
+enum ENUM_P2P_REG_STATE {
+	ENUM_P2P_REG_STATE_UNREGISTERED,
+	ENUM_P2P_REG_STATE_REGISTERING,
+	ENUM_P2P_REG_STATE_REGISTERED,
+	ENUM_P2P_REG_STATE_UNREGISTERING,
+	ENUM_P2P_REG_STATE_NUM
+};
 #endif
 
 enum ENUM_PKT_FLAG {
@@ -468,7 +483,7 @@ enum ENUM_PKT_FLAG {
 #if CFG_SUPPORT_TPENHANCE_MODE
 	ENUM_PKT_TCP_ACK,
 #endif /* CFG_SUPPORT_TPENHANCE_MODE */
-
+	ENUM_PKT_ICMPV6,		/* ICMPV6 */
 	ENUM_PKT_FLAG_NUM
 };
 
@@ -570,7 +585,8 @@ struct GL_SCAN_CACHE_INFO {
 		uint16_t u2CurRxRate[BSSID_NUM]; /* Unit 500 Kbps */
 		uint8_t ucCurRxRCPI0[BSSID_NUM];
 		uint8_t ucCurRxRCPI1[BSSID_NUM];
-		uint8_t ucCurRxNss[BSSID_NUM];
+		uint8_t ucCurRxNss[BSSID_NUM]; /* 1NSS Data Counter */
+		uint8_t ucCurRxNss2[BSSID_NUM]; /* 2NSS Data Counter */
 	};
 #endif /* CFG_SUPPORT_SCAN_CACHE_RESULT */
 

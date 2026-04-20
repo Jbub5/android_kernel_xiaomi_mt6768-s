@@ -673,7 +673,7 @@ static void soc7_0_ConstructFirmwarePrio(struct GLUE_INFO *prGlueInfo,
 	uint8_t ucIdx = 0;
 	uint8_t aucFlavor[2] = {0};
 
-	kalGetFwFlavor(prGlueInfo->prAdapter, &aucFlavor[0]);
+	kalGetFwFlavor(&aucFlavor[0]);
 
 	for (ucIdx = 0; apucsoc7_0FwName[ucIdx]; ucIdx++) {
 		if ((*pucNameIdx + 3) >= ucMaxNameIdx) {
@@ -690,8 +690,7 @@ static void soc7_0_ConstructFirmwarePrio(struct GLUE_INFO *prGlueInfo,
 				apucsoc7_0FwName[ucIdx],
 				CFG_WIFI_IP_SET,
 				aucFlavor,
-				wlanGetEcoVersion(
-					prGlueInfo->prAdapter));
+				1);
 		if (ret >= 0 && ret < CFG_FW_NAME_MAX_LEN)
 			(*pucNameIdx) += 1;
 		else
@@ -1836,7 +1835,7 @@ soc7_0_kalFirmwareImageMapping(
 
 	*ppvMapFileBuf = NULL;
 	*pu4FileLength = 0;
-	kalGetFwFlavor(prGlueInfo->prAdapter, &aucFlavor[0]);
+	kalGetFwFlavor(&aucFlavor[0]);
 
 	do {
 		/* <0.0> Get FW name prefix table */
@@ -2445,8 +2444,15 @@ static void soc7_0_DumpDebugCtrlAoCr(struct ADAPTER *prAdapter)
 	/* CONN2WF remapping
 	 * 0x1840_0120 = 32'h810F0000
 	 */
-	wf_ioremap_write(WF_MCU_BUS_CR_AP2WF_REMAP_1,
-			 WF_MCUSYS_INFRA_BUS_FULL_U_DEBUG_CTRL_AO_BASE);
+	u4Addr = WF_MCU_BUS_CR_AP2WF_REMAP_1;
+	u4Val = WF_MCUSYS_INFRA_BUS_FULL_U_DEBUG_CTRL_AO_BASE;
+	DBGLOG(HAL, ERROR, "WR 0x%08x=[0x%08x]\n", u4Addr, u4Val);
+	wf_ioremap_write(u4Addr, u4Val);
+
+	u4Addr = 0x18500000;
+	connac2x_DbgCrRead(prAdapter, u4Addr, &u4Val);
+	DBGLOG(HAL, ERROR, "0x%08x=[0x%08x]\n", u4Addr, u4Val);
+
 	/* READ debug information from debug_ctrl_ao CR
 	 * dump DEBUG_CTRL_RESULT_2~18 (0x1850_0408~0x1850_0448)
 	 */
@@ -2571,6 +2577,10 @@ static void soc7_0_DumpOtherCr(struct ADAPTER *prAdapter)
 	DBGLOG(INIT, INFO, "MD_AOR_STATUS 0x10001BF4=[%x]\n", u4Val);
 
 	/* Dump WFDMA CR */
+	connac2x_DbgCrRead(NULL, 0x184be008, &u4Val);
+	DBGLOG(INIT, INFO, "WFDMA clock 0x184be008=[%x]\n", u4Val);
+	connac2x_DbgCrRead(NULL, 0x184c0800, &u4Val);
+	DBGLOG(INIT, INFO, "WFDMA rst 0x184c0800=[%x]\n", u4Val);
 	connac2x_DumpCrRange(prAdapter, 0x18024200, 7, "WFDMA 0x18024200");
 	connac2x_DumpCrRange(prAdapter, 0x18024300, 16, "WFDMA 0x18024300");
 	connac2x_DumpCrRange(prAdapter, 0x18024380, 16, "WFDMA x18024380");
@@ -2643,6 +2653,8 @@ static int soc7_0_CheckBusHang(void *adapter, uint8_t ucWfResetEnable)
 	int conninfra_hang_ret = 0;
 	uint8_t conninfra_reset = FALSE;
 	uint32_t u4Value = 0;
+	uint32_t u4WfdmaRstVal = 0;
+	uint32_t u4WfdmaClockVal = 0;
 
 	if (prAdapter == NULL)
 		DBGLOG(HAL, INFO, "prAdapter NULL\n");
@@ -2743,6 +2755,28 @@ static int soc7_0_CheckBusHang(void *adapter, uint8_t ucWfResetEnable)
 		} else if (ucWfResetEnable) {
 			g_IsWfsysBusHang = TRUE;
 			glResetWholeChipResetTrigger("wifi bus hang");
+		}
+	} else {
+		connac2x_DbgCrRead(NULL, 0x184be008, &u4WfdmaClockVal);
+		connac2x_DbgCrRead(NULL, 0x184c0800, &u4WfdmaRstVal);
+		if (u4WfdmaClockVal == 0xdead0003 ||
+			u4WfdmaRstVal == 0xdead0003) {
+			soc7_0_DumpHostCr(prAdapter);
+		} else if (u4WfdmaClockVal == 0xdead0001 ||
+			u4WfdmaRstVal == 0xdead0001) {
+			DBGLOG(INIT, ERROR,
+				"clk 0x184be008=[%x] rst 0x184c0800=[%x]\n",
+				u4WfdmaClockVal, u4WfdmaRstVal);
+		} else if ((u4WfdmaClockVal & BIT(26)) &&
+			!(u4WfdmaClockVal & BIT(9))) {
+			DBGLOG(INIT, ERROR,
+				"clk 0x184be008=[%x] rst 0x184c0800=[%x]\n",
+				u4WfdmaClockVal, u4WfdmaRstVal);
+		} else if (!(u4WfdmaRstVal & BIT(2)) ||
+			!(u4WfdmaRstVal & BIT(3))) {
+			DBGLOG(INIT, ERROR,
+				"clk 0x184be008=[%x] rst 0x184c0800=[%x]\n",
+				u4WfdmaClockVal, u4WfdmaRstVal);
 		}
 	}
 

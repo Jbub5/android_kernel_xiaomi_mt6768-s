@@ -3039,6 +3039,11 @@ mtk_cfg80211_testmode_get_sta_statistics(IN struct wiphy
 	ASSERT(wiphy);
 	ASSERT(prGlueInfo);
 
+	if (len < sizeof(struct NL80211_DRIVER_GET_STA_STATISTICS_PARAMS)) {
+		DBGLOG(OID, WARN, "len [%d] is invalid!\n", len);
+		return -EINVAL;
+	}
+
 	if (data && len)
 		prParams = (struct NL80211_DRIVER_GET_STA_STATISTICS_PARAMS
 			    *) data;
@@ -3061,9 +3066,6 @@ mtk_cfg80211_testmode_get_sta_statistics(IN struct wiphy
 		DBGLOG(QM, ERROR, "allocate skb failed:%x\n", rStatus);
 		return -ENOMEM;
 	}
-
-	DBGLOG(QM, TRACE, "Get [" MACSTR "] STA statistics\n",
-	       MAC2STR(prParams->aucMacAddr));
 
 	kalMemZero(&rQueryStaStatistics,
 		   sizeof(rQueryStaStatistics));
@@ -7161,6 +7163,40 @@ int mtk_cfg_connect(struct wiphy *wiphy,
 	/* STA Mode */
 	return mtk_cfg80211_connect(wiphy, ndev, sme);
 }
+
+int mtk_cfg_update_connect_params(struct wiphy *wiphy,
+		  struct net_device *ndev,
+		  struct cfg80211_connect_params *sme,
+		  u32 changed){
+	uint8_t ucBssIndex = 0;
+	uint32_t u4BufLen;
+	uint32_t rStatus;
+	struct GLUE_INFO *prGlueInfo = NULL;
+	struct PARAM_CONNECT rNewSsid;
+
+	if (!(changed & UPDATE_ASSOC_IES))
+		return 0;
+
+	if (!(sme->ie && sme->ie_len))
+		return 0;
+
+	WIPHY_PRIV(wiphy, prGlueInfo);
+	ucBssIndex = wlanGetBssIdx(ndev);
+
+	DBGLOG(REQ, INFO, "[wlan%d] update connect %p %zu %d\n",
+		ucBssIndex, sme->ie, sme->ie_len, changed);
+	rNewSsid.pucIEs = (uint8_t *)sme->ie;
+	rNewSsid.u4IesLen = sme->ie_len;
+	rStatus = kalIoctlByBssIdx(prGlueInfo, wlanoidUpdateConnect,
+		   (void *)&rNewSsid, sizeof(struct PARAM_CONNECT),
+		   FALSE, FALSE, TRUE, &u4BufLen, ucBssIndex);
+	if (rStatus != WLAN_STATUS_SUCCESS) {
+		DBGLOG(REQ, WARN, "update SSID:%x\n", rStatus);
+		return -EINVAL;
+	}
+	return 0;
+}
+
 
 int mtk_cfg_disconnect(struct wiphy *wiphy,
 		       struct net_device *ndev,
