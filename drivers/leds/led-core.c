@@ -2,7 +2,6 @@
  * LED Class Core
  *
  * Copyright 2005-2006 Openedhand Ltd.
- * Copyright (C) 2021 XiaoMi, Inc.
  *
  * Author: Richard Purdie <rpurdie@openedhand.com>
  *

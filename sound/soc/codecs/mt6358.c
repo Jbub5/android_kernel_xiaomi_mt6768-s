@@ -3,7 +3,6 @@
 // mt6358.c  --  mt6358 ALSA SoC audio codec driver
 //
 // Copyright (c) 2018 MediaTek Inc.
-// Copyright (C) 2021 XiaoMi, Inc.
 // Author: KaiChieh Chuang <kaichieh.chuang@mediatek.com>
 
 #include <linux/platform_device.h>

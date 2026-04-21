@@ -2,7 +2,6 @@
  * TI LMU (Lighting Management Unit) Backlight Driver
  *
  * Copyright 2016 Texas Instruments
- * Copyright (C) 2021 XiaoMi, Inc.
  *
  * Author: Milo Kim <milo.kim@ti.com>
  *

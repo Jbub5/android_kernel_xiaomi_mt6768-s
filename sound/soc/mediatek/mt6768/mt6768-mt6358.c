@@ -3,7 +3,6 @@
 // mt6768-mt6358.c  --  mt6768 mt6358 ALSA SoC machine driver
 //
 // Copyright (c) 2018 MediaTek Inc.
-// Copyright (C) 2021 XiaoMi, Inc.
 // Author: Michael Hsiao <michael.hsiao@mediatek.com>
 
 #include <linux/module.h>

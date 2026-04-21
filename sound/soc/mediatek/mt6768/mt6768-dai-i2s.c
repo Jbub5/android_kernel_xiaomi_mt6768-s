@@ -3,7 +3,6 @@
 // MediaTek ALSA SoC Audio DAI I2S Control
 //
 // Copyright (c) 2018 MediaTek Inc.
-// Copyright (C) 2021 XiaoMi, Inc.
 // Author: Michael Hsiao <michael.hsiao@mediatek.com>
 
 #include <linux/bitops.h>

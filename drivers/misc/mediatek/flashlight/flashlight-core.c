@@ -2,7 +2,6 @@
  * Flashlight Core
  *
  * Copyright (C) 2015 MediaTek Inc.
- * Copyright (C) 2021 XiaoMi, Inc.
  *
  * Author: Simon Wang <Simon-TCH.Wang@mediatek.com>
  *
