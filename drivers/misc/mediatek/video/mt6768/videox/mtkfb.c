@@ -3361,4 +3361,3 @@ module_exit(mtkfb_cleanup);
 MODULE_DESCRIPTION("MEDIATEK framebuffer driver");
 MODULE_AUTHOR("Xuecheng Zhang <Xuecheng.Zhang@mediatek.com>");
 MODULE_LICENSE("GPL");
-

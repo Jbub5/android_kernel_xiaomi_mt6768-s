@@ -384,6 +384,7 @@ void mt_usb_host_disconnect(int delay)
 	DBG(0, "%s\n", typec_req_host ? "connect" : "disconnect");
 	issue_host_work(CONNECTION_OPS_DISC, delay, true);
 }
+
 #ifdef CONFIG_MTK_USB_TYPEC
 #ifdef CONFIG_TCPC_CLASS
 static int otg_tcp_notifier_call(struct notifier_block *nb,
