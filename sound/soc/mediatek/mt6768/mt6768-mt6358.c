@@ -21,6 +21,7 @@
 /*K19A code for HQ-128766 by zhangpeng at 2021.4.3 start*/
 #include "../fs1815n/fsm-dev.h"
 /*K19A code for HQ-128766 by zhangpeng at 2021.4.3 end*/
+
 /*
  * if need additional control for the ext spk amp that is connected
  * after Lineout Buffer / HP Buffer on the codec, put the control in
@@ -502,9 +503,11 @@ static int mt6768_mt6358_init(struct snd_soc_pcm_runtime *rtd)
 
 	/* disable ext amp connection */
 	snd_soc_dapm_disable_pin(dapm, EXT_SPK_AMP_W_NAME);
+
 /*K19A code for HQ-123483 by zhangpeng at 2021.3.22 start*/
-    snd_soc_dapm_disable_pin(dapm, EXT_RCV_AMP_W_NAME);// ALPS05007528
+	snd_soc_dapm_disable_pin(dapm, EXT_RCV_AMP_W_NAME);// ALPS05007528
 /*K19A code for HQ-123483 by zhangpeng at 2021.3.22 end*/
+
 	return 0;
 }
 

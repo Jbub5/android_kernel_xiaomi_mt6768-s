@@ -2657,6 +2657,7 @@ static int mt_lo_event(struct snd_soc_dapm_widget *w,
 /*K19A code for WXYFB-1015 by xuqingli at 2021/5/8 start*/
 	uint32_t reg_value = 0;
 /*K19A code for WXYFB-1015 by xuqingli at 2021/5/8 end*/
+
 	dev_info(priv->dev, "%s(), event 0x%x, mux %u\n",
 		 __func__,
 		 event,

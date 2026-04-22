@@ -7,6 +7,7 @@ obj-y   +=  aal_control.o
 #add psensor vdd3 compile by luozeng at 2021.3.24 start#
 obj-y   +=  ldo_alsps.o
 #add psensor vdd3 compile by luozeng at 2021.3.24 end#
+
 obj-$(CONFIG_MTK_ALSPSHUB)      +=  alspshub/
 obj-$(CONFIG_MTK_CM36558)	+=  cm36558/
 obj-$(CONFIG_MTK_LTR303)	+=  ltr303/

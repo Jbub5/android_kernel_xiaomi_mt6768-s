@@ -333,6 +333,7 @@ static int mt_ac_get_property(struct power_supply *psy,
 
 	return 0;
 }
+
 /*K19A HQ-124188 provide node quick_charge_type by miaozhichao at 2021/4/26 start*/
 enum quick_charge_type {
 	QUICK_CHARGE_NORMAL = 0,
@@ -342,6 +343,7 @@ enum quick_charge_type {
 	QUICK_CHARGE_MAX,
 };
 /*K19A HQ-124188 provide node quick_charge_type by miaozhichao at 2021/4/26 end*/
+
 static int mt_usb_get_property(struct power_supply *psy,
 	enum power_supply_property psp, union power_supply_propval *val)
 {

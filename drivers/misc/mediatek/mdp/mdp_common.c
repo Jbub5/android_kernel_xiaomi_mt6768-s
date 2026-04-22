@@ -1573,6 +1573,7 @@ s32 cmdq_mdp_flush_async(struct cmdqCommandStruct *desc, bool user_space,
 #ifdef CONFIG_MTK_ENG_BUILD
 	cmdq_mdp_store_debug(desc, handle);
 #endif
+
 	if (desc->engineFlag & inorder_mask)
 		handle->force_inorder = true;
 

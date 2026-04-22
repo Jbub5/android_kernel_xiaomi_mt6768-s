@@ -316,7 +316,6 @@ static ssize_t clk_enable_set(struct device *dev,
 		dev_err(fpc1022->dev, " spi clk NULL%s\n", __func__);
 		return 0;
 	}
-
 }
 
 static DEVICE_ATTR(clk_enable, 0200, NULL, clk_enable_set);

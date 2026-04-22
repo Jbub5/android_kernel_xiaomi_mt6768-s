@@ -1246,6 +1246,7 @@ int bdg_tx_phy_config(enum DISP_BDG_ENUM module,
 	if (timcon2.CLK_TRAIL < 2)
 		timcon2.CLK_TRAIL = 2;
 /*K19A K19A-138 solve mipi timing  by feiwen at 2021/5/19 end*/
+
 	/* clk_exit > 100ns (spec) */
 	/* clk_exit = 200ns */
 	/* timcon3.CLK_EXIT = NS_TO_CYCLE(200, cycle_time); */
@@ -4899,7 +4900,7 @@ int bdg_common_init_for_rx_pat(enum DISP_BDG_ENUM module,
 	EFUSE = (struct BDG_EFUSE_REGS *)DISPSYS_BDG_EFUSE_BASE;
 	GPIO = (struct BDG_GPIO_REGS *)DISPSYS_BDG_GPIO_BASE;
 	TX_CMDQ_REG[0] = (struct DSI_TX_CMDQ_REGS *)(DISPSYS_BDG_TX_DSI0_BASE + 0xd00);
-  
+
 	/* Huaqin modify for HQ-135591 by caogaojie at 2021/05/15 start */
 	clk_buf_disp_ctrl(true);
 	mdelay(5);

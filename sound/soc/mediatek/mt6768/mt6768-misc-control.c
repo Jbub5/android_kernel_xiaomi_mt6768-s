@@ -1253,6 +1253,7 @@ int mt6768_add_misc_control(struct snd_soc_platform *platform)
 	snd_soc_add_platform_controls(platform,
 				      mt6768_afe_speech_controls,
 				      ARRAY_SIZE(mt6768_afe_speech_controls));
+
 /*K19A code for WXYFB-1010 by xuqingli at 2021/4/20 start*/
   	fsm_add_control(platform);
 /*K19A code for WXYFB-1010 by xuqingli at 2021/4/20 end*/

@@ -1444,6 +1444,7 @@ static int __init alsps_init(void)
   	pr_debug("%s: call alsps_ldo3_driver_init\n", __func__);
     	alsps_ldo3_driver_init();
 /*Huaqin modify for HQ-12367 by luozeng at 2021.3.31 end*/
+
 	if (alsps_probe()) {
 		pr_err("failed to register alsps driver\n");
 		return -ENODEV;

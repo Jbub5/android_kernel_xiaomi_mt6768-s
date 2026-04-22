@@ -30,6 +30,7 @@
 /*Huaqin add for HQ-123513 by shiwenlong at 2021.4.01 start*/
 #include <linux/proc_fs.h>
 /*Huaqin add for HQ-123513 by shiwenlong at 2021.4.01 end*/
+
 const struct of_device_id swtp_of_match[] = {
 	{ .compatible = SWTP_COMPATIBLE_DEVICE_ID, },
 	{},

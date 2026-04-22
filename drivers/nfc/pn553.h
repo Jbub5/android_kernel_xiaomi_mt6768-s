@@ -169,4 +169,5 @@ struct hw_type_info {
 	char data[20];
 	int len;
 };
+
 #endif

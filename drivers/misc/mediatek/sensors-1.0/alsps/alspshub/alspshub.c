@@ -357,6 +357,7 @@ static int ps_recv_data(struct data_unit_t *event, void *reserved)
 	}
 	return err;
 }
+
 static int als_recv_data(struct data_unit_t *event, void *reserved)
 {
 	int err = 0;
@@ -437,6 +438,7 @@ static int alshub_factory_enable_sensor(bool enable_disable,
 	mutex_unlock(&alspshub_mutex);
 	return 0;
 }
+
 static int alshub_factory_get_data(int32_t *data)
 {
 /*Huaqin modify for HQ-12367 by luozeng at 2021.3.31 start*/
@@ -450,6 +452,7 @@ static int alshub_factory_get_data(int32_t *data)
 	return 0;
 }
 /*Huaqin modify for HQ-12367 by luozeng at 2021.3.31 end*/
+
 static int alshub_factory_get_raw_data(int32_t *data)
 {
 	int err = 0;

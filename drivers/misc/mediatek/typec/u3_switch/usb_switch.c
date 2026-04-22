@@ -289,6 +289,7 @@ static int usb_gpio_procfs_show(struct seq_file *s, void *unused)
 
 	return 0;
 }
+
 static int usb_gpio_procfs_open(struct inode *inode, struct file *file)
 {
 	return single_open(file, usb_gpio_procfs_show, PDE_DATA(inode));
@@ -356,10 +357,12 @@ static int usb_switch_procfs_show(struct seq_file *s, void *unused)
 {
 	return 0;
 }
+
 static int usb_switch_procfs_open(struct inode *inode, struct file *file)
 {
 	return single_open(file, usb_switch_procfs_show, PDE_DATA(inode));
 }
+
 static ssize_t usb_switch_procfs_write(struct file *file,
 	const char __user *ubuf, size_t count, loff_t *ppos)
 {
@@ -386,6 +389,7 @@ static ssize_t usb_switch_procfs_write(struct file *file,
 	} else
 		return -EINVAL;
 }
+
 static const struct file_operations usb_switch_procfs_fops = {
 	.open = usb_switch_procfs_open,
 	.write = usb_switch_procfs_write,
@@ -426,10 +430,12 @@ static int usb_cc_smt_procfs_show(struct seq_file *s, void *input)
 	return 0;
 }
 #endif
+
 static int usb_cc_smt_procfs_open(struct inode *inode, struct file *file)
 {
 	return single_open(file, usb_cc_smt_procfs_show, PDE_DATA(inode));
 }
+
 static const struct file_operations usb_cc_smt_procfs_fops = {
 	.open = usb_cc_smt_procfs_open,
 	.read = seq_read,

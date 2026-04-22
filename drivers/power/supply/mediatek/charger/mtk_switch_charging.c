@@ -169,6 +169,7 @@ static void swchg_select_charging_current_limit(struct charger_manager *info)
 		pdata->charging_current_limit = 500000;
 		goto done;
 	}
+
 	if (mtk_is_TA_support_pd_pps(info)) {
 		pdata->input_current_limit =
 			info->data.pe40_single_charger_input_current;

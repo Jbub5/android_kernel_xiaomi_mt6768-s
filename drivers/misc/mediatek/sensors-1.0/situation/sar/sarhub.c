@@ -202,7 +202,6 @@ static int sar_recv_data(struct data_unit_t *event, void *reserved)
 		value[2] = event->sar_event.z_bias;
 	/*k19a modify the way of sar get data by luozeng at 2021.3.18 end*/
 		err = sar_cal_report_t(value, (int64_t)event->time_stamp);
-
 		spin_lock(&calibration_lock);
 		obj->cali_data[0] =
 			event->sar_event.x_bias;

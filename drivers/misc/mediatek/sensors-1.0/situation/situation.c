@@ -12,12 +12,12 @@
  */
 
 #define pr_fmt(fmt) "<SITUATION> " fmt
+
 /*Huaqin modify for HQ-123670 by luozeng at 2021.4.26 start*/
 #include <hwmsensor.h>
 #include "situation.h"
 #include <SCP_sensorHub.h>
 /*Huaqin modify for HQ-123670 by luozeng at 2021.4.26 end*/
-
 
 static struct situation_context *situation_context_obj;
 
@@ -154,6 +154,7 @@ int sar_data_report(int32_t value[3])
 {
 	return sar_data_report_t(value, 0);
 }
+
 /*k19a modify the way of sar get data by luozeng at 2021.3.18 start*/
 int sar_cal_report_t(int32_t value[3], int64_t time_stamp)
 {
@@ -180,15 +181,18 @@ int sar_cal_report_t(int32_t value[3], int64_t time_stamp)
 		__pm_wakeup_event(&cxt->ws[index], 250);
 	return err;
 }
+
 /*k19a modify the way of sar get data by luozeng at 2021.3.18 end*/
 int situation_notify_t(int handle, int64_t time_stamp)
 {
 	return situation_data_report_t(handle, 1, time_stamp);
 }
+
 int situation_notify(int handle)
 {
 	return situation_data_report_t(handle, 1, 0);
 }
+
 int situation_flush_report(int handle)
 {
 	struct sensor_event event;
@@ -583,6 +587,7 @@ DEVICE_ATTR(situdevnum, 0644, situation_show_devnum, NULL);
 /*Huaqin modify for HQ-123670 by luozeng at 2021.4.26 start*/
 DEVICE_ATTR(sarcali_update, 0644, NULL, sarcali_update_store);  //new add
 /*Huaqin modify for HQ-123670 by luozeng at 2021.4.26 end*/
+
 static struct attribute *situation_attributes[] = {
 	&dev_attr_situactive.attr,
 	&dev_attr_situbatch.attr,

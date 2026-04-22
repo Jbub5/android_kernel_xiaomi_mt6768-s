@@ -63,7 +63,6 @@ struct wm_adsp {
 	struct device *dev;
 	struct regmap *regmap;
 	struct snd_soc_codec *codec;
-
 	int base;
 	int sysclk_reg;
 	int sysclk_mask;
@@ -83,7 +82,6 @@ struct wm_adsp {
 	bool preloaded;
 	bool booted;
 	bool running;
-
 	struct list_head ctl_list;
 
 	struct work_struct boot_work;
@@ -100,7 +98,6 @@ struct wm_adsp {
 	char *wmfw_file_name;
 	char *bin_file_name;
 #endif
-
 };
 
 #define WM_ADSP1(wname, num) \

@@ -90,6 +90,7 @@ extern bool tp_charger_status;
 /* Huaqin modify for HQ-131628 by shujiawang at 2021/05/10 end */
 
 static DEFINE_MUTEX(consumer_mutex);
+
 #if defined(TARGET_PRODUCT_SELENE)
 /* Huaqin modify for HQ-147481 by liunianliang at 2021/07/27 start */
 typedef enum
@@ -2353,7 +2354,6 @@ static int charger_routine_thread(void *arg)
 		if (info->charger_thread_polling == true)
 			mtk_charger_start_timer(info);
 
-
 		charger_update_data(info);
 		check_battery_exist(info);
 		check_dynamic_mivr(info);
@@ -2391,6 +2391,7 @@ static int mtk_charger_parse_dt(struct charger_manager *info,
 {
 	struct device_node *np = dev->of_node;
 	u32 val;
+
 	chr_err("%s: starts\n", __func__);
 
 	if (!np) {

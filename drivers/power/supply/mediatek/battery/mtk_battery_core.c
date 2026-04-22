@@ -605,7 +605,6 @@ bool __attribute__ ((weak)) mt_usb_is_device(void)
 int my_battery_id_voltage;
 void fgauge_get_profile_id(void)
 {
-
 	int id_volt = 0;
 	int ret = 0;
 	int auxadc_voltage = 0;

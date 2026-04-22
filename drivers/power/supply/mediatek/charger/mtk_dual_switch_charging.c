@@ -26,8 +26,6 @@ extern enum hvdcp_status hvdcp_type_tmp;
 extern int call_mode;
 /*K19A HQ-129052 K19A charger of thermal current limit by wangqi at 2021/5/13 end*/
 
-
-
 static int _uA_to_mA(int uA)
 {
 	if (uA == -1)
@@ -368,6 +366,7 @@ dual_swchg_select_charging_current_limit(struct charger_manager *info)
 		pdata->charging_current_limit = 6000000;
 		pr_err("POWER_SUPPLY_TYPE_USB_HVDCP set icl\n");
 	}
+
 /*K19A HQ-133296 K19A charger of low temperature by wangqi at 2021/4/27 start*/
 #if 0
 	if (info->enable_sw_jeita) {
@@ -479,6 +478,7 @@ dual_swchg_select_charging_current_limit(struct charger_manager *info)
 			pdata->input_current_limit =
 					pdata->input_current_limit_by_aicl;
 	}
+
 	/*K19A HQ-129052 K19A charger of thermal current limit by wangqi at 2021/5/13 start*/
 	if (call_mode >= 0) {
 		if (pdata->charging_current_limit >= (call_mode*1000)) {
@@ -492,6 +492,7 @@ done:
 		pdata->input_current_limit = pdata->input_current_limit / 2;
 		pdata2->input_current_limit = pdata2->input_current_limit / 2;
 	}
+
 	pr_err("force:%d %d thermal:(%d %d,%d %d)(%d %d %d)setting:(%d %d)(%d %d)",
 		_uA_to_mA(pdata->force_charging_current),
 		_uA_to_mA(pdata2->force_charging_current),

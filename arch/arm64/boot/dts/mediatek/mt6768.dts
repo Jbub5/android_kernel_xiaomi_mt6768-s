@@ -2828,7 +2828,6 @@ defined(CONFIG_MTK_CAM_SECURITY_SUPPORT)
 			"TOP_ULPOSC1_D2",
 			"TOP_ULPOSC1_D8";
 
-
 		mboxes = <&gce_mbox_bdg 0 0 CMDQ_THR_PRIO_4>,
 			<&gce_mbox_bdg 1 0 CMDQ_THR_PRIO_4>,
 			<&gce_mbox_bdg 2 0 CMDQ_THR_PRIO_4>,
@@ -3362,9 +3361,8 @@ defined(CONFIG_MTK_CAM_SECURITY_SUPPORT)
 			"CLK_MIPI_ANA_2A_CG",
 			"CLK_MIPI_ANA_2B_CG",
 			"CLK_TOP_CAMTM_SEL_CG",
-            "CLK_TOP_CAMTM_208_CG",
-            "CLK_SCP_SYS_CAM";
-
+			"CLK_TOP_CAMTM_208_CG",
+			"CLK_SCP_SYS_CAM";
 	};
 
 	flashlight_core: flashlight_core {
@@ -3472,11 +3470,10 @@ defined(CONFIG_MTK_CAM_SECURITY_SUPPORT)
 		compatible = "mediatek,radio_md_cfg";
 	};
 
-
-
 	mt_charger: mt_charger {
 		compatible = "mediatek,mt-charger";
 	};
+
 /*K19A WXYFB-996 K19A secret battery bring up by miaozhichao at 2021/3/26 start*/
 	onewire_gpio: onewire_gpio {
 		compatible = "xiaomi,onewire_gpio";
@@ -3486,6 +3483,7 @@ defined(CONFIG_MTK_CAM_SECURITY_SUPPORT)
 		compatible = "maxim,ds28e16";
 	};
 /*K19A WXYFB-996 K19A secret battery bring up by miaozhichao at 2021/3/26 end*/
+
 	lk_charger: lk_charger {
 		compatible = "mediatek,lk_charger";
 		enable_anime;
@@ -3575,7 +3573,6 @@ defined(CONFIG_MTK_CAM_SECURITY_SUPPORT)
 		min_charge_temp_plus_x_degree = <6>;
 		max_charge_temp = <50>;
 		max_charge_temp_minus_x_degree = <47>;
-
 
 		/* PE */
 		pe_ichg_level_threshold = <1000000>; /* uA */

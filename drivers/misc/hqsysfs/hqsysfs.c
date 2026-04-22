@@ -47,6 +47,7 @@ static HW_INFO(HWID_PMIC_VERSION, pmic_version);
 /*K19A code for WXYFB-1001 by zhangpeng at 2021.3.19 start*/
 static HW_INFO(HWID_AUDIO, audio_PA);
 /*K19A code for WXYFB-1001 by zhangpeng at 2021.3.19 end*/
+
 #if defined(TARGET_PRODUCT_SELENE)
 /* Huaqin modify for HQ-147481 by liunianliang at 2021/07/27 start */
 struct pcba_info pcba[] = {

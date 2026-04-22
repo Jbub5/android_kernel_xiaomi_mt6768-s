@@ -159,4 +159,5 @@
 #define CHG2_INPUT_CURRENT_LIMIT_PE	2000000
 #define NON_STANDARD_HVDCP_ICL	1900000
 bool get_pd_status(void);
+
 #endif /*__MTK_CHARGER_INIT_H__*/

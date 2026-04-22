@@ -49,6 +49,7 @@ struct charger_data;
 #define CHRLOG_DEBUG_LEVEL   2
 
 extern int chr_get_debug_level(void);
+
 /*K19A-104 wangchao modify debug log at 2021/4/8 start*/
 #define chr_err(fmt, args...)					\
 do {								\
@@ -57,6 +58,7 @@ do {								\
 	}							\
 } while (0)
 /*K19A-104 wangchao modify debug log at 2021/4/8 end*/
+
 #define chr_info(fmt, args...)					\
 do {								\
 	if (chr_get_debug_level() >= CHRLOG_ERROR_LEVEL) {	\
@@ -139,6 +141,7 @@ enum {
  * T3: 45 degree Celsius
  * T4: 50 degree Celsius
  */
+
 /*K19A HQ-124114 K19A charger of jeita by wangqi at 2021/4/16 start*/
 enum sw_jeita_state_enum {
 	TEMP_BELOW_NEG_T0 = 0,

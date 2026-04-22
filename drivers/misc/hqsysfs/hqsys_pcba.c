@@ -31,6 +31,7 @@ static bool read_pcba_config(void);
 /*K19A HQ-124114 K19A charger of jeita by wangqi at 2021/4/16 start*/
 int hq_selene_pcba_config;
 /*K19A HQ-124114 K19A charger of jeita by wangqi at 2021/4/16 end*/
+
 typedef struct {
 	int voltage_min;
 	int voltage_max;

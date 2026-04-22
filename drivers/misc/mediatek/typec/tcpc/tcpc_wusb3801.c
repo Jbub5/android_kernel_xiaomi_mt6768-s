@@ -377,6 +377,7 @@ void wusb3801_intr_handler_resume(void)
 static irqreturn_t wusb3801_intr_handler(int irq, void *data)
 {
 	struct wusb3801_chip *chip = data;
+
 	/* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 start */
 	if (bq2589x_get_cdp_status() == true) {
 		pr_err("%s:ljj  bq2589x_get_cdp_status is true,returned!!!\n", __func__);
@@ -387,6 +388,7 @@ static irqreturn_t wusb3801_intr_handler(int irq, void *data)
 		kthread_queue_work(&chip->irq_worker, &chip->irq_work);
 	}
 	/* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 end */
+
 	return IRQ_HANDLED;
 }
 

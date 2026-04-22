@@ -2054,6 +2054,7 @@ static int gf_probe(struct spi_device *spi)
 			goodix_fp_exist = false;
 			gf_debug(ERR_LOG, "%s, get goodix FP sensor chipID fail!!\n", __func__);
 			//goto err_readid;
+
 			//workaround to solve two spi device
 			pr_err("%s cannot find the sensor,now exit\n", __func__);
 			if (gf_dev->pinctrl_gpios) {

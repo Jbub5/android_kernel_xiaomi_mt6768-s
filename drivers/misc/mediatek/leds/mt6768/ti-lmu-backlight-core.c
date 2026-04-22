@@ -33,6 +33,7 @@
 #define DEFAULT_PWM_NAME			"lmu-backlight"
 
 static struct ti_lmu_bl_chip *bl_chip;
+
 /* Huaqin modify for HQ-142064 by caogaojie at 2021/06/28 start */
 int translate_value[2048] = {0, 50, 55, 171, 253, 317, 360, 414, 452, 486, 516, 543, 568, 591, 601, 611, 621, 631, 641, 651, 661, 671, 681, 691, 700, 709, 718,\
 												726, 734, 742, 750, 758, 765, 772, 779, 786, 793, 800, 807, 817, 824, 830, 836, 842, 848, 854, 860, 866, 872, 878, 884, 890, 896,\
@@ -132,6 +133,7 @@ int translate_value[2048] = {0, 50, 55, 171, 253, 317, 360, 414, 452, 486, 516, 
 												2034, 2034, 2035, 2035, 2035, 2035, 2035, 2035, 2035, 2036, 2036, 2036, 2036, 2036, 2036, 2036, 2037, 2037, 2037, 2037, 2037,\
 												2037, 2037, 2038, 2038, 2038, 2038, 2038, 2038, 2038, 2039, 2039, 2039, 2039, 2039, 2039, 2039, 2040, 2040, 2040, 2040};
 /* Huaqin modify for HQ-142064 by caogaojie at 2021/06/28 end */
+
 static int dump_i2c_reg(struct ti_lmu_bl_chip *chip)
 {
 	struct regmap *regmap = chip->lmu->regmap;
@@ -293,9 +295,11 @@ static int ti_lmu_backlight_update_brightness_register(struct ti_lmu_bl *lmu_bl,
 	u8 reg, val;
 	int ret;
 	int i = 0;
+
 	/* Huaqin modify for HQ-142064 by caogaojie at 2021/06/28 start */
 	regmap_write(regmap, 0x13, 0x22);
 	/* Huaqin modify for HQ-142064 by caogaojie at 2021/06/28 start */
+
 	if (lmu_bl->mode == BL_PWM_BASED) {
 		switch (cfg->pwm_action) {
 		case UPDATE_PWM_ONLY:

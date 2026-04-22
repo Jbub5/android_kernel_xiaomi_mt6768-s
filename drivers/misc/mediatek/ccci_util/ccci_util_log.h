@@ -18,6 +18,7 @@
 extern void mrdump_mini_add_misc(unsigned long addr, unsigned long size,
 	unsigned long start, char *name);
 #endif
+
 /* #define BRING_UP_LOG_MODE */
 #ifndef BRING_UP_LOG_MODE
 /* ------------------------------------------------------------------------- */

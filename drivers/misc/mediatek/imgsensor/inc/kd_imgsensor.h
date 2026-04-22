@@ -162,7 +162,6 @@
 #define IMX355_AAC_ULTRA_SENSOR_ID 0x355
 #define IMX355_AAC_ULTRA_SENSOR_INDIA_ID 0x358
 #define IMX355_AAC_ULTRA_SENSOR_CN_ID (0x355 + 5)
-
 /*OV*/
 #define OV23850_SENSOR_ID                       0x023850
 #define OV16880_SENSOR_ID                       0x016880
@@ -232,7 +231,6 @@
 #define OV50C40_QTECH_MAIN_SENSOR_ID               (0x565043+1)
 #define OV50C40_QTECH_MAIN_SENSOR_INDIA_ID               (0x565043+4)
 #define OV50C40_QTECH_MAIN_SENSOR_CN_ID             (0x565044 +5)
-
 #define OV13B10_OFILM_SENSOR_ID                 0x560D44
 #define OV13B10_QTECH_SENSOR_ID                 0x560D45
 #define S5K3L6_QTECH_SENSOR_ID                 0x30C6
@@ -704,7 +702,6 @@
 #define SENSOR_DRVNAME_IMX355_MIPI_RAW          "imx355_mipi_raw"
 #define SENSOR_DRVNAME_OV13B10_MIPI_RAW         "ov13b10_mipi_raw"
 #define SENSOR_DRVNAME_OV02B10_MIPI_RAW         "ov02b10_mipi_raw"
-
 
 /******************************************************************************
  *

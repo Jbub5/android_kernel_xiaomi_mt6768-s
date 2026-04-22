@@ -65,14 +65,17 @@ static const char * const power_supply_technology_text[] = {
 	"Unknown", "NiMH", "Li-ion", "Li-poly", "LiFe", "NiCd",
 	"LiMn"
 };
+
 /*K19A HQ-123457 K19A charger of profile by wangqi at 2021/4/22 start*/
 static const char * const power_supply_battery_type_text[] = {
 	"SWD_68K", "COSMX_100K","NVT_68K","SWD_330K","secret","Unknown"
 };
+
 static const char * const power_supply_battery_vendor_text[] = {
 	"SWD_68K", "COSMX_100K","NVT_68K","SWD_330K","secret","Unknown"
 };
 /*K19A HQ-123457 K19A charger of profile by wangqi at 2021/4/22 end*/
+
 static const char * const power_supply_capacity_level_text[] = {
 	"Unknown", "Critical", "Low", "Normal", "High", "Full"
 };
@@ -97,6 +100,7 @@ static ssize_t power_supply_show_property(struct device *dev,
 		value.intval = psy->desc->type;
 	} else {
 		ret = power_supply_get_property(psy, off, &value);
+
 		if (ret < 0) {
 			if (ret == -ENODATA)
 				dev_dbg_ratelimited(dev,
@@ -163,7 +167,6 @@ static ssize_t power_supply_show_property(struct device *dev,
 		return sprintf(buf, "%lld\n", value.int64val);
 	else
 		return sprintf(buf, "%d\n", value.intval);
-
 }
 
 static ssize_t power_supply_store_property(struct device *dev,

@@ -339,6 +339,7 @@ static int __init mtkfb_get_white_point(char *p)
 
 	lcd_merlin_para.white_point_y = (wpoint[3]-'0') * 100
 		+ (wpoint[4]-'0') * 10 + (wpoint[5]-'0');
+
 	return 0;
 }
 
@@ -588,6 +589,7 @@ static int mtkfb_blank(int blank_mode, struct fb_info *info)
 	default:
 		return -EINVAL;
 	}
+
 	return 0;
 }
 
@@ -3016,6 +3018,7 @@ static int mtkfb_resume(struct platform_device *pdev)
 static void mtkfb_shutdown(struct platform_device *pdev)
 {
 	MTKFB_LOG("[FB Driver] %s()\n", __func__);
+
 	if (primary_display_is_sleepd()) {
 		MTKFB_LOG("mtkfb has been power off\n");
 		return;
@@ -3096,6 +3099,7 @@ static void mtkfb_late_resume(void)
 	DISPMSG("[FB Driver] enter late_resume\n");
 
 	ret = primary_display_resume();
+
 	if (ret) {
 		DISPERR("primary display resume failed\n");
 		return;

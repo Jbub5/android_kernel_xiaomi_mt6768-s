@@ -469,7 +469,8 @@ static int tpd_fb_notifier_callback(
 int tpd_driver_add(struct tpd_driver_t *tpd_drv)
 {
 	int i;
-		TPD_DMESG("touch driver tpd_driver_add\n");
+
+	TPD_DMESG("touch driver tpd_driver_add\n");
 	if (g_tpd_drv != NULL) {
 		TPD_DMESG("touch driver exist\n");
 		return -1;

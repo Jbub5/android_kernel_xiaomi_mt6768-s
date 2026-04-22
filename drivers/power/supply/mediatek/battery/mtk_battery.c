@@ -428,6 +428,7 @@ static int bms_get_property(struct power_supply *psy,
 
 	int fgcurrent = 0;
 	bool b_ischarging = 0;
+
 	switch (psp) {
 	case POWER_SUPPLY_PROP_CAPACITY:
 		val->intval = gm.ui_soc;
@@ -2089,6 +2090,7 @@ int force_get_tbat(bool update)
 	gm.ntc_disable_nafg = false;
 	bm_debug("[%s] t:%d precise:%d\n", __func__,
 		bat_temperature_val, gm.tbat_precise);
+
 	return bat_temperature_val;
 #endif
 }
