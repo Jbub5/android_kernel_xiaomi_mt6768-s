@@ -319,9 +319,11 @@ struct fb_post_video_buffer {
 struct fb_lcd_merlin_para {
 	int white_point_x;
 	int white_point_y;
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
 /* Huaqin modify for HQ-126356 by caogaojie at 2021/05/06 start */
 	int white_point_l;
 /* Huaqin modify for HQ-126356 by caogaojie at 2021/05/06 end */
+#endif
 	u32 white_point_r;
 	u32 white_point_g;
 	u32 white_point_b;
