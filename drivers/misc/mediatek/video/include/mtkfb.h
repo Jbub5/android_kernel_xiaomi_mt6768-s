@@ -189,15 +189,6 @@ struct fb_update_window {
 	unsigned int width, height;
 };
 
-struct fb_lcd_merlin_para {
-	int white_point_x;
-	int white_point_y;
-	u32 white_point_r;
-	u32 white_point_g;
-	u32 white_point_b;
-
-};
-
 enum MTK_FB_LAYER_TYPE {
 	LAYER_2D = 0,
 	LAYER_3D_SBS_0 = 0x1,
@@ -323,6 +314,19 @@ struct fb_post_video_buffer {
 	void *vir_addr;
 	enum MTK_FB_TV_SRC_FORMAT format;
 	unsigned int width, height;
+};
+
+struct fb_lcd_merlin_para {
+	int white_point_x;
+	int white_point_y;
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
+/* Huaqin modify for HQ-126356 by caogaojie at 2021/05/06 start */
+	int white_point_l;
+/* Huaqin modify for HQ-126356 by caogaojie at 2021/05/06 end */
+#endif
+	u32 white_point_r;
+	u32 white_point_g;
+	u32 white_point_b;
 };
 
 #if defined(CONFIG_MACH_MT6735) || defined(CONFIG_MACH_MT6735M)\
