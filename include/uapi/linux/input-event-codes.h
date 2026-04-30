@@ -337,10 +337,12 @@
 
 #define KEY_MICMUTE		248	/* Mute / unmute the microphone */
 
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
 /* Huaqin modify for HQ-123513 by liunianliang at 2021/04/25 start */
 #define KEY_TABLE0             249
 #define KEY_TABLE1             250
 /* Huaqin modify for HQ-123513 by liunianliang at 2021/04/25 end */
+#endif
 
 /* Code 255 is reserved for special needs of AT keyboard driver */
 
