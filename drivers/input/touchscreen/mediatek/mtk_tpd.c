@@ -645,7 +645,8 @@ static int tpd_probe(struct platform_device *pdev)
 		/* add tpd driver into list */
 		if (tpd_driver_list[i].tpd_device_name != NULL) {
 			tpd_driver_list[i].tpd_local_init();
-			/* msleep(1); */
+			TPD_DMESG("%s, tpd_driver_name=%s\n", __func__, tpd_driver_list[i].tpd_device_name);
+			/*msleep(10);*/
 			if (tpd_load_status == 1) {
 				TPD_DMESG("%s, tpd_driver_name=%s\n", __func__,
 					  tpd_driver_list[i].tpd_device_name);
