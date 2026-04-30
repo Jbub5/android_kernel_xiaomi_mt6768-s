@@ -1,6 +1,10 @@
+config TARGET_PRODUCT_LANCELOT
+  bool "lancelot"
+  default n
+
 config TARGET_PRODUCT_SELENE
   bool "selene"
-  default y
+  default n
 
 config HQ_SYSFS_SUPPORT
   bool "Enable Huaqin Sysfs Driver"
