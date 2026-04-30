@@ -170,4 +170,7 @@ struct hw_type_info {
 	int len;
 };
 
+long pn544_dev_ioctl(struct file *filp, unsigned int cmd, unsigned long arg);
+long p61_cold_reset(void);
+
 #endif
