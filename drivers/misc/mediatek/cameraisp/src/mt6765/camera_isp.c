@@ -63,7 +63,7 @@
 
 #include <mt-plat/sync_write.h> /* For mt65xx_reg_sync_writel(). */
 
-#ifdef COFNIG_MTK_IOMMU
+#ifdef CONFIG_MTK_IOMMU
 #include <mtk_iommu.h>
 #else
 #include <m4u.h>

@@ -17,7 +17,7 @@
 #include <linux/met_drv.h>
 #endif
 #include <linux/slab.h>
-#ifdef COFNIG_MTK_IOMMU
+#ifdef CONFIG_MTK_IOMMU
 #include "mtk_iommu.h"
 #elif defined(CONFIG_MTK_M4U)
 #include "m4u.h"
@@ -317,7 +317,7 @@ int32_t cmdq_mdp_reset_with_mmsys(const uint64_t engineToResetAgain)
 	return 0;
 }
 
-#ifdef COFNIG_MTK_IOMMU
+#ifdef CONFIG_MTK_IOMMU
 mtk_iommu_callback_ret_t cmdq_TranslationFault_callback(
 	int port, unsigned int mva, void *data)
 {
@@ -989,7 +989,7 @@ int32_t cmdqMdpClockOff(uint64_t engineFlag)
 
 void cmdqMdpInitialSetting(void)
 {
-#ifdef COFNIG_MTK_IOMMU
+#ifdef CONFIG_MTK_IOMMU
 	char *data = kzalloc(MDP_DISPATCH_KEY_STR_LEN, GFP_KERNEL);
 
 	/* Register ION Translation Fault function */
