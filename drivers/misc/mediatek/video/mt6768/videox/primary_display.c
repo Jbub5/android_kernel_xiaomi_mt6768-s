@@ -8355,6 +8355,73 @@ static int _primary_display_set_lcm_hbm(bool en)
 
 	return ret;
 }
+int _set_lcm_cmd_by_cmdq(unsigned int *lcm_cmd, unsigned int *lcm_count,
+	unsigned int *lcm_value)
+{
+	int ret = 0;
+	struct cmdqRecStruct *cmdq_handle_lcm_cmd = NULL;
+
+	mmprofile_log_ex(ddp_mmp_get_events()->primary_set_cmd,
+		MMPROFILE_FLAG_PULSE, 1, 1);
+	ret = cmdqRecCreate(CMDQ_SCENARIO_PRIMARY_DISP, &cmdq_handle_lcm_cmd);
+	DISPDBG("primary set lcm cmd, handle=%p\n", cmdq_handle_lcm_cmd);
+	if (ret) {
+		DISPWARN("fail to create primary cmdq handle for setlcmcmd\n");
+		return -1;
+	}
+
+	if (primary_display_is_video_mode()) {
+		mmprofile_log_ex(ddp_mmp_get_events()->primary_set_cmd,
+			MMPROFILE_FLAG_PULSE, 1, 2);
+		cmdqRecReset(cmdq_handle_lcm_cmd);
+				if (bdg_is_bdg_connected() == 1) {
+			cmdqRecWait(cmdq_handle_lcm_cmd, CMDQ_EVENT_MUTEX0_STREAM_EOF);
+			/* stop dsi vdo mode */
+			dpmgr_path_build_cmdq(primary_get_dpmgr_handle(),
+				cmdq_handle_lcm_cmd, CMDQ_STOP_VDO_MODE, 0);
+			disp_lcm_set_lcm_cmd(pgc->plcm, cmdq_handle_lcm_cmd, lcm_cmd,
+				 lcm_count, lcm_value);
+			dpmgr_path_build_cmdq(primary_get_dpmgr_handle(), cmdq_handle_lcm_cmd,
+				CMDQ_START_VDO_MODE, 0);
+			cmdqRecClearEventToken(cmdq_handle_lcm_cmd, CMDQ_EVENT_MUTEX0_STREAM_EOF);
+
+			dpmgr_path_trigger(primary_get_dpmgr_handle(),
+				cmdq_handle_lcm_cmd, CMDQ_ENABLE);
+			ddp_mutex_set_sof_wait(dpmgr_path_get_mutex(
+				primary_get_dpmgr_handle()), cmdq_handle_lcm_cmd, 0);
+
+			_cmdq_flush_config_handle_mira(cmdq_handle_lcm_cmd, 1);
+		} else {
+			_cmdq_insert_wait_frame_done_token_mira(cmdq_handle_lcm_cmd);
+			disp_lcm_set_lcm_cmd(pgc->plcm, cmdq_handle_lcm_cmd, lcm_cmd,
+				lcm_count, lcm_value);
+			_cmdq_flush_config_handle_mira(cmdq_handle_lcm_cmd, 1);
+		}
+		DISPCHECK("[CMD]%s ret=%d\n", __func__, ret);
+	} else {
+		mmprofile_log_ex(ddp_mmp_get_events()->primary_set_bl,
+			MMPROFILE_FLAG_PULSE, 1, 3);
+		cmdqRecReset(cmdq_handle_lcm_cmd);
+		_cmdq_handle_clear_dirty(cmdq_handle_lcm_cmd);
+		_cmdq_insert_wait_frame_done_token_mira(cmdq_handle_lcm_cmd);
+
+		disp_lcm_set_lcm_cmd(pgc->plcm, cmdq_handle_lcm_cmd, lcm_cmd,
+			lcm_count, lcm_value);
+		cmdqRecSetEventToken(cmdq_handle_lcm_cmd,
+			CMDQ_SYNC_TOKEN_CONFIG_DIRTY);
+		mmprofile_log_ex(ddp_mmp_get_events()->primary_set_cmd,
+			MMPROFILE_FLAG_PULSE, 1, 4);
+		_cmdq_flush_config_handle_mira(cmdq_handle_lcm_cmd, 1);
+		mmprofile_log_ex(ddp_mmp_get_events()->primary_set_cmd,
+			MMPROFILE_FLAG_PULSE, 1, 6);
+		DISPCHECK("[CMD]%s ret=%d\n", __func__, ret);
+	}
+	cmdqRecDestroy(cmdq_handle_lcm_cmd);
+	cmdq_handle_lcm_cmd = NULL;
+	mmprofile_log_ex(ddp_mmp_get_events()->primary_set_cmd,
+		MMPROFILE_FLAG_PULSE, 1, 5);
+	return ret;
+}
 
 int primary_display_set_lcm_hbm(bool en)
 {
@@ -8479,73 +8546,6 @@ int primary_display_setbacklight(unsigned int level)
 	return 0;
 }
 
-int _set_lcm_cmd_by_cmdq(unsigned int *lcm_cmd, unsigned int *lcm_count,
-	unsigned int *lcm_value)
-{
-	int ret = 0;
-	struct cmdqRecStruct *cmdq_handle_lcm_cmd = NULL;
-
-	mmprofile_log_ex(ddp_mmp_get_events()->primary_set_cmd,
-		MMPROFILE_FLAG_PULSE, 1, 1);
-	ret = cmdqRecCreate(CMDQ_SCENARIO_PRIMARY_DISP, &cmdq_handle_lcm_cmd);
-	DISPDBG("primary set lcm cmd, handle=%p\n", cmdq_handle_lcm_cmd);
-	if (ret) {
-		DISPWARN("fail to create primary cmdq handle for setlcmcmd\n");
-		return -1;
-	}
-
-	if (primary_display_is_video_mode()) {
-		mmprofile_log_ex(ddp_mmp_get_events()->primary_set_cmd,
-			MMPROFILE_FLAG_PULSE, 1, 2);
-		cmdqRecReset(cmdq_handle_lcm_cmd);
-				if (bdg_is_bdg_connected() == 1) {
-			cmdqRecWait(cmdq_handle_lcm_cmd, CMDQ_EVENT_MUTEX0_STREAM_EOF);
-			/* stop dsi vdo mode */
-			dpmgr_path_build_cmdq(primary_get_dpmgr_handle(),
-				cmdq_handle_lcm_cmd, CMDQ_STOP_VDO_MODE, 0);
-			disp_lcm_set_lcm_cmd(pgc->plcm, cmdq_handle_lcm_cmd, lcm_cmd,
-				 lcm_count, lcm_value);
-			dpmgr_path_build_cmdq(primary_get_dpmgr_handle(), cmdq_handle_lcm_cmd,
-				CMDQ_START_VDO_MODE, 0);
-			cmdqRecClearEventToken(cmdq_handle_lcm_cmd, CMDQ_EVENT_MUTEX0_STREAM_EOF);
-
-			dpmgr_path_trigger(primary_get_dpmgr_handle(),
-				cmdq_handle_lcm_cmd, CMDQ_ENABLE);
-			ddp_mutex_set_sof_wait(dpmgr_path_get_mutex(
-				primary_get_dpmgr_handle()), cmdq_handle_lcm_cmd, 0);
-
-			_cmdq_flush_config_handle_mira(cmdq_handle_lcm_cmd, 1);
-		} else {
-			_cmdq_insert_wait_frame_done_token_mira(cmdq_handle_lcm_cmd);
-			disp_lcm_set_lcm_cmd(pgc->plcm, cmdq_handle_lcm_cmd, lcm_cmd,
-				lcm_count, lcm_value);
-			_cmdq_flush_config_handle_mira(cmdq_handle_lcm_cmd, 1);
-		}
-		DISPCHECK("[CMD]%s ret=%d\n", __func__, ret);
-	} else {
-		mmprofile_log_ex(ddp_mmp_get_events()->primary_set_bl,
-			MMPROFILE_FLAG_PULSE, 1, 3);
-		cmdqRecReset(cmdq_handle_lcm_cmd);
-		_cmdq_handle_clear_dirty(cmdq_handle_lcm_cmd);
-		_cmdq_insert_wait_frame_done_token_mira(cmdq_handle_lcm_cmd);
-
-		disp_lcm_set_lcm_cmd(pgc->plcm, cmdq_handle_lcm_cmd, lcm_cmd,
-			lcm_count, lcm_value);
-		cmdqRecSetEventToken(cmdq_handle_lcm_cmd,
-			CMDQ_SYNC_TOKEN_CONFIG_DIRTY);
-		mmprofile_log_ex(ddp_mmp_get_events()->primary_set_cmd,
-			MMPROFILE_FLAG_PULSE, 1, 4);
-		_cmdq_flush_config_handle_mira(cmdq_handle_lcm_cmd, 1);
-		mmprofile_log_ex(ddp_mmp_get_events()->primary_set_cmd,
-			MMPROFILE_FLAG_PULSE, 1, 6);
-		DISPCHECK("[CMD]%s ret=%d\n", __func__, ret);
-	}
-	cmdqRecDestroy(cmdq_handle_lcm_cmd);
-	cmdq_handle_lcm_cmd = NULL;
-	mmprofile_log_ex(ddp_mmp_get_events()->primary_set_cmd,
-		MMPROFILE_FLAG_PULSE, 1, 5);
-	return ret;
-}
 
 int primary_display_setlcm_cmd(unsigned int *lcm_cmd, unsigned int *lcm_count,
 	unsigned int *lcm_value)
