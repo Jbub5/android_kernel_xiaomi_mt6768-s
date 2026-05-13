@@ -150,18 +150,6 @@ extern bool nvt_gesture_flag;
 //extern void  BDG_set_cmdq_V2_DSI0(void *cmdq, unsigned int cmd, unsigned char count,unsigned char *para_list, unsigned char force_update);
 /* Huaqin modify for HQ-126356 by caogaojie at 2021/05/07 end */
 
-/* Huaqin add for HQ-124138 by liunianliang at 2021/04/29 start */
-#ifdef CONFIG_MI_ERRFLAG_ESD_CHECK_ENABLE
-/* Huaqin add for K19A-315 by feiwen at 2021/06/16 start */
-extern struct nvt_ts_data *ts;
-/* Huaqin add for K19A-315 by feiwen at 2021/06/16 end */
-extern int32_t nvt_update_firmware(char *firmware_name);
-/* Huaqin modify for HQ-144782 by caogaojie at 2021/07/05 start */
-static bool esd_flag = false;
-extern bool g_trigger_disp_esd_recovery;
-/* Huaqin modify for HQ-144782 by caogaojie at 2021/07/05 end */
-#endif
-/* Huaqin add for HQ-124138 by liunianliang at 2021/04/29 end */
 /*****************************************************************************
  * Function Prototype
  *****************************************************************************/
@@ -611,11 +599,6 @@ static void lcm_get_params(struct LCM_PARAMS *params)
 #endif
 	params->dsi.CLK_HS_POST = 36;
 	params->dsi.clk_lp_per_line_enable = 0;
-/* Huaqin add for HQ-124138 by liunianliang at 2021/04/29 start */
-#ifdef CONFIG_MI_ERRFLAG_ESD_CHECK_ENABLE
-	params->dsi.esd_check_enable = 1;
-#endif
-/* Huaqin add for HQ-124138 by liunianliang at 2021/04/29 end */
 	//params->dsi.esd_check_enable = 1;
 	params->dsi.customization_esd_check_enable = 0;
 	/*params->dsi.lcm_esd_check_table[0].cmd = 0x0a;
@@ -698,19 +681,6 @@ static void lcm_init(void)
 	MDELAY(10);
 	/* Huaqin modify for HQ-132702 by caogaojie at 2021/06/15 end */
 	/* Huaqin modify for HQ-132702 by liunianliang at 2021/05/20 end */
-	/* Huaqin modify for HQ-161950 by jiangyue at 2021/11/05 start */
-	if(esd_flag){
-		nvt_bootloader_reset_locked();
-		push_table(NULL, tp_reset_cmd1, ARRAY_SIZE(tp_reset_cmd1), 1);
-		MDELAY(10);
-		nvt_esd_vdd_tp_recovery();
-		MDELAY(20);
-		push_table(NULL, tp_reset_cmd2, ARRAY_SIZE(tp_reset_cmd2), 1);
-		MDELAY(10);
-		esd_flag = false;
-		g_trigger_disp_esd_recovery = false;
-	}
-	/* Huaqin modify for HQ-161950 by jiangyue at 2021/11/05 end */
 		LCM_LOGI("[DENNIS][%s][%d]\n", __func__, __LINE__);
 	/* Huaqin modify for HQ-140017 by caogaojie at 2021/07/06 start */
 	/* Huaqin modify for HQ-155949 by caogaojie at 2021/09/18 start */
@@ -846,37 +816,6 @@ static unsigned int lcm_compare_id(void)
 
 }
 
-/* Huaqin add for HQ-124138 by liunianliang at 2021/04/29 start */
-#ifdef CONFIG_MI_ERRFLAG_ESD_CHECK_ENABLE
-static unsigned int lcd_esd_recover(void)
-{
-	LCM_LOGI("%s, int and update tp fw..\n", __func__);
-/* Huaqin modify for HQ-140017 by caogaojie at 2021/07/05 start */
-	esd_flag = true;
-/* Huaqin modify for HQ-140017 by caogaojie at 2021/07/05 end */
-	lcm_init_power();
-	lcm_init();
-	
-/* Huaqin add for HQ-142518 by feiwen at 2021/06/24 start */
-#ifdef CONFIG_MTK_KERNEL_POWER_OFF_CHARGING
-	if (get_boot_mode() == KERNEL_POWER_OFF_CHARGING_BOOT
-		||get_boot_mode() == LOW_POWER_OFF_CHARGING_BOOT)
-		{
-			LCM_LOGI("%s, enter power off charging mode.\n", __func__);
-		} else {
-/* Huaqin add for K19A-315 by feiwen at 2021/06/16 start */
-			mutex_lock(&ts->lock);
-			nvt_update_firmware("nt36672c_tm_01_ts_fw.bin");
-			mutex_unlock(&ts->lock);
-/* Huaqin add for K19A-315 by feiwen at 2021/06/16 end */
-		}
-#endif
-/* Huaqin add for HQ-142518 by feiwen at 2021/06/24 end */
-	return 0;
-}
-#endif
-/* Huaqin add for HQ-124138 by liunianliang at 2021/04/29 end */
-
 struct LCM_DRIVER dsi_panel_k19a_36_02_0a_dsc_vdo_lcm_drv = {
 	.name = "dsi_panel_k19a_36_02_0a_dsc_vdo_lcm_drv",
 	.set_util_funcs = lcm_set_util_funcs,
@@ -892,10 +831,5 @@ struct LCM_DRIVER dsi_panel_k19a_36_02_0a_dsc_vdo_lcm_drv = {
 	.ata_check = lcm_ata_check,
 	.update = lcm_update,
 	.set_hw_info = lcm_set_hw_info,
-/* Huaqin add for HQ-124138 by liunianliang at 2021/04/29 start */
-#ifdef CONFIG_MI_ERRFLAG_ESD_CHECK_ENABLE
-	.esd_recover = lcd_esd_recover,
-#endif
-/* Huaqin add for HQ-124138 by liunianliang at 2021/04/29 end */
 };
 
