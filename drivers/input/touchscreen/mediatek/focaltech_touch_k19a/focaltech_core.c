@@ -81,11 +81,6 @@ extern	int	fts_tp_data_dump_proc_init(void);
 extern	void fts_tp_data_dump_proc_exit(void);
 #endif
 
-/* Huaqin add for HQ-148570 by jiangyue at 2021/10/15 start */
-#ifdef CONFIG_MI_ERRFLAG_ESD_CHECK_ENABLE
-extern atomic_t lcm_ready;
-#endif
-/* Huaqin add for HQ-148570 by jiangyue at 2021/10/15 end */
 /*****************************************************************************
 * Static function prototypes
 *****************************************************************************/
@@ -162,25 +157,9 @@ void fts_tp_state_recovery(struct fts_ts_data *ts_data)
 	fts_gesture_recovery(ts_data);
 	FTS_FUNC_EXIT();
 }
-/* Huaqin add for HQ-158437 by gaoxue at 2021/10/25 start */
-#ifdef CONFIG_MI_ERRFLAG_ESD_CHECK_ENABLE
-extern atomic_t lcm_ready;
-/* Huaqin add for HQ-174687 by jiangyue at 2021/12/31 start */
-extern atomic_t lcm_valid_irq;
-/* Huaqin add for HQ-174687 by jiangyue at 2021/12/31 end */
-#endif
-/* Huaqin add for HQ-158437 by gaoxue at 2021/10/25 end */
+
 int fts_reset_proc(int hdelayms)
 {
-	/* Huaqin add for HQ-158437 by gaoxue at 2021/10/25 start */
-        #ifdef CONFIG_MI_ERRFLAG_ESD_CHECK_ENABLE
-                atomic_set(&lcm_ready,0);
-		/* Huaqin add for HQ-174687 by jiangyue at 2021/12/31 start */
-		atomic_set(&lcm_valid_irq,1);
-		/* Huaqin add for HQ-174687 by jiangyue at 2021/12/31 end */
-                FTS_INFO("[ESD]atomic_set(&lcm_ready,0)\n");
-        #endif
-        /* Huaqin add for HQ-158437 by gaoxue at 2021/10/25 end */
 	gpio_direction_output(fts_data->pdata->reset_gpio, 0);
 	/* ����kernel msleep����ʱ���Ʈ��1ms�п��ܱ��20ms�����Բ���mdelay(2)
 	   ���ʵ�����ⷢ�ֲ���Ʈ�ܳ���Ҳ���Բ��ģ���Ҫ��Ӱ��FW����ʱ��
@@ -190,12 +169,6 @@ int fts_reset_proc(int hdelayms)
 	if (hdelayms) {
 		msleep(hdelayms);
 	}
-	/* Huaqin add for HQ-158437 by gaoxue at 2021/10/25 start */
-        #ifdef CONFIG_MI_ERRFLAG_ESD_CHECK_ENABLE
-                atomic_set(&lcm_ready,1);
-                FTS_INFO("[ESD]atomic_set(&lcm_ready,1)\n");
-        #endif
-        /* Huaqin add for HQ-158437 by gaoxue at 2021/10/25 end */
 	return 0;
 }
 
@@ -2023,13 +1996,6 @@ static int fts_ts_suspend(struct device *dev)
 		FTS_INFO("fw upgrade in process, can't suspend");
 		return 0;
 	}
-
-/* Huaqin add for HQ-148570 by jiangyue at 2021/10/15 start */
-#ifdef CONFIG_MI_ERRFLAG_ESD_CHECK_ENABLE
-	atomic_set(&lcm_ready, 0);
-	FTS_INFO("[ESD] atomic_set(&lcm_ready, 0)\n");
-#endif
-/* Huaqin add for HQ-148570 by jiangyue at 2021/10/15 end */
 
 #if FTS_ESDCHECK_EN
 	fts_esdcheck_suspend();
