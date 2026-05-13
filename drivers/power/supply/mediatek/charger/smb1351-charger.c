@@ -2318,7 +2318,8 @@ static int smb1351_set_usbchg_current(struct charger_device *chg_dev, u32 uA)
 			if (usb_chg_current[i] <= current_ma)
 				break;
 		}
-		if (i < 0)
+		pr_err("set i:%d\n", i);
+		if (i < 2)
 			i = 0;
 		rc = smb1351_masked_write(chip, CHG_CURRENT_CTRL_REG,
 						AC_INPUT_CURRENT_LIMIT_MASK, i);
@@ -2703,6 +2704,27 @@ static int smb1351_enable_otg(struct charger_device *chg_dev, bool en)
 	return rc;
 }
 
+static int smb1351_do_event(struct charger_device *chg_dev, u32 event,
+			    u32 args)
+{
+	if (chg_dev == NULL)
+		return -EINVAL;
+
+	pr_info("%s: event = %d\n", __func__, event);
+	switch (event) {
+	case EVENT_EOC:
+		charger_dev_notify(chg_dev, CHARGER_DEV_NOTIFY_EOC);
+		break;
+	case EVENT_RECHARGE:
+		charger_dev_notify(chg_dev, CHARGER_DEV_NOTIFY_RECHG);
+		break;
+	default:
+		break;
+	}
+
+	return 0;
+}
+
 static int smb1351_set_otg_current(struct charger_device *chg_dev, u32 uA)
 {
 	u8 reg;
@@ -2898,6 +2920,7 @@ static struct charger_ops smb1351_chg_ops = {
 	.enable_hvdcp_det = smb1351_enable_hvdcp_det,
 	.plug_in = smb1351_plug_in,
 	.enable_otg = smb1351_enable_otg,
+	.event = smb1351_do_event,
 	.set_otg_current = smb1351_set_otg_current,
 	.check_hv_charging = smb1351_check_hv_charging,
 };
@@ -3100,6 +3123,10 @@ static int smb1351_charger_probe(struct i2c_client *client,
 	chip->is_connect  = false;
 	chip->thermal_status = TEMP_BELOW_RANGE;
 	chip->rerun_apsd_count = 0;
+	rc = smb_chip_get_version(chip);
+	if (rc < 0) {
+		return -ENOMEM;
+	}
 
 	mutex_init(&chip->chgdet_lock);
 	i2c_set_clientdata(client, chip);

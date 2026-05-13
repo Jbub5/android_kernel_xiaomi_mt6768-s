@@ -67,7 +67,7 @@ static const char * const power_supply_technology_text[] = {
 };
 
 static const char * const power_supply_battery_type_text[] = {
-	"NVT_68k", "COSMX_100K", "Unknown"
+	"SWD_68K", "COSMX_100K","NVT_68K","SWD_330K","secret","Unknown"
 };
 
 static const char * const power_supply_capacity_level_text[] = {
@@ -135,10 +135,12 @@ static ssize_t power_supply_show_property(struct device *dev,
 	else if (off == POWER_SUPPLY_PROP_BATTERY_TYPE)
 		return sprintf(buf, "%s\n",
 			       power_supply_battery_type_text[value.intval]);
+	else if (off == POWER_SUPPLY_PROP_BATTERY_VENDOR)
+		return sprintf(buf, "%s\n",
+				   power_supply_battery_type_text[value.intval]);
 	else if (off >= POWER_SUPPLY_PROP_MODEL_NAME)
 		return sprintf(buf, "%s\n", value.strval);
-
-	if (off == POWER_SUPPLY_PROP_CHARGE_COUNTER_EXT)
+	else if (off == POWER_SUPPLY_PROP_CHARGE_COUNTER_EXT)
 		return sprintf(buf, "%lld\n", value.int64val);
 	else
 		return sprintf(buf, "%d\n", value.intval);
@@ -275,6 +277,7 @@ static struct device_attribute power_supply_attrs[] = {
 	POWER_SUPPLY_ATTR(reverse_chg_cc),
 	POWER_SUPPLY_ATTR(reverse_chg_status),
 	POWER_SUPPLY_ATTR(reverse_limit),
+	POWER_SUPPLY_ATTR(charging_enabled),
 	/* Local extensions */
 	POWER_SUPPLY_ATTR(usb_hc),
 	POWER_SUPPLY_ATTR(usb_otg),
@@ -284,11 +287,15 @@ static struct device_attribute power_supply_attrs[] = {
 	POWER_SUPPLY_ATTR(resistance),
 	POWER_SUPPLY_ATTR(resistance_id),
 	POWER_SUPPLY_ATTR(input_suspend),
+	POWER_SUPPLY_ATTR(battery_id_voltage),
+	POWER_SUPPLY_ATTR(hiz_enable),
+	POWER_SUPPLY_ATTR(shutdown_delay),
 	POWER_SUPPLY_ATTR(ra_detected),
 	POWER_SUPPLY_ATTR(tx_adapter),
 	POWER_SUPPLY_ATTR(connector_temp),
 	POWER_SUPPLY_ATTR(vbus_disable),
 	POWER_SUPPLY_ATTR(chip_ok),
+	POWER_SUPPLY_ATTR(quick_charge_type),
 	/* Local extensions of type int64_t */
 	POWER_SUPPLY_ATTR(charge_counter_ext),
 	/* Properties of type `const char *' */
@@ -296,6 +303,7 @@ static struct device_attribute power_supply_attrs[] = {
 	POWER_SUPPLY_ATTR(manufacturer),
 	POWER_SUPPLY_ATTR(serial_number),
 	POWER_SUPPLY_ATTR(battery_type),
+	POWER_SUPPLY_ATTR(battery_vendor),
 };
 
 static struct attribute *

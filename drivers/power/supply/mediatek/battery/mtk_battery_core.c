@@ -93,6 +93,10 @@ int mtk_qmax_aging;
 /* ============================================================ */
 /* gauge hal interface */
 /* ============================================================ */
+/*K19A HQ-123457 K19A charger of profile by wangqi at 2021/4/22 start*/
+extern int hq_config(void);
+/*K19A HQ-123457 K19A charger of profile by wangqi at 2021/4/22 start*/
+
 bool gauge_get_current(int *bat_current)
 {
 	bool is_charging = false;
@@ -647,14 +651,29 @@ void fgauge_get_profile_id(void)
 	pr_err("[%s]battery_id_voltage is %d\n", __func__, id_volt);
 
 	my_battery_id_voltage = id_volt;
-	if (id_volt >= NVT_MIN_VOLTAGE && id_volt <= NVT_MAX_VOLTAGE) {
+	/*K19A HQ-123457 K19A charger of profile by wangqi at 2021/4/22 start*/
+	if (id_volt >= SWD_MIN_VOLTAGE && id_volt <= SWD_MAX_VOLTAGE) {
 		gm.battery_id = 0;
-	} else if (id_volt >= COSMX_MIN_VOLTAGE && id_volt <= COSMX_MAX_VOLTAGE) {
-		gm.battery_id = 1;
-	} else {
+	if(hq_config()== 1)
 		gm.battery_id = 2;
+	}else if (id_volt >= COSMX_MIN_VOLTAGE && id_volt <= COSMX_MAX_VOLTAGE) {
+		gm.battery_id = 1;
+		/* K19SFAC-41 code for K19T by wanglicheng at 20210929 start */
+		if(hq_config()== 4)
+			gm.battery_id = 5;
+		/* K19SFAC-41 code for K19T by wanglicheng at 20210929 end */
+	} else if (id_volt >= SWD_SEC_MIN_VOLTAGE && id_volt <= SWD_SEC_MAX_VOLTAGE) {
+		gm.battery_id = 3;
+		/* K19SFAC-41 code for K19T by wanglicheng at 20210929 start */
+		if(hq_config()== 4)
+			gm.battery_id = 4;
+		/* K19SFAC-41 code for K19T by wanglicheng at 20210929 end */
+	}else if (id_volt >= SECRET_MIN_VOLTAGE && id_volt <= SECRET_MAX_VOLTAGE) {
+		gm.battery_id = 4;
+	}else {
+		gm.battery_id = 5;
 	}
-
+	/*K19A HQ-123457 K19A charger of profile by wangqi at 2021/4/22 end*/
 	pr_err("[%s]Battery id (%d) volt (%d)\n",
 		__func__, gm.battery_id, id_volt);
 
