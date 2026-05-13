@@ -10129,6 +10129,10 @@ extern int read_lcm(unsigned char cmd, unsigned char *buf,
 			unsigned char buf_size, bool sendhs, bool need_lock,
 			unsigned char offset);
 
+extern void ddp_dsi_bdg_dynfps_chg_fps(
+	enum DISP_MODULE_ENUM module, void *handle,
+	unsigned int last_fps, unsigned int new_fps, unsigned int chg_index);
+
 void primary_display_dynfps_chg_fps(int cfg_id)
 {
 	int last_cfg_id;
