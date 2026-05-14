@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -123,24 +124,20 @@ static unsigned int prv_adp_mdla_pwr_lim;
 unsigned int gv_cpu_power_limit = 0x7FFFFFFF;
 unsigned int gv_gpu_power_limit = 0x7FFFFFFF;
 #if CPT_ADAPTIVE_AP_COOLER
-static int TARGET_TJ = CLATM_INIT_CFG_0_TARGET_TJ;
-static int cpu_target_tj = 65000;/*not use*/
-static int cpu_target_offset = 10000;/*not use*/
-/*not used when tscpu_atm = 3*/
+static int TARGET_TJ = 65000;
+static int cpu_target_tj = 65000;
+static int cpu_target_offset = 10000;
 static int TARGET_TJ_HIGH = 66000;
-/*not used when tscpu_atm = 3*/
 static int TARGET_TJ_LOW = 64000;
 static int PACKAGE_THETA_JA_RISE = 10;
 static int PACKAGE_THETA_JA_FALL = 10;
-static int MINIMUM_CPU_POWER = CLATM_INIT_CFG_0_MIN_CPU_PWR;
-static int MAXIMUM_CPU_POWER = CLATM_INIT_CFG_0_MAX_CPU_PWR;
-static int MINIMUM_GPU_POWER = CLATM_INIT_CFG_0_MIN_GPU_PWR;
-static int MAXIMUM_GPU_POWER = CLATM_INIT_CFG_0_MAX_GPU_PWR;
-static int MINIMUM_TOTAL_POWER = CLATM_INIT_CFG_0_MIN_CPU_PWR +
-	CLATM_INIT_CFG_0_MIN_GPU_PWR;
-static int MAXIMUM_TOTAL_POWER = CLATM_INIT_CFG_0_MAX_CPU_PWR +
-	CLATM_INIT_CFG_0_MAX_GPU_PWR;
-static int FIRST_STEP_TOTAL_POWER_BUDGET = CLATM_INIT_CFG_0_FIRST_STEP;
+static int MINIMUM_CPU_POWER = 500;
+static int MAXIMUM_CPU_POWER = 1240;
+static int MINIMUM_GPU_POWER = 676;
+static int MAXIMUM_GPU_POWER = 676;
+static int MINIMUM_TOTAL_POWER = 500 + 676;
+static int MAXIMUM_TOTAL_POWER = 1240 + 676;
+static int FIRST_STEP_TOTAL_POWER_BUDGET = 1750;
 #if defined(THERMAL_VPU_SUPPORT)
 static int MINIMUM_VPU_POWER = 300;
 static int MAXIMUM_VPU_POWER = 1000;
@@ -3809,33 +3806,6 @@ static int krtatm_thread(void *arg)
 						krtatm_curr_maxtj,
 						(unsigned int) gpu_loading);
 
-			trace_ATM__result(
-				TARGET_TJ,
-				atm_curr_maxtj,
-#if defined(CONFIG_MACH_MT6739)
-				get_immediate_cpu_wrap(),
-				0,
-#elif defined(CONFIG_MACH_MT6765) || defined(CONFIG_MACH_MT6771) || defined(CONFIG_MACH_MT8168)
-				get_immediate_cpuLL_wrap(),
-				get_immediate_cpuL_wrap(),
-#else
-				get_immediate_cpuL_wrap(),
-				get_immediate_cpuB_wrap(),
-#endif
-				get_immediate_gpu_wrap(),
-				gpu_loading,
-				(adaptive_cpu_power_limit == 0x7FFFFFFF)
-					? MAXIMUM_CPU_POWER : adaptive_cpu_power_limit,
-				(adaptive_gpu_power_limit == 0x7FFFFFFF)
-					? MAXIMUM_GPU_POWER : adaptive_gpu_power_limit,
-				cl_dev_adp_cpu_state_active,
-#if defined(EARA_THERMAL_SUPPORT)
-				is_EARA_handled
-#else
-				0
-#endif
-			);
-
 			/* To confirm if krtatm kthread is really running. */
 			if (krtatm_curr_maxtj >= 100000 ||
 			(krtatm_curr_maxtj - krtatm_prev_maxtj >= 20000)) {
@@ -3889,6 +3859,74 @@ static int krtatm_thread(void *arg)
 	return 0;
 }
 #endif	/* FAST_RESPONSE_ATM */
+
+static void init_ctm_param(void)
+{
+	int t_K_SUM_TT_HIGH = CLCTM_TT_HIGH;
+	int t_K_SUM_TT_LOW = CLCTM_TT_LOW;
+	int t_CATMP_STEADY_TTJ_DELTA = CLCTM_STEADY_TTJ_DELTA;
+
+	ctm_on = CLATM_INIT_CFG_CATM;	/* 2: cATM+, 1: cATMv1, 0: off */
+
+	MAX_TARGET_TJ = CLCTM_TARGET_TJ;
+	STEADY_TARGET_TJ = CLCTM_TARGET_TJ;
+	TRIP_TPCB = CLCTM_TPCB_1;
+	STEADY_TARGET_TPCB = CLCTM_TPCB_2;
+	MAX_EXIT_TJ = CLCTM_EXIT_TJ;
+	STEADY_EXIT_TJ = CLCTM_EXIT_TJ;
+
+	COEF_AE = CLCTM_AE;
+	COEF_BE = CLCTM_BE;
+	COEF_AX = CLCTM_AX;
+	COEF_BX = CLCTM_BX;
+
+#if defined(CATM_TPCB_EXTEND)
+	if (g_turbo_bin && (STEADY_TARGET_TPCB >= 52000)) {
+		if (t_TPCB_EXTEND > 0 && t_TPCB_EXTEND < 10000) {
+			TRIP_TPCB += t_TPCB_EXTEND;
+			STEADY_TARGET_TPCB += t_TPCB_EXTEND;
+			COEF_AE = STEADY_TARGET_TJ +
+				(STEADY_TARGET_TPCB * COEF_BE) / 1000;
+			COEF_AX = STEADY_EXIT_TJ +
+				(STEADY_TARGET_TPCB * COEF_BX) / 1000;
+			TPCB_EXTEND = t_TPCB_EXTEND;
+		}
+	}
+#endif
+
+	/* +++ cATM+ parameters +++ */
+	if (ctm_on == 2) {
+		if (t_K_SUM_TT_HIGH >= 0
+			&& t_K_SUM_TT_HIGH < MAX_K_SUM_TT)
+			K_SUM_TT_HIGH = t_K_SUM_TT_HIGH;
+
+		if (t_K_SUM_TT_LOW >= 0
+			&& t_K_SUM_TT_LOW < MAX_K_SUM_TT)
+			K_SUM_TT_LOW = t_K_SUM_TT_LOW;
+
+		if (t_CATMP_STEADY_TTJ_DELTA >= 0)
+			CATMP_STEADY_TTJ_DELTA =
+					t_CATMP_STEADY_TTJ_DELTA;
+
+		catmplus_update_params();
+	}
+	/* --- cATM+ parameters --- */
+
+	/* --- SPA parameters --- */
+	thermal_spa_t.t_spa_Tpolicy_info.steady_target_tj =
+						STEADY_TARGET_TJ;
+
+	thermal_spa_t.t_spa_Tpolicy_info.steady_exit_tj =
+						STEADY_EXIT_TJ;
+
+#ifdef CONFIG_MTK_TINYSYS_SSPM_SUPPORT
+#if THERMAL_ENABLE_TINYSYS_SSPM && CPT_ADAPTIVE_AP_COOLER &&	\
+	PRECISE_HYBRID_POWER_BUDGET && CONTINUOUS_TM
+		atm_update_catm_param_to_sspm();
+#endif
+#endif
+
+}
 
 static int __init mtk_cooler_atm_init(void)
 {
@@ -3962,6 +4000,7 @@ static int __init mtk_cooler_atm_init(void)
 #if 0
 	reset_gpu_power_history();
 #endif
+	init_ctm_param();
 	tscpu_dprintk("%s: end\n", __func__);
 	return 0;
 }
