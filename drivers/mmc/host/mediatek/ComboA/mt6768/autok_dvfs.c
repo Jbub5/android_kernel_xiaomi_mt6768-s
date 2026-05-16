@@ -853,7 +853,7 @@ static int autok_opp[AUTOK_VCORE_NUM] = {
 };
 #endif
 
-#ifdef CONFIG_MTK_EMMC_HW_CQ
+#if defined(CONFIG_MTK_EMMC_HW_CQ) && !defined(FPGA_PLATFORM) && defined(VCOREFS_READY)
 static int emmc_autok_switch_cqe(struct msdc_host *host, bool enable)
 {
 	bool cmdq_mode = 0;
