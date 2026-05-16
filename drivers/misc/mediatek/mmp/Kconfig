@@ -1,6 +1,6 @@
 config MTK_MMPROFILE_SUPPORT
 	bool "MMProfile function enable or disable"
-	default y
+	default n
 	help
 	  Multimedia profiling mechanism function support.
 	  By enable this config, the actual implementation under mmp/src/
@@ -10,7 +10,7 @@ config MTK_MMPROFILE_SUPPORT
 
 config MMPROFILE
 	bool "MMProfile module enable or disable"
-	default y
+	default n
 	help
 	  Enable other module to use Multimedia profiling mechanism.
 	  By enable this config, the mmp/ driver is built into kernel.
