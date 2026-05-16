@@ -2719,8 +2719,6 @@ static int nvt_fb_notifier_callback(struct notifier_block *self, unsigned long e
 {
 	struct fb_event *evdata = data;
 	int *blank;
-	struct nvt_ts_data *ts =
-		container_of(self, struct nvt_ts_data, fb_notif);
 
 	if (evdata && evdata->data && event == FB_EARLY_EVENT_BLANK) {
 		blank = evdata->data;
