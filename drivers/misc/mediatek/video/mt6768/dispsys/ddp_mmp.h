@@ -18,6 +18,7 @@
 #include "mmprofile_function.h"
 #include "ddp_info.h"
 #include "disp_session.h"
+#ifdef CONFIG_MMPROFILE
 struct DDP_MMP_Events {
 	mmp_event DDP;
 	mmp_event layerParent;
@@ -154,6 +155,9 @@ struct DDP_MMP_Events {
 	mmp_event primary_set_cmd;
 	mmp_event primary_pm_qos;
 };
+#else
+struct DDP_MMP_Events {}
+#endif
 
 struct DDP_MMP_Events *ddp_mmp_get_events(void);
 void init_ddp_mmp_events(void);

@@ -92,7 +92,10 @@ obj-y += ddp_disp_bdg.o
 endif
 ifeq ($(CONFIG_MMPROFILE), y)
 obj-y += ddp_mmp.o
+else
+obj-y += ddp_mmp_dummy.o
 endif
+
 obj-y += ddp_met.o
 
 obj-y += display_recorder.o
