@@ -682,9 +682,6 @@ static int battery_get_property(struct power_supply *psy,
 	case POWER_SUPPLY_PROP_INPUT_SUSPEND:
 		val->intval = charger_manager_is_input_suspend();
 		break;
-	case POWER_SUPPLY_PROP_SHUTDOWN_DELAY:
-		val->intval= gm.shutdown_delay;
-		break;
 	case POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT:
 		val->intval = charger_manager_get_prop_system_temp_level();
 		break;
