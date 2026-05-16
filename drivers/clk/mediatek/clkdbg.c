@@ -406,8 +406,6 @@ static u32 read_spm_pwr_status(void)
 
 static s32 *read_spm_pwr_status_array(void)
 {
-	static void __iomem *scpsys_base, *pwr_sta, *pwr_sta_2nd;
-	static int pwr_sta_val[STA_NUM];
 
 	if (clkdbg_ops == NULL || clkdbg_ops->get_spm_pwr_status_array  == NULL)
 		return  ERR_PTR(-EINVAL);
@@ -734,6 +732,7 @@ const char *get_last_cmd(void)
 	return last_cmd;
 }
 
+#if defined(CONFIG_MTK_ENG_BUILD)
 static int clkop_int_ckname(int (*clkop)(struct clk *clk),
 			const char *clkop_name, const char *clk_name,
 			struct clk *ck, struct seq_file *s)
@@ -1176,6 +1175,8 @@ static int clkdbg_reg_clr(struct seq_file *s, void *v)
 
 	return 0;
 }
+
+#endif
 
 static int parse_val_from_cmd(unsigned long *pval)
 {
