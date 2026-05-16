@@ -885,6 +885,7 @@ fail:
 
 	return ret;
 }
+/* Huaqin modify for HQ-144782 by caogaojie at 2021/07/05 end */
 /*******************************************************
 Description:
 	Novatek touchscreen Download_Firmware function. It's

@@ -47,6 +47,12 @@
 #include <linux/jiffies.h>
 #endif /* #if NVT_TOUCH_ESD_PROTECT */
 
+#if WAKEUP_GESTURE
+#ifdef CONFIG_TOUCHSCREEN_COMMON
+#include <linux/input/tp_common.h>
+#endif
+#endif
+
 #if NVT_TOUCH_ESD_PROTECT
 static struct delayed_work nvt_esd_check_work;
 static struct workqueue_struct *nvt_esd_check_wq;
@@ -653,6 +659,8 @@ int32_t nvt_check_fw_status(void)
 	int32_t i = 0;
 	const int32_t retry = 50;
 
+	usleep_range(20000, 20000);
+
 	for (i = 0; i < retry; i++) {
 		//---set xdata index to EVENT BUF ADDR---
 		nvt_set_page(ts->mmap->EVENT_BUF_ADDR | EVENT_MAP_HANDSHAKING_or_SUB_CMD_BYTE);
@@ -729,7 +737,6 @@ return:
 int32_t nvt_read_pid(void)
 {
 	uint8_t buf[4] = {0};
-	int32_t ret = 0;
 
 	//---set xdata index to EVENT BUF ADDR---
 	nvt_set_page(ts->mmap->EVENT_BUF_ADDR | EVENT_MAP_PROJECTID);
@@ -747,7 +754,7 @@ int32_t nvt_read_pid(void)
 
 	NVT_LOG("PID=%04X\n", ts->nvt_pid);
 
-	return ret;
+	return 0;
 }
 
 /*******************************************************
@@ -805,7 +812,6 @@ info_retry:
 
 	NVT_LOG("fw_ver = 0x%02X, fw_type = 0x%02X\n", ts->fw_ver, buf[14]);
 	/*BSP.Touch - 2020.11.13 - add for hw_info start*/
-	printk("[%s]: fw_ver = 0x%02x \n", ts->fw_ver);
 	tp_fw_version = ts->fw_ver;
 	/*BSP.Touch - 2020.11.13 - add for hw_info end*/
 	//---Get Novatek PID---
@@ -837,7 +843,7 @@ void get_tp_info(void)
 	}
 #endif
 
-	printk("[%s]: tp_version %s\n", __func__, tp_version_info);
+	NVT_LOG("[%s]: tp_version %s\n", __func__, tp_version_info);
 
 	hq_regiser_hw_info(HWID_CTP, tp_version_info);
 
@@ -1446,14 +1452,6 @@ static irqreturn_t nvt_ts_work_func(int irq, void *data)
 		NVT_ERR("CTP_SPI_READ failed.(%d)\n", ret);
 		goto XFER_ERROR;
 	}
-/*
-	//--- dump SPI buf ---
-	for (i = 0; i < 10; i++) {
-		printk("%02X %02X %02X %02X %02X %02X  ",
-			point_data[1+i*6], point_data[2+i*6], point_data[3+i*6], point_data[4+i*6], point_data[5+i*6], point_data[6+i*6]);
-	}
-	printk("\n");
-*/
 
 #if NVT_TOUCH_WDT_RECOVERY
    /* ESD protect by WDT */
@@ -1527,8 +1525,7 @@ static irqreturn_t nvt_ts_work_func(int irq, void *data)
 			input_report_abs(ts->input_dev, ABS_MT_POSITION_Y, input_y);
 			input_report_abs(ts->input_dev, ABS_MT_PRESSURE, TOUCH_FORCE_NUM);
 
-#if MT_PROTOCOL_B
-#else /* MT_PROTOCOL_B */
+#if !(MT_PROTOCOL_B) /* MT_PROTOCOL_B */
 			input_mt_sync(ts->input_dev);
 #endif /* MT_PROTOCOL_B */
 
@@ -1671,8 +1668,34 @@ int nvt_gesture_switch(struct input_dev *dev, unsigned int type, unsigned int co
 	}
 	return 0;
 }
-#endif
 
+#ifdef CONFIG_TOUCHSCREEN_COMMON
+static ssize_t double_tap_show(struct kobject *kobj,
+                               struct kobj_attribute *attr, char *buf)
+{
+    return sprintf(buf, "%d\n", nvt_gesture_flag);
+}
+
+static ssize_t double_tap_store(struct kobject *kobj,
+                                struct kobj_attribute *attr, const char *buf,
+                                size_t count)
+{
+    int rc, val;
+
+    rc = kstrtoint(buf, 10, &val);
+    if (rc)
+    return -EINVAL;
+
+    nvt_gesture_flag = !!val;
+    return count;
+}
+
+static struct tp_common_ops double_tap_ops = {
+    .show = double_tap_show,
+    .store = double_tap_store
+};
+#endif
+#endif
 
 /*BSP.TP add nvt_irq - 2020.11.11 - Start*/
 static ssize_t nvt_irq_show(
@@ -1681,7 +1704,7 @@ static ssize_t nvt_irq_show(
 	ssize_t count = 0;
 	struct irq_desc *desc = irq_to_desc(ts->client->irq);
 
-	count = snprintf(buf, PAGE_SIZE, "irq_depth:%d\n", desc->depth);
+	count = snprintf(buf, sizeof(buf), "irq_depth:%d\n", desc->depth);
 
 	return count;
 }
@@ -1856,6 +1879,8 @@ static int32_t nvt_ts_probe(struct spi_device *client)
 		return -EXDEV;
 	}
 #endif
+/* Huaqin add for HQ-131657 by liunianliang at 2021/06/03 end */
+
 	ts->client = client;
 	spi_set_drvdata(client, ts);
 	/*BSP.TP add nvt_irq - 2020.11.11 - Start*/
@@ -1979,10 +2004,17 @@ static int32_t nvt_ts_probe(struct spi_device *client)
 #endif
 
 #if WAKEUP_GESTURE
-	for (retry = 0; retry < (sizeof(gesture_key_array) / sizeof(gesture_key_array[0])); retry++) {
+	for (retry = 0; retry < ARRAY_SIZE(gesture_key_array); retry++) {
 		input_set_capability(ts->input_dev, EV_KEY, gesture_key_array[retry]);
 	}
 	ts->input_dev->event = nvt_gesture_switch;
+#ifdef CONFIG_TOUCHSCREEN_COMMON
+	ret = tp_common_set_double_tap_ops(&double_tap_ops);
+	if (ret < 0) {
+		NVT_ERR("%s: Failed to create double_tap node err=%d\n",
+		__func__, ret);
+	}
+#endif
 #endif
 	input_set_capability(ts->input_dev, EV_KEY, 523);
 	sprintf(ts->phys, "input/ts");
@@ -2613,7 +2645,7 @@ static int32_t nvt_ts_resume(struct device *dev)
 	nvt_irq_enable(true);
 #endif
 	/* Huaqin modify for TP GESTURE by zhangjiangbin at 2021/07/13 end */
-	
+
 #if NVT_TOUCH_ESD_PROTECT
 	nvt_esd_check_enable(false);
 	queue_delayed_work(nvt_esd_check_wq, &nvt_esd_check_work,
@@ -2625,10 +2657,10 @@ static int32_t nvt_ts_resume(struct device *dev)
 	/* Huaqin modify for HQ-131628 by shujiawang at 2021/05/10 start */
 	if (tp_charger_status == true) {
 		nvt_set_charger_switch(1);
-		NVT_ERR("charger_switch = 1\n");
+		NVT_LOG("charger_switch = 1\n");
 	} else {
 		nvt_set_charger_switch(0);
-		NVT_ERR("charger_switch = 0\n");
+		NVT_LOG("charger_switch = 0\n");
 	}
 	/* Huaqin modify for HQ-131628 by shujiawang at 2021/05/10 end */
 
@@ -2683,10 +2715,10 @@ int32_t nvt_ts_tp_resume(void)
 	/* Huaqin modify for HQ-131628 by shujiawang at 2021/05/10 start */
 	if (tp_charger_status == true) {
 		nvt_set_charger_switch(1);
-		NVT_ERR("charger_switch = 1\n");
+		NVT_LOG("charger_switch = 1\n");
 	} else {
 		nvt_set_charger_switch(0);
-		NVT_ERR("charger_switch = 0\n");
+		NVT_LOG("charger_switch = 0\n");
 	}
 	/* Huaqin modify for HQ-131628 by shujiawang at 2021/05/10 end */
 
@@ -2731,6 +2763,8 @@ static int nvt_fb_notifier_callback(struct notifier_block *self, unsigned long e
 {
 	struct fb_event *evdata = data;
 	int *blank;
+	struct nvt_ts_data *ts =
+		container_of(self, struct nvt_ts_data, fb_notif);
 
 	if (evdata && evdata->data && event == FB_EARLY_EVENT_BLANK) {
 		blank = evdata->data;
@@ -2759,7 +2793,7 @@ static int nvt_fb_notifier_callback(struct notifier_block *self, unsigned long e
 #endif
 /* Huaqin modify for HQ-131657 by liunianliang at 2021/06/16 end */
 /* Huaqin modify for HQ-131657 by feiwen at 2021/06/03 start */
-#ifdef TP_RESUME_EN
+#if TP_RESUME_EN
 			nvt_resume_queue_work();
 #else
 			nvt_ts_resume(&ts->client->dev);
@@ -2820,7 +2854,6 @@ static struct spi_driver nvt_spi_driver = {
 	.id_table	= nvt_ts_id,
 	.driver = {
 		.name	= NVT_SPI_NAME,
-		.owner	= THIS_MODULE,
 #ifdef CONFIG_OF
 		.of_match_table = nvt_match_table,
 #endif
@@ -2872,7 +2905,7 @@ int __init is_lcm_detect(char *str)
 /* Huaqin add for HQ-148560 by caogaojie at 2021/9/30 end */
 #endif
 	}
-	printk("Func:%s is_lcm_detect:%s", __func__, str);
+	NVT_LOG("Func:%s is_lcm_detect:%s", __func__, str);
 	return 0;
 }
  __setup("LCM_name=", is_lcm_detect);

@@ -90,7 +90,6 @@ static const struct nvt_ts_mem_map NT36526_memory_map = {
 	.DMA_CRC_FLAG_ADDR        = 0x3F134,
 };
 
-
 static const struct nvt_ts_mem_map NT36675_memory_map = {
 	.EVENT_BUF_ADDR           = 0x22D00,
 	.RAW_PIPE0_ADDR           = 0x24000,

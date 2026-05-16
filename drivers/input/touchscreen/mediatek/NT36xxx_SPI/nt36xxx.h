@@ -40,18 +40,15 @@
 #include <linux/platform_data/spi-mt65xx.h>
 #endif
 
-/* Huaqin modify for HQ-131657 by feiwen at 2021/06/03 start */
-#define TP_RESUME_EN 1
-/* Huaqin modify for HQ-131657 by feiwen at 2021/06/03 end */
 
-/* Huaqin modify for HQ-131657 by liunianliang at 2021/06/16 start */
-#define TP_SUSPEND_EN 1
-/* Huaqin modify for HQ-131657 by liunianliang at 2021/06/16 end */
+#define TP_RESUME_EN 0
+
+#define TP_SUSPEND_EN 0
 
 #define NVT_DEBUG 0
 #define NVT_NDEBUG 1
 /*BSP.Tp - 2020.11.05 -add NVT_LOCKDOWN - start*/
-#define NVT_LOCKDOWN 1
+#define NVT_LOCKDOWN 0
 /*BSP.Tp - 2020.11.05 -add NVT_LOCKDOWN, end*/
 //---GPIO number---
 #define NVTTOUCH_RST_PIN 980
@@ -87,7 +84,7 @@ void nvt_lockdown_proc_deinit(void);
 //---Input device info.---
 #define NVT_TS_NAME "NVTCapacitiveTouchScreen"
 
-#define NVT_IRQ_SWITCH
+#define NVT_IRQ_SWITCH 1
 //---Touch info.---
 #define TOUCH_DEFAULT_MAX_WIDTH 1080
 #ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
@@ -125,7 +122,7 @@ extern const uint16_t touch_key_array[TOUCH_KEY_NUM];
 #endif
 #define MT_PROTOCOL_B 1
 #define WAKEUP_GESTURE 1
-#define TP_SELFTEST 1
+#define TP_SELFTEST 0
 #if	TP_SELFTEST
 extern	int32_t	nvt_tp_selftest_proc_init(void);
 extern	void	nvt_tp_selftest_proc_deinit(void);
@@ -138,12 +135,12 @@ extern const uint16_t gesture_key_array[];
 extern char *BOOT_UPDATE_FIRMWARE_NAME;
 extern char *MP_UPDATE_FIRMWARE_NAME;
 /*BSP.TP - add tp compare - 20201116 - End*/
-#define POINT_DATA_CHECKSUM 1
+#define POINT_DATA_CHECKSUM 0
 #define POINT_DATA_CHECKSUM_LEN 65
 
 //---ESD Protect.---
 /* Huaqin modify for HQ-140017 by caogaojie at 2021/07/05 start */
-#define NVT_TOUCH_ESD_PROTECT 1
+#define NVT_TOUCH_ESD_PROTECT 0
 #define NVT_TOUCH_ESD_CHECK_PERIOD 1500	/* ms */
 #define NVT_TOUCH_WDT_RECOVERY 1
 #define NVT_TOUCH_ESD_DISP_RECOVERY 0
