@@ -1476,9 +1476,9 @@ static int rt1711_tcpcdev_init(struct rt1711_chip *chip, struct device *dev)
 
 	if (of_property_read_u32(np, "rt-tcpc,rp_level", &val) >= 0) {
 		switch (val) {
-		case TYPEC_RP_DFT:
-		case TYPEC_RP_1_5:
-		case TYPEC_RP_3_0:
+		case TYPEC_CC_RP_DFT:
+		case TYPEC_CC_RP_1_5:
+		case TYPEC_CC_RP_3_0:
 			desc->rp_lvl = val;
 			break;
 		default:
