@@ -36,7 +36,7 @@
 #include <linux/fb.h>
 #elif defined(CONFIG_HAS_EARLYSUSPEND)
 #include <linux/earlysuspend.h>
-#endifs
+#endif
 
 /* Huaqin add for HQ-131657 by liunianliang at 2021/06/03 start */
 #include "mtk_boot_common.h"
