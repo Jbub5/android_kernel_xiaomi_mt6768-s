@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2017 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -24,8 +25,15 @@
 #else
 		mt-tcpc,notifier_supply_num = <2>;
 #endif
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
+/* Huaqin modify for HQ-123199 by shiwenlong at 2021/4/4 start */
+		mt6370pd,intr_gpio = <&pio 41 0x0>;
+		mt6370pd,intr_gpio_num = <41>;
+/* Huaqin modify for HQ-123199 by shiwenlong at 2021/4/4 end */
+#else
 		mt6370pd,intr_gpio = <&pio 24 0x0>;
 		mt6370pd,intr_gpio_num = <24>;
+#endif
 		pd-data {
 			pd,vid = <0x29cf>;
 			pd,pid = <0x5081>;

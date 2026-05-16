@@ -1434,6 +1434,15 @@ defined(CONFIG_MTK_CAM_SECURITY_SUPPORT)
 		compatible = "mediatek,pmic-accdet";
 	};
 
+	swtp: swtp {
+		compatible = "mediatek, swtp-eint";
+#if !defined(CONFIG_TARGET_PRODUCT_MERLINCOMMON)
+		swtp-gpio = <&pio 56 0>;
+#else
+		ant_sw_gpios = <&pio 72 0>;
+#endif
+	};
+
 	mt6358_gauge {
 		compatible = "mediatek,mt6358_gauge";
 		gauge_name = "gauge";
@@ -1442,6 +1451,15 @@ defined(CONFIG_MTK_CAM_SECURITY_SUPPORT)
 
 	gauge_timer {
 		compatible = "mediatek,gauge_timer_service";
+	};
+
+	simtray {
+		compatible = "xiaomi,simtray-status";
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
+		status-gpio = <&pio 47 0>;
+#else
+		status-gpio = <&pio 46 0>;
+#endif
 	};
 
 #if (CONFIG_MTK_GAUGE_VERSION == 30)
@@ -2055,7 +2073,11 @@ defined(CONFIG_MTK_CAM_SECURITY_SUPPORT)
 
 	spi0:spi0@1100a000 {
 		compatible = "mediatek,mt6765-spi";
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
+		mediatek,pad-select = <0>,<1>;
+#else
 		mediatek,pad-select = <0>;
+#endif
 		reg = <0 0x1100a000 0 0x1000>;
 		interrupts = <GIC_SPI 138 IRQ_TYPE_LEVEL_LOW>;
 		clocks = <&topckgen CLK_TOP_SYSPLL3_D2>,
@@ -2302,6 +2324,12 @@ defined(CONFIG_MTK_CAM_SECURITY_SUPPORT)
 		reg = <0 0x11c90000 0 0x1000>;
 	};
 
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
+	msdc1_ins:msdc1_ins@0 {
+		compatible = "mediatek,mt6768-sdcard-ins";
+	};
+#endif
+
 	usb1p_sif@11210000 {
 		compatible = "mediatek,usb1p_sif";
 		reg = <0 0x11210000 0 0x10000>;
@@ -2428,9 +2456,11 @@ defined(CONFIG_MTK_CAM_SECURITY_SUPPORT)
 		mtk_spk_i2s_out = <3>;
 		mtk_spk_i2s_in = <0>;
 		/* mtk_spk_i2s_mck = <3>; */
+#ifndef CONFIG_SND_SOC_FS16XX
 		mediatek,speaker-codec {
 			sound-dai = <&speaker_amp>;
 		};
+#endif
 	};
 
 	snd_scp_spk: snd_scp_spk {
@@ -2809,6 +2839,46 @@ defined(CONFIG_MTK_CAM_SECURITY_SUPPORT)
 			"TOP_UNIVPLL2_D4",
 			"TOP_ULPOSC1_D2",
 			"TOP_ULPOSC1_D8";
+
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
+		mboxes = <&gce_mbox_bdg 0 0 CMDQ_THR_PRIO_4>,
+			<&gce_mbox_bdg 1 0 CMDQ_THR_PRIO_4>,
+			<&gce_mbox_bdg 2 0 CMDQ_THR_PRIO_4>,
+			<&gce_mbox_bdg 3 CMDQ_NO_TIMEOUT CMDQ_THR_PRIO_2>,
+			<&gce_mbox_bdg 5 CMDQ_NO_TIMEOUT CMDQ_THR_PRIO_2>;
+
+		gce-client-names = "BDG_CLIENT_CFG0",
+			"BDG_CLIENT_CFG1",
+			"BDG_CLIENT_CFG2",
+			"BDG_CLIENT_TRIG_LOOP0",
+			"BDG_CLIENT_TRIG_LOOP1";
+
+		/* define subsys, see mt6885-gce.h */
+		gce-subsys = <&gce_mbox 0x14000000 SUBSYS_1400XXXX>,
+			<&gce_mbox 0x14010000 SUBSYS_1401XXXX>,
+			<&gce_mbox 0x14020000 SUBSYS_1402XXXX>;
+
+		/* define events, see mt6885-gce.h */
+		gce-event-names = "bdg_rdma0_sof",
+			"bdg_dsi0_sof",
+			"bdg_rdma0_sof",
+			"bdg_rdma0_eof",
+			"bdg_dsi0_eof",
+			"bdg_dsi0_te",
+			"bdg_dsi0_irq",
+			"bdg_dsi0_done",
+			"bdg_dsi0_target_line";
+
+		gce-events = <&gce_mbox_bdg CMDQ_BRIDGE_EVENT_DISP_RDMA0_SOF>,
+			<&gce_mbox_bdg CMDQ_BRIDGE_EVENT_DISP_DSI0_SOF>,
+			<&gce_mbox_bdg CMDQ_BRIDGE_EVENT_DISP_RDMA0_SOF>,
+			<&gce_mbox_bdg CMDQ_BRIDGE_EVENT_DISP_RDMA0_FRAME_DONE>,
+			<&gce_mbox_bdg CMDQ_BRIDGE_EVENT_DSI_FRAME_DONE>,
+			<&gce_mbox_bdg CMDQ_BRIDGE_EVENT_DSI0_TE_ENG_EVENT>,
+			<&gce_mbox_bdg CMDQ_BRIDGE_EVENT_DSI0_IRQ_ENG_EVENT>,
+			<&gce_mbox_bdg CMDQ_BRIDGE_EVENT_DSI0_DONE_ENG_EVENT>,
+			<&gce_mbox_bdg CMDQ_BRIDGE_EVENT_DSI0_TARGET_LINE_EVENT>;
+#endif
 	};
 
 	dsi_te: dsi_te {
@@ -3818,7 +3888,7 @@ defined(CONFIG_MTK_CAM_SECURITY_SUPPORT)
 #ifdef CONFIG_CHARGER_RT9471
 #include "mediatek/rt9471.dtsi"
 #endif
-#ifdef CONFIG_TCPC_RT1711H
+#if defined(CONFIG_TCPC_RT1711H) || defined(CONFIG_TARGET_PRODUCT_SELENECOMMON)
 #include "mediatek/tcpc_config.dtsi"
 #endif
 #ifdef CONFIG_MTK_ENABLE_GENIEZONE
