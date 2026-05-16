@@ -1857,11 +1857,9 @@ static int mtk_hp_spk_enable(struct mt6358_priv *priv)
 	if (priv->apply_n12db_gain)
 		regmap_update_bits(priv->regmap, MT6358_AUDDEC_ANA_CON7,
 				0xff, 0x0004);
-	// I really wanted to find the real definition, but i cloud not find it
+
 	/* Audio left headphone input multiplexor selection : LOL */
-	#ifndef CONFIG_TARGET_PRODUCT_SELENECOMMON
 	set_hp_l_input_mux(priv, HP_INPUT_MUX_LOL);
-	#endif
 
 	/* Disable headphone short-circuit protection */
 	regmap_update_bits(priv->regmap, MT6358_AUDDEC_ANA_CON0,
@@ -1928,19 +1926,12 @@ static int mtk_hp_spk_enable(struct mt6358_priv *priv)
 	/* Set LOL gain to normal gain step by step */
 	regmap_write(priv->regmap, MT6358_ZCD_CON1, DL_GAIN_N_10DB_REG);
 
-	#ifndef CONFIG_TARGET_PRODUCT_SELENECOMMON
 	/* Switch HPL MUX to Line-out */
 	regmap_update_bits(priv->regmap, MT6358_AUDDEC_ANA_CON0,
 			0x3 << 8, 0x01 << 8);
 	/* Switch HPR MUX to DAC-R */
 	regmap_update_bits(priv->regmap, MT6358_AUDDEC_ANA_CON0,
 			0x3 << 10, 0x2 << 10);
-	#else
-	/* Switch HPL MUX to HS */
-	regmap_write(priv->regmap, MT6358_AUDDEC_ANA_CON0, 0x3300);
-	/* Switch HPR MUX to LOL */
-	regmap_write(priv->regmap, MT6358_AUDDEC_ANA_CON0, 0x3700);
-	#endif
 
 	/* Enable HP aux output stage */
 	regmap_update_bits(priv->regmap, MT6358_AUDDEC_ANA_CON1,
@@ -2015,10 +2006,10 @@ static int mtk_hp_spk_enable(struct mt6358_priv *priv)
 	/* Switch LOL MUX to audio DAC */
 	regmap_update_bits(priv->regmap, MT6358_AUDDEC_ANA_CON7,
 			0x3 << 2, 0x2 << 2);
-
-	#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
 	/* Switch HS MUX to audio DAC */
 	regmap_write(priv->regmap, MT6358_AUDDEC_ANA_CON6, 0x009b);
+
+	#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
 
     //lch inverse
 	regmap_update_bits(priv->regmap, MT6358_AFUNC_AUD_CON0,
@@ -2446,10 +2437,6 @@ static int mtk_hp_dual_spk_disable(struct mt6358_priv *priv)
 	/* Set HP CMFB gate rstb */
 	regmap_update_bits(priv->regmap, MT6358_AUDDEC_ANA_CON4,
 			0x1 << 6, 0x0);
-	#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
-        /* Switch HS MUX to audio DAC */
-        regmap_write(priv->regmap, MT6358_AUDDEC_ANA_CON6, 0x0090);
-    #endif
 
 	/* disable Pull-down HPL/R to AVSS28_AUD */
 	hp_pull_down(priv, false);
@@ -2751,7 +2738,7 @@ static int mt_lo_event(struct snd_soc_dapm_widget *w,
 
 		#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
 		//lch inverse
-		regmap_write(priv->regmap, MT6358_AFUNC_AUD_CON0,0xCFA1);
+		regmap_write(priv->regmap, MT6358_AFUNC_AUD_CON0, 0xCFA1);
 		#endif
 
 		break;
