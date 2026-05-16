@@ -209,7 +209,7 @@ static void disp_pwm_backlight_status(enum disp_pwm_id_t id,
 	} else {
 		/* Set dummy backlight value */
 		if (is_power_on == true)
-			high_width = 1023;
+			high_width = 2047;
 		else
 			high_width = 0;
 	}
@@ -250,7 +250,7 @@ static void disp_pwm_query_backlight(char *debug_output)
 				high_width = 0;
 		} else {
 			/* Set dummy backlight value */
-			high_width = 1023;
+			high_width = 2047;
 		}
 	} else {
 		/* Read vlaue before clock off */
@@ -447,9 +447,9 @@ static void disp_pwm_set_enabled(struct cmdqRecStruct *cmdq,
  *
  * Inputs:
  *  id		- DISP_PWM0 / DISP_PWM1
- *  level_1024	- Backlight value in [0, 1023]
+ *  level_1024	- Backlight value in [0, 2047]
  * Returns:
- *  PWM duty in [0, 1023]
+ *  PWM duty in [0, 2047]
  */
 static int disp_pwm_level_remap(enum disp_pwm_id_t id, int level_1024)
 {
@@ -546,7 +546,7 @@ int disp_pwm_get_max_backlight(enum disp_pwm_id_t id)
 
 	return atomic_read(&g_pwm_max_backlight[index]);
 #else
-	return 1023;
+	return 2047;
 #endif
 }
 
@@ -842,7 +842,7 @@ static void disp_pwm_test_grad(const char *cmd)
 	switch (cmd[0]) {
 	case 'H':
 		DISP_REG_SET(NULL, reg_grad, (1 << 16) | (1 << 8) | 1);
-		disp_pwm_set_backlight(DISP_PWM0, 1023);
+		disp_pwm_set_backlight(DISP_PWM0, 2047);
 		break;
 
 	case 'L':
