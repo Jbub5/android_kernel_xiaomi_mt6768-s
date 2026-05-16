@@ -363,6 +363,7 @@ static void usbpd_check_cp_psy(struct usbpd_pm *pdpm)
         if (!pdpm->cp_psy)
             pr_err("sc8551 cp_psy not found\n");
     }
+	#if defined(CONFIG_CHARGER_LN8000_CHARGER)
 	/*K19A-104 ln8000 bringup by wangchao at 2021/4/10 start*/
 	if (!pdpm->cp_psy) {
 		pdpm->cp_psy = power_supply_get_by_name("ln8000-charger");
@@ -370,6 +371,7 @@ static void usbpd_check_cp_psy(struct usbpd_pm *pdpm)
 			pr_err("ln8000 cp_psy not found\n");
 	}
 	/*K19A-104 ln8000 bringup by wangchao at 2021/4/10 end*/
+	#endif
 }
 
 static void usbpd_check_cp_sec_psy(struct usbpd_pm *pdpm)

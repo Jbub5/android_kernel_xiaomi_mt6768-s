@@ -656,7 +656,7 @@ void fgauge_get_profile_id(void)
 		gm.battery_id = 0;
 	if(hq_config()== 1)
 		gm.battery_id = 2;
-	}else if (id_volt >= COSMX_MIN_VOLTAGE && id_volt <= COSMX_MAX_VOLTAGE) {
+	} else if (id_volt >= COSMX_MIN_VOLTAGE && id_volt <= COSMX_MAX_VOLTAGE) {
 		gm.battery_id = 1;
 		/* K19SFAC-41 code for K19T by wanglicheng at 20210929 start */
 		if(hq_config()== 4)
@@ -668,9 +668,7 @@ void fgauge_get_profile_id(void)
 		if(hq_config()== 4)
 			gm.battery_id = 4;
 		/* K19SFAC-41 code for K19T by wanglicheng at 20210929 end */
-	}else if (id_volt >= SECRET_MIN_VOLTAGE && id_volt <= SECRET_MAX_VOLTAGE) {
-		gm.battery_id = 4;
-	}else {
+	} else {
 		gm.battery_id = 5;
 	}
 	/*K19A HQ-123457 K19A charger of profile by wangqi at 2021/4/22 end*/
