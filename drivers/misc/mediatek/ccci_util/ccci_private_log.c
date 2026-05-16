@@ -928,10 +928,6 @@ static void ccci_dump_buffer_init(void)
 		}
 	}
 
-	mrdump_mini_add_misc((unsigned long)reg_dump_ctlb[0].buffer, CCCI_REG_DUMP_BUF,
-		0, "_EXTRA_MD_");
-	mrdump_mini_add_misc((unsigned long)ke_dump_ctlb[0].buffer, CCCI_KE_DUMP_BUF,
-		0, "_EXTRA_CCCI_");
 }
 
 /* functions will be called by external */
