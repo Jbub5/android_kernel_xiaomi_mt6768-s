@@ -4,6 +4,8 @@
 
 #include "ddp_m4u.h"
 
+static struct DDP_MMP_Events DDP_MMP_Events;
+
 void init_ddp_mmp_events(void)
 {
 }
