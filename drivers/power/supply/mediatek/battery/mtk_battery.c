@@ -567,7 +567,7 @@ void otg_thermal_limit(void)
 }
 
 
-int get_charger_type(void);
+extern enum charger_type mt_get_charger_type(void);
 static int battery_get_property(struct power_supply *psy,
 	enum power_supply_property psp,
 	union power_supply_propval *val)
@@ -605,7 +605,7 @@ static int battery_get_property(struct power_supply *psy,
 		break;
 	case POWER_SUPPLY_PROP_CHARGE_TYPE:
 		//charger_dev_get_charger_type(primary_charger, &type);
-		type = get_charger_type();
+		type = mt_get_charger_type();
 		pr_debug("ljj charger_dev_get_charger_type = %d\n",type);
 		if (type > 9 || type < 0)
 			type = 0;
