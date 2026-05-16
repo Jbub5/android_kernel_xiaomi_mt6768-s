@@ -421,7 +421,6 @@
 #define IMX616_SENSOR_ID                        0x0616
 #define OV48C_SENSOR_ID                         0x564843
 #define IMX355_SENSOR_ID                        0x0355
-#define OV13B10_SENSOR_ID                       0x560d42
 #define OV02B10_SENSOR_ID                       0x002b
 
 
