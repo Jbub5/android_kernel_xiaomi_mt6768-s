@@ -444,11 +444,6 @@ int hq_regiser_hw_info(enum hardware_id id, char *device_name)
 				ret = -4;
 				goto err;
 			}
-			switch (id) {
-			case HWID_AUDIO:
-				audio_pa = device_name;
-				break;
-			}
 
 			switch (hw->hw_id) {
 				/*
@@ -458,9 +453,12 @@ int hq_regiser_hw_info(enum hardware_id id, char *device_name)
 						hw->hw_device_name = "Can't find Camera Vendor";
 					break;
 				*/
+			case HWID_AUDIO:
+				audio_pa = device_name;
+				break;
 			default:
 					hw->hw_device_name = device_name;
-					break;
+				break;
 			}
 
 
