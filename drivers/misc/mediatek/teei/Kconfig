@@ -161,3 +161,10 @@ config MICROTRUST_TZDRIVER_DYNAMICAL_DEBUG
 	  This framework supports DCIH and GP API test drivers.
 	  Say Y if you would like to enable the test framework.
 	  If unsure, say N.
+
+config MICROTRUST_LEGACY_IOCTL
+	tristate
+	default n
+	default y if !TARGET_PRODUCT_SELENECOMMON
+	---help---
+	  Workaround for legacy keymaster.
