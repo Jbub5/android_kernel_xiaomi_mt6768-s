@@ -31,9 +31,11 @@
 #endif
 // ALPS05007528 end
 
+#if !defined(CONFIG_TARGET_PRODUCT_LANCELOTCOMMON) && !defined(CONFIG_TARGET_PRODUCT_MERLINCOMMON) && !defined(CONFIG_TARGET_PRODUCT_SHIVACOMMON)
 static const char *awinic = "awinic";
 static const char *foursemi = "foursemi";
 extern char *get_audio_pa_vendor(void);
+#endif
 
 static const char *const mt6768_spk_type_str[] = {MTK_SPK_NOT_SMARTPA_STR,
 						  MTK_SPK_RICHTEK_RT5509_STR,
@@ -201,6 +203,11 @@ static int mt6768_mt6358_spk_amp_event(struct snd_soc_dapm_widget *w,
 	switch (event) {
 	case SND_SOC_DAPM_POST_PMU:
 		/* spk amp on control */
+#ifndef CONFIG_TARGET_PRODUCT_SELENECOMMON
+#ifdef CONFIG_SND_SOC_AW87519
+		aw87519_audio_kspk();
+#endif
+#else
 		if (strcmp((const char *)get_audio_pa_vendor(), awinic) == 0) {
 #ifdef CONFIG_SND_SOC_AW87559
 			aw87xxx_audio_scene_load(AW87XXX_MUSIC_MODE, AW87XXX_LEFT_CHANNEL);
@@ -210,15 +217,17 @@ static int mt6768_mt6358_spk_amp_event(struct snd_soc_dapm_widget *w,
 			fsm_speaker_onn(FSM_SCENE_MUSIC);
 #endif
 		} else {
-#ifdef CONFIG_SND_SOC_AW87519
-			aw87519_audio_kspk();
-#else
 			pr_err("Please check out start PA");
-#endif
 		}
+#endif
 		break;
 	case SND_SOC_DAPM_PRE_PMD:
 		/* spk amp off control */
+#ifndef CONFIG_TARGET_PRODUCT_SELENECOMMON
+#ifdef CONFIG_SND_SOC_AW87519
+			aw87519_audio_off();
+#endif
+#else
 		if (strcmp((const char *)get_audio_pa_vendor(), awinic) == 0) {
 #ifdef CONFIG_SND_SOC_AW87559
 			aw87xxx_audio_scene_load(AW87XXX_OFF_MODE, AW87XXX_LEFT_CHANNEL);
@@ -228,12 +237,9 @@ static int mt6768_mt6358_spk_amp_event(struct snd_soc_dapm_widget *w,
 			fsm_speaker_off();
 #endif
 		} else {
-#ifdef CONFIG_SND_SOC_AW87519
-			aw87519_audio_off();
-#else
 			pr_err("Please check out start PA");
-#endif
 		}
+#endif
 		break;
 	default:
 		break;
