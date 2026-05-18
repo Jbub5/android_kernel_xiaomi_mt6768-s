@@ -24,7 +24,7 @@
 
 #include "lcm_drv.h"
 /* Huaqin add for K19A-315 by feiwen at 2021/06/16 start */
-#include "../../../../input/touchscreen/mediatek/NT36672C/nt36xxx.h"
+#include "../../../../input/touchscreen/mediatek/NT36xxx_SPI/nt36xxx.h"
 /* Huaqin add for K19A-315 by feiwen at 2021/06/16 end */
 /* Huaqin add for HQ-142518 by feiwen at 2021/06/24 start */
 #include "mtk_boot_common.h"
