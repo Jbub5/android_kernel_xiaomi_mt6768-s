@@ -1,5 +1,6 @@
 subdir-ccflags-y += -Wall -Werror
 obj-$(CONFIG_TCPC_MT6360)		+= tcpc_mt6360.o
+obj-$(CONFIG_TCPC_WUSB3801)	+= tcpc_wusb3801.o
 obj-y				+= tcpc_fusb303.o
 obj-$(CONFIG_TCPC_MT6362)	+= tcpc_mt6362.o
 obj-$(CONFIG_TCPC_MT6370)		+= tcpc_mt6370.o
