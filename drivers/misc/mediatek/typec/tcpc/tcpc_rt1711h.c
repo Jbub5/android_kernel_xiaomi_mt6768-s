@@ -1325,6 +1325,8 @@ static int rt_parse_dt(struct rt1711_chip *chip, struct device *dev)
 	if (!np) {
 		pr_notice("%s find node rt1711_type_c_port0 fail\n", __func__);
 		return -ENODEV;
+	} else {
+		pr_err("%s zhanghuan rt1711_type_c_port0\n", __func__);
 	}
 	dev->of_node = np;
 
@@ -1503,6 +1505,7 @@ static inline int rt1711h_check_revision(struct i2c_client *client)
 	int ret;
 	u8 data = 1;
 
+	dev_err(&client->dev, "%s :%x\n", __func__, client->addr);
 	ret = rt1711_read_device(client, TCPC_V10_REG_VID, 2, &vid);
 	if (ret < 0) {
 		dev_err(&client->dev, "read chip ID fail\n");
@@ -1510,7 +1513,7 @@ static inline int rt1711h_check_revision(struct i2c_client *client)
 	}
 
 	if (vid != RICHTEK_1711_VID) {
-		pr_info("%s failed, VID=0x%04x\n", __func__, vid);
+		pr_info("%s failedaaa, VID=0x%04x\n", __func__, vid);
 		return -ENODEV;
 	}
 
@@ -1547,7 +1550,7 @@ static int rt1711_i2c_probe(struct i2c_client *client,
 	int ret = 0, chip_id;
 	bool use_dt = client->dev.of_node;
 
-	pr_info("%s\n", __func__);
+	pr_info("%s111\n", __func__);
 	if (i2c_check_functionality(client->adapter,
 			I2C_FUNC_SMBUS_I2C_BLOCK | I2C_FUNC_SMBUS_BYTE_DATA))
 		pr_info("I2C functionality : OK...\n");
@@ -1555,17 +1558,21 @@ static int rt1711_i2c_probe(struct i2c_client *client,
 		pr_info("I2C functionality check : failuare...\n");
 
 	chip_id = rt1711h_check_revision(client);
-	if (chip_id < 0)
+	if (chip_id < 0){
+		pr_err("szw:222rt1711\n");
 		return chip_id;
-
+		}	
+	pr_err("szw:read rt1711 chip id success\n");
 #if TCPC_ENABLE_ANYMSG
 	check_printk_performance();
 #endif /* TCPC_ENABLE_ANYMSG */
 
+	pr_err("szw:read rt17111 chip id success\n");
 	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
 	if (!chip)
 		return -ENOMEM;
 
+	pr_err("szw:read rt17112 chip id success\n");
 	if (use_dt) {
 		ret = rt_parse_dt(chip, &client->dev);
 		if (ret < 0)
@@ -1574,6 +1581,7 @@ static int rt1711_i2c_probe(struct i2c_client *client,
 		dev_err(&client->dev, "no dts node\n");
 		return -ENODEV;
 	}
+	pr_err("szw:read rt17113 chip id success\n");
 	chip->dev = &client->dev;
 	chip->client = client;
 	sema_init(&chip->io_lock, 1);
@@ -1582,6 +1590,7 @@ static int rt1711_i2c_probe(struct i2c_client *client,
 	INIT_DELAYED_WORK(&chip->poll_work, rt1711_poll_work);
 	wakeup_source_init(&chip->irq_wake_lock, "rt1711h_irq_wakelock");
 
+	pr_err("szw:read rt17114 chip id success\n");
 	chip->chip_id = chip_id;
 	pr_info("rt1711h_chipID = 0x%0x\n", chip_id);
 
