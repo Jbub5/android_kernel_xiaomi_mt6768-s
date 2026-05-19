@@ -14,6 +14,7 @@ bat_gm30: battery{
 	compatible = "mediatek,bat_gm30";
 	io-channels = <&auxadc 2>;
 	io-channel-names = "batteryID-channel";
+
 	DIFFERENCE_FULLOCV_ITH = <(250)>;			/*	Charging termination current*/
 
 	SHUTDOWN_1_TIME = <(5)>;					/*	If ui_soc shows 1% more than X minites, system will shutdown*/
@@ -46,15 +47,15 @@ bat_gm30: battery{
 
 	TEMPERATURE_T4 = <(-10)>;					/*	Battery temperature T4*/
 
-	g_FG_PSEUDO100_T0 = <(95)>;				/*	Pseudo 100% percentage at T0*/
+	g_FG_PSEUDO100_T0 = <(95)>;					/*	Pseudo 100% percentage at T0*/
 
-	g_FG_PSEUDO100_T1 = <(95)>;				/*	Pseudo 100% percentage at T1*/
+	g_FG_PSEUDO100_T1 = <(95)>;					/*	Pseudo 100% percentage at T1*/
 
-	g_FG_PSEUDO100_T2 = <(95)>;				/*	Pseudo 100% percentage at T2*/
+	g_FG_PSEUDO100_T2 = <(95)>;					/*	Pseudo 100% percentage at T2*/
 
-	g_FG_PSEUDO100_T3 = <(95)>;				/*	Pseudo 100% percentage at T3*/
+	g_FG_PSEUDO100_T3 = <(95)>;					/*	Pseudo 100% percentage at T3*/
 
-	g_FG_PSEUDO100_T4 = <(95)>;				/*	Pseudo 100% percentage at T4*/
+	g_FG_PSEUDO100_T4 = <(95)>;					/*	Pseudo 100% percentage at T4*/
 
 	Q_MAX_SYS_VOLTAGE_BAT0 = <(3550)>;			/*	Pseudo1 for hide percentage*/
 
