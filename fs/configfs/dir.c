@@ -1243,7 +1243,7 @@ int configfs_depend_item_unlocked(struct configfs_subsystem *caller_subsys,
 		root = parent;
 	} else {
 		target_subsys = parent->cg_subsys;
-		/* Find a CONFIGfs root as we may need it for locking */
+		/* Find a cofnigfs root as we may need it for locking */
 		for (root = parent; !configfs_is_root(&root->cg_item);
 		     root = root->cg_item.ci_group)
 			;
