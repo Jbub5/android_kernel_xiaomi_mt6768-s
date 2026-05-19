@@ -34,6 +34,7 @@
 #include "inc/pd_dbg_info.h"
 #include "inc/tcpci.h"
 #include "inc/rt1711h.h"
+#include "../../../../power/supply/mediatek/charger/mtk_charger_init.h"
 
 #ifdef CONFIG_RT_REGMAP
 #include <mt-plat/rt-regmap.h>
@@ -48,6 +49,13 @@
 #define RT1711H_DRV_VERSION	"2.0.4_MTK"
 
 #define RT1711H_IRQ_WAKE_TIME	(500) /* ms */
+
+bool g_pd_is_present = false;
+
+bool get_pd_status(void)
+{
+       return g_pd_is_present;
+}
 
 struct rt1711_chip {
 	struct i2c_client *client;
@@ -1511,6 +1519,8 @@ static inline int rt1711h_check_revision(struct i2c_client *client)
 		dev_err(&client->dev, "read chip ID fail\n");
 		return -EIO;
 	}
+	
+	g_pd_is_present = true;
 
 	if (vid != RICHTEK_1711_VID) {
 		pr_info("%s failedaaa, VID=0x%04x\n", __func__, vid);
