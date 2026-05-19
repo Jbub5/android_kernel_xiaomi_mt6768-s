@@ -37,7 +37,6 @@ config MTK_USB_TYPEC_U3_MUX_V2
 	  The v2 version depends on v1 version configration.
 	  It is more easily for customer to manager and add mux
 	  module driver.
-
 config TCPC_MT6360
 	bool "MediaTek MT6360 TypeC port Controller Driver"
 	depends on TCPC_CLASS
@@ -46,6 +45,7 @@ config TCPC_MT6360
 	  TypeC port Controller
 	  Also Support Power Delivery
 	  Say N to disable
+
 
 config MTK_TYPEC_WATER_DETECT
 	bool "Water detection function for type-c connector"
