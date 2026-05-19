@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -178,7 +179,7 @@
 #define REVERSE_CHG_SINK				0X02
 #define REVERSE_CHG_DRP					0X03
 
-/*K19A HQ-134474 K19A for typec mode by langjunjun at 2021/6/1 start*/
+/* HQ-134474 K19A typec mode by langjunjun at 2021/6/1 start */
 enum typec_mode {
 NOTHING_ATTACHED,
 SINK_ATTACHED,
@@ -191,5 +192,5 @@ SOURCE_ATTACHED_MEDIUM_CURRENT,
 SOURCE_ATTACHED_HIGH_CURRENT,
 NON_COMPLIANT,
 };
-/*K19A HQ-134474 K19A for typec mode by langjunjun at 2021/6/1 end*/
+/* HQ-134474 K19A typec mode by langjunjun at 2021/6/1 end */
 #endif /* #ifndef __LINUX_WUSB3801_H */

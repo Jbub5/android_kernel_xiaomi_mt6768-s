@@ -188,6 +188,55 @@ int fusb30x_set_watchdog(struct tcpc_device *tcpc_dev, bool en)
 	pr_info("%s: enter \n",__func__);
 	return 0;
 }
+int fusb30x_set_intrst(struct tcpc_device *tcpc_dev, bool en)
+{
+	pr_info("%s: enter \n",__func__);
+	return 0;
+}
+static int fusb30x_set_msg_header(
+	struct tcpc_device *tcpc, uint8_t power_role, uint8_t data_role)
+{
+	pr_info("%s: enter \n",__func__);
+	return 0;
+}
+static int fusb30x_set_rx_enable(struct tcpc_device *tcpc, uint8_t enable)
+{
+	pr_info("%s: enter \n",__func__);
+	return 0;
+}
+static int fusb30x_protocol_reset(struct tcpc_device *tcpc_dev)
+{
+	pr_info("%s: enter \n",__func__);
+	return 0;
+}
+static int fusb30x_get_message(struct tcpc_device *tcpc, uint32_t *payload,
+			uint16_t *msg_head, enum tcpm_transmit_type *frame_type)
+{
+	pr_info("%s: enter \n",__func__);
+	return 0;
+}
+static int fusb30x_transmit(struct tcpc_device *tcpc,
+	enum tcpm_transmit_type type, uint16_t header, const uint32_t *data)
+{
+	pr_info("%s: enter \n",__func__);
+	return 0;
+}
+static int fusb30x_set_bist_test_mode(struct tcpc_device *tcpc, bool en)
+{
+	pr_info("%s: enter \n",__func__);
+	return 0;
+}
+static int fusb30x_set_bist_carrier_mode(
+	struct tcpc_device *tcpc, uint8_t pattern)
+{
+	pr_info("%s: enter \n",__func__);
+	return 0;
+}
+static int fusb30x_retransmit(struct tcpc_device *tcpc)
+{
+	pr_info("%s: enter \n",__func__);
+	return 0;
+}
 static struct tcpc_ops fusb30x_tcpc_ops = {
 	.init = fusb30x_tcpc_init,
 	.alert_status_clear = fusb30x_alert_status_clear,
@@ -207,6 +256,15 @@ static struct tcpc_ops fusb30x_tcpc_ops = {
 	.is_low_power_mode = fusb30x_is_low_power_mode,
 	.set_low_power_mode = fusb30x_set_low_power_mode,
 	.set_watchdog = fusb30x_set_watchdog,
+//	.set_intrst = fusb30x_set_intrst,
+	.set_msg_header = fusb30x_set_msg_header,
+	.set_rx_enable = fusb30x_set_rx_enable,
+	.protocol_reset = fusb30x_protocol_reset,
+	.get_message = fusb30x_get_message,
+	.transmit = fusb30x_transmit,
+	.set_bist_test_mode = fusb30x_set_bist_test_mode,
+	.set_bist_carrier_mode = fusb30x_set_bist_carrier_mode,
+	.retransmit = fusb30x_retransmit,
 };
 
 static void fusb30x_reset_delay_work(struct work_struct *work)

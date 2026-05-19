@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017 MediaTek Inc.
+ * Copyright (C) 2021 XiaoMi, Inc.
  *
  * Mediatek wusb3801 Type-C Port Control Driver
  *
@@ -34,18 +35,27 @@
 #include <linux/compiler.h>
 #include "inc/pd_dbg_info.h"
 #include "inc/tcpci.h"
-#include "inc/tcpci_timer.h"
-#include "inc/tcpci_typec.h"
 #include "inc/wusb3801.h"
 
+#include <linux/kernel.h>
+#include <linux/module.h>
 #include <linux/mutex.h>
 #include <linux/atomic.h>
+#include <linux/kthread.h>
 #include <linux/hrtimer.h>
+#include <linux/version.h>
 
-/*K19A HQHW-963 K19A for sy cdp by langjunjun at 2021/7/15 start*/
+#include <linux/sched/rt.h>
+#include <uapi/linux/sched/types.h>
+
+#include "inc/tcpci.h"
+#include "inc/tcpci_timer.h"
+#include "inc/tcpci_typec.h"
+
+/* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 start */
 #define __BQ25890H__ 1
 #include "../../../../power/supply/mediatek/charger/bq2589x_reg.h"
-/*K19A HQHW-963 K19A for sy cdp  by langjunjun at 2021/7/15 end*/
+/* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 end */
 
 #if 1 /*  #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 9, 0))*/
 #include <linux/sched/rt.h>
@@ -87,16 +97,15 @@ struct wusb3801_chip {
 	int chip_id;
 };
 
-//extern int tcpci_report_usb_port_attached(struct tcpc_device *tcpc);
-//extern int tcpci_report_usb_port_detached(struct tcpc_device *tcpc);
 #ifdef __TEST_CC_PATCH__
-extern uint8_t	typec_cc_orientation;
+extern	uint8_t     typec_cc_orientation;
 #endif	/* __TEST_CC_PATCH__ */
 static struct i2c_client *w_client;
-/*K19A HQHW-963 K19A for sy cdp by langjunjun at 2021/7/15 start*/
+
+/* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 start */
 static bool g_irq_3801_flag = false;
 struct wusb3801_chip *g_3801_chip = NULL;
-/*K19A HQHW-963 K19A for sy cdp by langjunjun at 2021/7/15 end*/
+/* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 end */
 
 static int wusb3801_read_device(void *client, u32 reg, int len, void *dst)
 {
@@ -208,10 +217,8 @@ static int test_cc_patch(struct wusb3801_chip *chip)
 {
 	int rc;
 	int ret;
-	int rc_reg_08 = 0, i = 0;
-
 	struct device *cdev = &chip->client->dev;
-	dev_info(cdev, "%s \n", __func__);
+	dev_err(cdev, "%s \n", __func__);
 
 	wusb3801_i2c_write8(chip->tcpc,
 			WUSB3801_REG_TEST_02, 0x82);
@@ -229,36 +236,17 @@ static int test_cc_patch(struct wusb3801_chip *chip)
 	msleep(10);
 	wusb3801_i2c_write8(chip->tcpc,
 			WUSB3801_REG_TEST_02, 0x00);
-	pr_info("dhx---add msleep 200\n");
-	dev_info(cdev, "%s rc = [0x%02x] \n", __func__, rc);
-
-//huanglei add for reg 0x08 write zero fail begin
-    do{
-		msleep(100);
-		wusb3801_i2c_write8(chip->tcpc,
-				WUSB3801_REG_TEST_02, 0x00);
-		msleep(100);
-	rc_reg_08 = wusb3801_i2c_read8(chip->tcpc, WUSB3801_REG_TEST_02);
-		i++;
-    }while(rc_reg_08 != 0 && i < 5);
-//end
-	/* Xiaomi error recovery handling */
-	ret = wusb3801_i2c_read8(chip->tcpc,
-			WUSB3801_REG_TEST_02);
-
+	pr_err("dhx---add msleep 200\n");
+	dev_err(cdev, "%s rc = [0x%02x] \n", __func__, rc);
+	ret = wusb3801_i2c_read8(chip->tcpc, WUSB3801_REG_TEST_02);
 	if (ret & WUSB3801_FORCE_ERR_RCY_MASK) {
-		dev_err(cdev,
-			"%s enter error recovery :0x%x\n",
-			__func__, ret);
-
-		wusb3801_i2c_write8(chip->tcpc,
-				WUSB3801_REG_TEST_02, 0x00);
-		/*K19A HQ-134474 K19A for typec mode by langjunjun at 2021/6/1 start*/
+		pr_err("wusb3801 [%s]enter error recovery :0x%x\n", __func__, ret);
+		wusb3801_i2c_write8(chip->tcpc, WUSB3801_REG_TEST_02, 0x00);
+		/* HQ-134474 K19A typec mode by langjunjun at 2021/6/1 start */
 		wusb3801_i2c_write8(chip->tcpc, WUSB3801_REG_TEST_09, 0x00);
-		/*K19A HQ-134474 K19A for typec mode by langjunjun at 2021/6/1 end*/
+		/* HQ-134474 K19A typec mode by langjunjun at 2021/6/1 end */
 	}
-
-	return BITS_GET(rc, 0x40);
+    return BITS_GET(rc, 0x40);
 }
 #endif /* __TEST_CC_PATCH__ */
 
@@ -271,8 +259,10 @@ static void wusb3801_irq_work_handler(struct kthread_work *work)
 	int int_sts;
 	uint8_t status, type;
 	struct tcpc_device *tcpc;
+
 	if (0 == first_check_flag)
 		return;
+
 	tcpc = chip->tcpc;
 		tcpci_lock_typec(tcpc);
 	/* get interrupt */
@@ -305,10 +295,8 @@ static void wusb3801_irq_work_handler(struct kthread_work *work)
 		#endif	/* __TEST_CC_PATCH__ */
 		typec_cc_orientation = 0x0;
 		tcpc->typec_attach_new = TYPEC_UNATTACHED;
-		//tcpci_report_usb_port_detached(chip->tcpc);
-		tcpci_report_usb_port_changed(chip->tcpc);
 		//tcpc->typec_role = TYPEC_ROLE_UNKNOWN;
-		//tcpci_notify_typec_state(tcpc);
+		tcpci_notify_typec_state(tcpc);
 		if (tcpc->typec_attach_old == TYPEC_ATTACHED_SRC) {
 		    tcpci_source_vbus(tcpc, TCP_VBUS_CTRL_TYPEC, TCPC_VBUS_SOURCE_0V, 0);
 		}
@@ -339,9 +327,7 @@ static void wusb3801_irq_work_handler(struct kthread_work *work)
 		}
 	}
 	typec_cc_orientation = BITS_GET(rc, WUSB3801_CC_STS_MASK);
-	tcpc->typec_polarity = typec_cc_orientation - 1;
 #endif	/* __TEST_CC_PATCH__ */
-	pr_err("%s:  type = %d \n",__func__, type);
 	switch (type) {
 	case WUSB3801_TYPE_SNK:
 		/*if ( tcpc->typec_role != TYPEC_ROLE_SRC) {
@@ -350,10 +336,8 @@ static void wusb3801_irq_work_handler(struct kthread_work *work)
 		}*/
 		if (tcpc->typec_attach_new != TYPEC_ATTACHED_SRC) {
 				tcpc->typec_attach_new = TYPEC_ATTACHED_SRC;
-				//tcpci_report_usb_port_attached(chip->tcpc);
-				tcpci_report_usb_port_changed(chip->tcpc);
 				tcpci_source_vbus(tcpc, TCP_VBUS_CTRL_TYPEC, TCPC_VBUS_SOURCE_5V, 0);
-				//tcpci_notify_typec_state(tcpc);
+				tcpci_notify_typec_state(tcpc);
 				tcpc->typec_attach_old = TYPEC_ATTACHED_SRC;
 		}
 		break;
@@ -364,9 +348,7 @@ static void wusb3801_irq_work_handler(struct kthread_work *work)
 		 }*/
 		if (tcpc->typec_attach_new != TYPEC_ATTACHED_SNK) {
 				tcpc->typec_attach_new = TYPEC_ATTACHED_SNK;
-				//tcpci_report_usb_port_attached(chip->tcpc);
-				tcpci_report_usb_port_changed(chip->tcpc);
-				//tcpci_notify_typec_state(tcpc);
+				tcpci_notify_typec_state(tcpc);
 				tcpc->typec_attach_old = TYPEC_ATTACHED_SNK;
 		}
 		break;
@@ -378,7 +360,8 @@ static void wusb3801_irq_work_handler(struct kthread_work *work)
      }
 	tcpci_unlock_typec(tcpc);
 }
-/*K19A HQHW-963 K19A for sy cdp by langjunjun at 2021/7/15 start*/
+
+/* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 start */
 void wusb3801_intr_handler_resume(void)
 {
 	if (g_irq_3801_flag == true) {
@@ -389,23 +372,22 @@ void wusb3801_intr_handler_resume(void)
 	}
 	return;
 }
-/*K19A HQHW-963 K19A for sy cdp by langjunjun at 2021/7/15 end*/
+/* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 end */
 
 static irqreturn_t wusb3801_intr_handler(int irq, void *data)
 {
 	struct wusb3801_chip *chip = data;
-	#ifdef CONFIG_CHARGER_BQ2589X_CHARGER
+
+	/* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 start */
 	if (bq2589x_get_cdp_status() == true) {
 		pr_err("%s:ljj  bq2589x_get_cdp_status is true,returned!!!\n", __func__);
 		g_irq_3801_flag = true;
 		g_3801_chip = chip;
-	#else
-	if (0) {
-	#endif
 	} else {
 		__pm_wakeup_event(&chip->irq_wake_lock, WUSB3801_IRQ_WAKE_TIME);
 		kthread_queue_work(&chip->irq_worker, &chip->irq_work);
 	}
+	/* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 end */
 
 	return IRQ_HANDLED;
 }
@@ -465,25 +447,13 @@ static int wusb3801_init_alert(struct tcpc_device *tcpc)
 	pr_info("IRQF_NO_THREAD Test\r\n");
 	i2c_smbus_read_byte_data(chip->client, WUSB3801_REG_INTERRUPT);//first clear interrupt
 	ret = i2c_smbus_read_byte_data(chip->client, WUSB3801_REG_TEST_02);
-
-//huanglei add for reg 0x08& 0x0F write zero fail begin
-	wusb3801_i2c_write8(chip->tcpc, WUSB3801_REG_TEST_02, 0x00);
-	wusb3801_i2c_write8(chip->tcpc, WUSB3801_REG_TEST_09, 0x00);
-//huanglei add for reg 0x08& 0x0F write zero fail end
-
-	/* error recovery handling */
 	if (ret & WUSB3801_FORCE_ERR_RCY_MASK) {
-		dev_err(chip->dev,
-			"%s enter error recovery :0x%x\n",
-			__func__, ret);
-
-		wusb3801_i2c_write8(chip->tcpc,
-				WUSB3801_REG_TEST_02, 0x00);
-		/*K19A HQ-134474 K19A for typec mode by langjunjun at 2021/6/1 start*/
+		pr_err("wusb3801 [%s]enter error recovery :0x%x\n", __func__, ret);
+		wusb3801_i2c_write8(chip->tcpc, WUSB3801_REG_TEST_02, 0x00);
+		/* HQ-134474 K19A typec mode by langjunjun at 2021/6/1 start */
 		wusb3801_i2c_write8(chip->tcpc, WUSB3801_REG_TEST_09, 0x00);
-		/*K19A HQ-134474 K19A for typec mode by langjunjun at 2021/6/1 end*/
+		/* HQ-134474 K19A typec mode by langjunjun at 2021/6/1 end */
 	}
-
 	ret = request_irq(chip->irq, wusb3801_intr_handler,
 		IRQF_TRIGGER_FALLING | IRQF_NO_THREAD |
 		IRQF_NO_SUSPEND, name, chip);
@@ -533,7 +503,6 @@ static int wusb3801_get_power_status(
 		struct tcpc_device *tcpc, uint16_t *pwr_status)
 {
 		pr_info("%s enter \n", __func__);
-	*pwr_status = 0;
 	return 0;
 }
 
@@ -608,7 +577,7 @@ static int wusb3801_tcpc_get_mode(struct tcpc_device *tcpc, int *typec_mode)
 		*typec_mode = 0;
 		break;
 	}
-	pr_info("%s: wusb3801 type[0x%02x]\n", __func__, type);
+	pr_err("%s: wusb3801 type[0x%02x]\n", __func__, type);
 
 	return 0;
 }
@@ -622,7 +591,7 @@ static int wusb3801_set_role(struct tcpc_device *tcpc, int mode)
 		pr_err("%s: fail to read mode\n", __func__);
 		return rc;
 	}
-	pr_info("dhx--set role %d\n", mode);
+	pr_err("dhx--set role %d\n", mode);
 	rc &= ~WUSB3801_MODE_MASK;
 	rc &= ~WUSB3801_INT_MASK;//Disable the chip interrupt
 	if (mode == REVERSE_CHG_SOURCE) {
@@ -813,26 +782,21 @@ static void wusb3801_first_check_typec_work(struct work_struct *work)
 		}
 	}
 	typec_cc_orientation = BITS_GET(rc, WUSB3801_CC_STS_MASK);
-	chip->tcpc->typec_polarity = typec_cc_orientation -1;
 #endif	/* __TEST_CC_PATCH__ */
 	switch (type) {
 	case WUSB3801_TYPE_SNK:
 		chip->tcpc->typec_attach_new = TYPEC_ATTACHED_SRC;
-		//tcpci_report_usb_port_attached(chip->tcpc);
-		tcpci_report_usb_port_changed(chip->tcpc);
 		//chip->tcpc->typec_role = TYPEC_ROLE_SRC;
 		//tcpci_notify_role_swap(chip->tcpc, TCP_NOTIFY_DR_SWAP, PD_ROLE_DFP);
 		tcpci_source_vbus(chip->tcpc, TCP_VBUS_CTRL_TYPEC, TCPC_VBUS_SOURCE_5V, 0);
-		//tcpci_notify_typec_state(chip->tcpc);
+		tcpci_notify_typec_state(chip->tcpc);
 		chip->tcpc->typec_attach_old = TYPEC_ATTACHED_SRC;
 		break;
 	case WUSB3801_TYPE_SRC:
 		chip->tcpc->typec_attach_new = TYPEC_ATTACHED_SNK;
-		//tcpci_report_usb_port_attached(chip->tcpc);
-		tcpci_report_usb_port_changed(chip->tcpc);
 		//chip->tcpc->typec_role = TYPEC_ROLE_SNK;
 		//tcpci_notify_role_swap(chip->tcpc, TCP_NOTIFY_DR_SWAP, PD_ROLE_UFP);
-		//tcpci_notify_typec_state(chip->tcpc);
+		tcpci_notify_typec_state(chip->tcpc);
 		chip->tcpc->typec_attach_old = TYPEC_ATTACHED_SNK;
 		break;
 	default:
@@ -911,10 +875,8 @@ static int wusb3801_tcpcdev_init(struct wusb3801_chip *chip, struct device *dev)
 	if (IS_ERR(chip->tcpc))
 		return -EINVAL;
 
-	//chip->tcpc->typec_attach_old = !TYPEC_UNATTACHED;
-    //chip->tcpc->typec_attach_new = TYPEC_UNATTACHED;
-    //tcpci_report_usb_port_detached(chip->tcpc);
-    //tcpci_report_usb_port_changed(chip->tcpc);
+	chip->tcpc->typec_attach_old = TYPEC_UNATTACHED;
+    chip->tcpc->typec_attach_new = TYPEC_UNATTACHED;
     //chip->tcpc->typec_role = TYPEC_ROLE_UNKNOWN;
 	schedule_delayed_work(
 						&chip->first_check_typec_work, msecs_to_jiffies(3000));
@@ -1055,7 +1017,7 @@ static int wusb3801_i2c_probe(struct i2c_client *client,
 	chip->cc_sts = 0xFF;
 	chip->cc_test_flag = 0;
 	chip->dev_sub_id = dev_sub_id;
-	typec_cc_orientation = 0;
+	 typec_cc_orientation = 0;
 #endif /* __TEST_CC_PATCH__ */
 	sema_init(&chip->io_lock, 1);
 	sema_init(&chip->suspend_lock, 1);
@@ -1105,10 +1067,8 @@ static int wusb3801_i2c_probe(struct i2c_client *client,
 			pr_err("cannot read 0x%02x\n", i);
 			rc = 0;
 		}
-		pr_info("from 0x%02x read 0x%02x\n", (uint8_t)i, rc);
+		pr_err("from 0x%02x read 0x%02x\n", (uint8_t)i, rc);
 	}
-
-	tcpc_schedule_init_work(chip->tcpc);
 
 	pr_info("%s probe OK!\n", __func__);
 	return 0;
@@ -1183,7 +1143,6 @@ static void wusb3801_shutdown(struct i2c_client *client)
 	if (chip != NULL) {
 		if (chip->irq)
 			disable_irq(chip->irq);
-		tcpm_shutdown(chip->tcpc);
 	}
 }
 
