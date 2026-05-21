@@ -354,7 +354,7 @@
 
 &i2c7 {
 	fusb303@21 {
-		status = "ok";
+		status = "disabled";
 		compatible = "on,fusb303";
 		reg = <0x21>;
 		interrupt-parent = <&pio>;
