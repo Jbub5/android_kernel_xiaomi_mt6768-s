@@ -2467,7 +2467,7 @@ static int fusb303_probe(struct i2c_client *client,
 	ret = fusb303_read_device_id(chip);
 	if (ret != FUSB303_REV) {
 		dev_err(cdev, "fusb303 not support\n");
-		dev_err(cdev, "fusb303 is force enabled\n"); //goto err1;
+		goto err1;
 	}
 	data = devm_kzalloc(cdev,
 				sizeof(struct fusb303_data), GFP_KERNEL);
