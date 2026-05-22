@@ -79,7 +79,7 @@
  * http://www.testusb.com/power_issue.htm
  */
 
-#define CONFIG_TYPEC_SNK_CURR_DFT		100
+#define CONFIG_TYPEC_SNK_CURR_DFT		150
 #define CONFIG_TYPEC_SRC_CURR_DFT		500
 #define CONFIG_TYPEC_SNK_CURR_LIMIT		0
 
