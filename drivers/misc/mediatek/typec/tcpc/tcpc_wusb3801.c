@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2017 MediaTek Inc.
- * Copyright (C) 2021 XiaoMi, Inc.
  *
  * Mediatek wusb3801 Type-C Port Control Driver
  *
@@ -51,7 +50,6 @@
 #include "inc/tcpci.h"
 #include "inc/tcpci_timer.h"
 #include "inc/tcpci_typec.h"
-
 
 #if 1 /*  #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 9, 0))*/
 #include <linux/sched/rt.h>
@@ -247,10 +245,8 @@ static void wusb3801_irq_work_handler(struct kthread_work *work)
 	int int_sts;
 	uint8_t status, type;
 	struct tcpc_device *tcpc;
-
 	if (0 == first_check_flag)
 		return;
-
 	tcpc = chip->tcpc;
 		tcpci_lock_typec(tcpc);
 	/* get interrupt */
@@ -316,6 +312,7 @@ static void wusb3801_irq_work_handler(struct kthread_work *work)
 	}
 	typec_cc_orientation = BITS_GET(rc, WUSB3801_CC_STS_MASK);
 #endif	/* __TEST_CC_PATCH__ */
+	pr_err("%s:  type = %d \n",__func__, type);
 	switch (type) {
 	case WUSB3801_TYPE_SNK:
 		/*if ( tcpc->typec_role != TYPEC_ROLE_SRC) {
@@ -349,14 +346,11 @@ static void wusb3801_irq_work_handler(struct kthread_work *work)
 	tcpci_unlock_typec(tcpc);
 }
 
-
 static irqreturn_t wusb3801_intr_handler(int irq, void *data)
 {
 	struct wusb3801_chip *chip = data;
-
-	__pm_wakeup_event(&chip->irq_wake_lock, WUSB3801_IRQ_WAKE_TIME);
-
-	kthread_queue_work(&chip->irq_worker, &chip->irq_work);
+		__pm_wakeup_event(&chip->irq_wake_lock, WUSB3801_IRQ_WAKE_TIME);
+		kthread_queue_work(&chip->irq_worker, &chip->irq_work);
 	return IRQ_HANDLED;
 }
 
@@ -529,8 +523,7 @@ static int wusb3801_tcpc_get_mode(struct tcpc_device *tcpc, int *typec_mode)
 	status = (rc & WUSB3801_ATTACH) ? true : false;
 	type = status ? \
 			rc & WUSB3801_TYPE_MASK : WUSB3801_TYPE_INVALID;
-	pr_info("sts[0x%02x], type[0x%02x]\n", status, type);
-
+	pr_err(" sts[0x%02x], type[0x%02x]\n", status, type);
 	switch (type) {
 	case WUSB3801_TYPE_SNK:
 		*typec_mode = 2;
@@ -542,8 +535,7 @@ static int wusb3801_tcpc_get_mode(struct tcpc_device *tcpc, int *typec_mode)
 		*typec_mode = 0;
 		break;
 	}
-	pr_err("%s: wusb3801 type[0x%02x]\n", __func__, type);
-
+	pr_err("%s: wusb3801 type[0x%02x] typec_mode=%d\n", __func__, type,*typec_mode);
 	return 0;
 }
 
@@ -712,7 +704,6 @@ static void wusb3801_first_check_typec_work(struct work_struct *work)
 		return ;
 	}
 	int_sts = rc & WUSB3801_INT_STS_MASK;
-
 	first_check_flag = 1;
 	rc = wusb3801_i2c_read8(chip->tcpc, WUSB3801_REG_STATUS);
 	if (rc < 0) {
@@ -952,7 +943,6 @@ static int wusb3801_i2c_probe(struct i2c_client *client,
 	int i, rc;
 	bool use_dt = client->dev.of_node;
 
-	pr_info("%s\n", __func__);
 	if (i2c_check_functionality(client->adapter,
 			I2C_FUNC_SMBUS_I2C_BLOCK | I2C_FUNC_SMBUS_BYTE_DATA))
 		pr_info("I2C functionality : OK...\n");
@@ -960,12 +950,13 @@ static int wusb3801_i2c_probe(struct i2c_client *client,
 		pr_info("I2C functionality check : failuare...\n");
 
 	chip_id = wusb3801_check_revision(client);
+	pr_err("szw:chip_id=%d\n",chip_id);
 	if (chip_id < 0) {
 		chip_id = wusb3801_check_revision(client);
 		if (chip_id < 0)
 			return chip_id;
 	}
-
+pr_err("szw:chip_id2=%d\n",chip_id);
 	chip = devm_kzalloc(&client->dev, sizeof (*chip), GFP_KERNEL);
 	if (!chip)
 		return -ENOMEM;
