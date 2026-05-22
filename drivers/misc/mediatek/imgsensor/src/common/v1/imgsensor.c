@@ -653,8 +653,7 @@ static inline int adopt_CAMERA_HW_GetInfo(void *pBuf)
 
 #if defined(CONFIG_TARGET_PRODUCT_MERLINCOMMON)
 	// HACK
-	unsigned int curr_idx = pFeatureCtrl->InvokeCamera;
-	MUINT32 curr_idx = pSensorGetInfo->SensorId;
+	unsigned int curr_idx = pSensorGetInfo->SensorId;
 	if (curr_idx == IMGSENSOR_SENSOR_IDX_MAIN3) {
                 curr_idx = IMGSENSOR_SENSOR_IDX_SUB;
         }
@@ -857,7 +856,7 @@ static inline int adopt_CAMERA_HW_GetInfo2(void *pBuf)
 
 #if defined(CONFIG_TARGET_PRODUCT_MERLINCOMMON)
 	// HACK
-	unsigned int curr_idx = pFeatureCtrl->InvokeCamera;
+	unsigned int curr_idx = pSensorGetInfo->SensorId;
 	if (curr_idx == IMGSENSOR_SENSOR_IDX_MAIN3) {
                 curr_idx = IMGSENSOR_SENSOR_IDX_SUB;
         }
