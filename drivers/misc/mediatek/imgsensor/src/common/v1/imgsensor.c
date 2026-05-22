@@ -651,7 +651,7 @@ static inline int adopt_CAMERA_HW_GetInfo(void *pBuf)
 		return -EFAULT;
 	}
 
-#if defined(CONFIG_TARGET_PRODUCT_MERLIN)
+#if defined(CONFIG_TARGET_PRODUCT_MERLINCOMMON)
 	// HACK
 	unsigned int curr_idx = pFeatureCtrl->InvokeCamera;
 	MUINT32 curr_idx = pSensorGetInfo->SensorId;
@@ -855,7 +855,7 @@ static inline int adopt_CAMERA_HW_GetInfo2(void *pBuf)
 		return -EFAULT;
 	}
 
-#if defined(CONFIG_TARGET_PRODUCT_MERLIN)
+#if defined(CONFIG_TARGET_PRODUCT_MERLINCOMMON)
 	// HACK
 	unsigned int curr_idx = pFeatureCtrl->InvokeCamera;
 	if (curr_idx == IMGSENSOR_SENSOR_IDX_MAIN3) {
@@ -1290,7 +1290,7 @@ static inline int adopt_CAMERA_HW_FeatureControl(void *pBuf)
 		return -EFAULT;
 	}
 
-#if defined(CONFIG_TARGET_PRODUCT_LANCELOT) || defined(CONFIG_TARGET_PRODUCT_MERLIN)
+#if defined(CONFIG_TARGET_PRODUCT_LANCELOTCOMMON) || defined(CONFIG_TARGET_PRODUCT_MERLINCOMMON)
 	unsigned int curr_idx = pFeatureCtrl->InvokeCamera;
 #endif
 	psensor = imgsensor_sensor_get_inst(pFeatureCtrl->InvokeCamera);
@@ -1298,7 +1298,7 @@ static inline int adopt_CAMERA_HW_FeatureControl(void *pBuf)
 		pr_err("[%s] NULL psensor.\n", __func__);
 		return -EFAULT;
 	} else {
-#ifdef CONFIG_TARGET_PRODUCT_LANCELOT
+#ifdef CONFIG_TARGET_PRODUCT_LANCELOTCOMMON
 		// HACK
 		if (curr_idx == IMGSENSOR_SENSOR_IDX_MAIN2) {
 			curr_idx = IMGSENSOR_SENSOR_IDX_SUB;
@@ -1311,7 +1311,7 @@ static inline int adopt_CAMERA_HW_FeatureControl(void *pBuf)
 			return -EFAULT;
 		}
 #endif
-#ifdef CONFIG_TARGET_PRODUCT_MERLIN
+#ifdef CONFIG_TARGET_PRODUCT_MERLINCOMMON
 		// HACK
 		if (curr_idx == IMGSENSOR_SENSOR_IDX_MAIN3) {
 			curr_idx = IMGSENSOR_SENSOR_IDX_SUB;
@@ -1366,7 +1366,7 @@ static inline int adopt_CAMERA_HW_FeatureControl(void *pBuf)
 	{
 		MINT32 drv_idx;
 
-#if defined(CONFIG_TARGET_PRODUCT_LANCELOT) || defined(CONFIG_TARGET_PRODUCT_MERLIN)
+#if defined(CONFIG_TARGET_PRODUCT_LANCELOTCOMMON) || defined(CONFIG_TARGET_PRODUCT_MERLINCOMMON)
 		psensor->inst.sensor_idx = curr_idx; // HACK
 #else
 		psensor->inst.sensor_idx = pFeatureCtrl->InvokeCamera;
@@ -2117,7 +2117,7 @@ static inline int adopt_CAMERA_HW_FeatureControl(void *pBuf)
 		if (gimgsensor.mclk_set_drive_current != NULL) {
 			gimgsensor.mclk_set_drive_current(
 			gimgsensor.hw.pdev[IMGSENSOR_HW_ID_MCLK]->pinstance,
-#if defined(CONFIG_TARGET_PRODUCT_LANCELOT) || defined(CONFIG_TARGET_PRODUCT_MERLIN)
+#if defined(CONFIG_TARGET_PRODUCT_LANCELOTCOMMON) || defined(CONFIG_TARGET_PRODUCT_MERLINCOMMON)
 				curr_idx, // HACK
 #else
 				pFeatureCtrl->InvokeCamera,
