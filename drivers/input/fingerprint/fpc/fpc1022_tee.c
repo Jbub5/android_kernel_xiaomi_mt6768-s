@@ -89,7 +89,11 @@
 
 #define     FPC102X_REG_HWID      252
 #define FPC1022_CHIP 0x1000
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
+#define FPC1022_CHIP_MASK_SENSOR_TYPE 0xf000
+#else
 #define FPC1022_CHIP_MASK_SENSOR_TYPE 0xff00
+#endif
 
 #define GPIO_GET(pin) __gpio_get_value(pin)	//get input pin value
 
@@ -206,7 +210,8 @@ static void fpc1022_get_irqNum(struct fpc1022_data *fpc1022)
 
 		fpc1022->irq_num = irq_of_parse_and_map(node, 0);	//xpt
 		fpc1022->irq_gpio = of_get_named_gpio(node, "fpc,gpio_irq", 0);
-	}
+	} else
+		pr_err("%s can't find compatible node\n", __func__);
 }
 
 static int hw_reset(struct fpc1022_data *fpc1022)
@@ -609,6 +614,7 @@ static int fpc1022_platform_probe(struct platform_device *pldev)
 		goto err_lookup_state;
 	}
 
+#ifndef CONFIG_TARGET_PRODUCT_SELENECOMMON
 	fpc1022->st_spi_cs_h = pinctrl_lookup_state(fpc1022->pinctrl, "spi_cs_high");
 	if (IS_ERR(fpc1022->st_spi_cs_h)) {
 		ret = PTR_ERR(fpc1022->st_spi_cs_h);
@@ -623,6 +629,7 @@ static int fpc1022_platform_probe(struct platform_device *pldev)
 	mdelay(10);
 	//set cs from gpio mode to spi mode
 	pinctrl_select_state(fpc1022->pinctrl, fpc1022->st_spi_cs_h);
+#endif
 
 	fpc1022_get_irqNum(fpc1022);
 
