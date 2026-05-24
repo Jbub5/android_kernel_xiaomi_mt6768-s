@@ -327,6 +327,8 @@ static inline char *power_mode_to_string(enum mtkfb_power_mode pm)
 typedef int (*PRIMARY_DISPLAY_CALLBACK) (unsigned int user_data);
 
 struct display_primary_path_context *_get_context(void);
+int _set_lcm_cmd_by_cmdq(unsigned int *lcm_cmd, unsigned int *lcm_count,
+	unsigned int *lcm_value);
 void _primary_path_lock(const char *caller);
 void _primary_path_unlock(const char *caller);
 int primary_display_init(char *lcm_name, unsigned int lcm_fps,
