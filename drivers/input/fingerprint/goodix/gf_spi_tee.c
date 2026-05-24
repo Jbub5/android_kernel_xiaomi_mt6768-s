@@ -307,6 +307,28 @@ static int gf_get_gpio_dts_info(struct gf_device *gf_dev)
 		return ret;
 	}
 #endif
+
+#ifdef TARGET_PRODUCT_SELENE
+	gf_dev->pins_reset_high = pinctrl_lookup_state(gf_dev->pinctrl_gpios, "reset_high");
+	if (IS_ERR(gf_dev->pins_reset_high)) {
+		ret = PTR_ERR(gf_dev->pins_reset_high);
+		gf_debug(ERR_LOG, "%s can't find fingerprint pinctrl reset_high\n", __func__);
+		return ret;
+	}
+	gf_dev->pins_reset_low = pinctrl_lookup_state(gf_dev->pinctrl_gpios, "reset_low");
+	if (IS_ERR(gf_dev->pins_reset_low)) {
+		ret = PTR_ERR(gf_dev->pins_reset_low);
+		gf_debug(ERR_LOG, "%s can't find fingerprint pinctrl reset_low\n", __func__);
+		return ret;
+	}
+	gf_dev->pins_spi_mode = pinctrl_lookup_state(gf_dev->pinctrl_gpios, "spi_mode");
+	if (IS_ERR(gf_dev->pins_spi_mode)) {
+		ret = PTR_ERR(gf_dev->pins_spi_mode);
+		gf_debug(ERR_LOG, "%s can't find fingerprint pinctrl spi_mode\n", __func__);
+		return ret;
+	}
+	pinctrl_select_state(gf_dev->pinctrl_gpios, gf_dev->pins_spi_mode);
+#else
 	gf_dev->pins_reset_high = pinctrl_lookup_state(gf_dev->pinctrl_gpios, "reset_high");
 	if (IS_ERR(gf_dev->pins_reset_high)) {
 		ret = PTR_ERR(gf_dev->pins_reset_high);
@@ -334,6 +356,7 @@ static int gf_get_gpio_dts_info(struct gf_device *gf_dev)
 		gf_debug(ERR_LOG, "%s can't find fingerprint pinctrl reset_low\n", __func__);
 		return ret;
 	}
+#endif
 
 	gf_debug(DEBUG_LOG, "%s, get pinctrl success!\n", __func__);
 #endif
@@ -901,7 +924,9 @@ static long gf_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 			break;
 		}
 
-		if (GF_KEY_HOME == gf_key.key) {
+		if (GF_KEY_HOME_DOUBLE_CLICK== gf_key.key) {
+			key_input = GF_KEY_INPUT_DOUBLE;
+		} else if (GF_KEY_HOME == gf_key.key) {
 			key_input = GF_KEY_INPUT_HOME;
 		} else if (GF_KEY_POWER == gf_key.key) {
 			key_input = GF_KEY_INPUT_HOME;
@@ -913,6 +938,10 @@ static long gf_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 		}
 		gf_debug(INFO_LOG, "%s: received key event[%d], key=%d, value=%d\n",
 				__func__, key_input, gf_key.key, gf_key.value);
+		if(GF_KEY_HOME_DOUBLE_CLICK == gf_key.key){
+			input_report_key(gf_dev->input, key_input, gf_key.value);
+		    input_sync(gf_dev->input);
+		}
 
 		if ((GF_KEY_POWER == gf_key.key || GF_KEY_CAMERA == gf_key.key) && (gf_key.value == 1)) {
 			input_report_key(gf_dev->input, key_input, 1);
@@ -2086,8 +2115,10 @@ static int gf_probe(struct spi_device *spi)
 	pr_err("%s %d now get dts info done!", __func__, __LINE__);
 	mdelay(10);
 	gf_hw_power_enable(gf_dev, 1);
+#ifndef TARGET_PRODUCT_SELENE
 	//set cs pin to cs mode
 	pinctrl_select_state(gf_dev->pinctrl_gpios, gf_dev->pins_spi_cs_high);
+#endif
 	gf_bypass_flash_gpio_cfg();
 	pr_err("%s %d now enable spi clk API", __func__, __LINE__);
 	gf_spi_clk_enable(gf_dev, 1);
@@ -2113,7 +2144,12 @@ static int gf_probe(struct spi_device *spi)
 	gf_spi_read_bytes(gf_dev, 0x0000, 4, rx_test);
 	printk("%s rx_test chip id:0x%x 0x%x 0x%x 0x%x \n", __func__, rx_test[0], rx_test[1], rx_test[2], rx_test[3]);
 	if (1) {
-	if (((rx_test[0] != 0x04) || (rx_test[3] != 0x25)) && ((rx_test[0] != 0x03) || (rx_test[3] != 0x25))) {
+	if (!((rx_test[3] == 0x25) &&
+      ((rx_test[0] == 0x07) ||
+       (rx_test[0] == 0x08) ||
+       (rx_test[0] == 0x10) ||
+       (rx_test[0] == 0x04) ||
+       (rx_test[0] == 0x03)))) {
 			goodix_fp_exist = false;
 			gf_debug(ERR_LOG, "%s, get goodix FP sensor chipID fail!!\n", __func__);
 			//goto err_readid;
@@ -2235,6 +2271,7 @@ static int gf_probe(struct spi_device *spi)
 	__set_bit(EV_KEY, gf_dev->input->evbit);
 	__set_bit(GF_KEY_INPUT_HOME, gf_dev->input->keybit);
 
+	__set_bit(GF_KEY_INPUT_DOUBLE, gf_dev->input->keybit);
 	__set_bit(GF_KEY_INPUT_MENU, gf_dev->input->keybit);
 	__set_bit(GF_KEY_INPUT_BACK, gf_dev->input->keybit);
 	__set_bit(GF_KEY_INPUT_POWER, gf_dev->input->keybit);
@@ -2251,6 +2288,10 @@ static int gf_probe(struct spi_device *spi)
 	//__set_bit(GF_KEY_INPUT_KPENTER, gf_dev->input->keybit);
 
 	gf_dev->input->name = GF_INPUT_NAME;
+#ifdef TARGET_PRODUCT_SELENE
+	gf_dev->input->id.vendor  = 0x0666;
+	gf_dev->input->id.product = 0x0888;
+#endif
 	if (input_register_device(gf_dev->input)) {
 		gf_debug(ERR_LOG, "%s, Failed to register input device.\n", __func__);
 		status = -ENODEV;
