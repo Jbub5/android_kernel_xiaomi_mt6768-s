@@ -1450,6 +1450,7 @@ defined(CONFIG_MTK_CAM_SECURITY_SUPPORT)
 	gauge_timer {
 		compatible = "mediatek,gauge_timer_service";
 	};
+
 	simtray {
 		compatible = "xiaomi,simtray-status";
 		status-gpio = <&pio 46 0>;
@@ -3332,6 +3333,7 @@ defined(CONFIG_MTK_CAM_SECURITY_SUPPORT)
 			part = <0>;
 		};
 	};
+
 	flashlights_mt6370: flashlights_mt6370 {
 		compatible = "mediatek,flashlights_mt6370";
 		decouple = <0>;
@@ -3601,11 +3603,13 @@ defined(CONFIG_MTK_CAM_SECURITY_SUPPORT)
 	touch: touch {
 		compatible = "mediatek,touch";
 	};
+
 	xiaomi_touch{
 		compatible = "xiaomi-touch";
 		status = "ok";
 		touch,name = "xiaomi-touch";
     };
+
 /*
 	nfc:nfc {
 		compatible = "mediatek,nfc-gpio-v2";
@@ -3613,7 +3617,8 @@ defined(CONFIG_MTK_CAM_SECURITY_SUPPORT)
 		gpio-rst-std = <&pio 159 0x0>;
 		gpio-irq = <9>;
 		gpio-irq-std = <&pio 9 0x0>;
-	};*/
+	};
+*/
 
 	irq_nfc: irq_nfc {
 		compatible = "mediatek,irq_nfc-eint";
@@ -3623,7 +3628,7 @@ defined(CONFIG_MTK_CAM_SECURITY_SUPPORT)
 	smart_pa: smart_pa {
 	};
 
-    board_id: board_id {
+	board_id: board_id {
 		compatible = "mediatek,board_id";
 	};
 
@@ -3633,6 +3638,7 @@ defined(CONFIG_MTK_CAM_SECURITY_SUPPORT)
 		io-channel-names = "blk_thermal-channel";
 		status = "okay";
 	};
+
 	gpio_usage_mapping:gpio {
 		compatible = "mediatek,gpio_usage_mapping";
 	};
@@ -3850,7 +3856,6 @@ defined(CONFIG_MTK_CAM_SECURITY_SUPPORT)
 			pinmux = <PINMUX_GPIO143__FUNC_VOW_CLK_MISO>;
 		};
 	};
-
 
 	reverse_high: reverse_high {
 		pins_cmd_dat {
@@ -5126,20 +5131,6 @@ defined(CONFIG_MTK_CAM_SECURITY_SUPPORT)
 		};
 
 	};
-
-	/*
-	focaltech@0 {
-			compatible = "focaltech8719P,FTS-ts-spi";
-			reg = <0>;
-			spi-max-frequency = <8000000>;
-			interrupt-parent = <&pio>;
-			interrupts = <1 0x2>;
-			focaltech,reset-gpio = <&pio 92 0x00>;
-			focaltech,irq-gpio = <&pio 1 0x2001>;
-			focaltech,max-touch-number = <10>;
-			focaltech,display-coords =  <0 0 1080 2340>;
-		};
-	*/
 };
 #endif
 
@@ -5151,7 +5142,7 @@ defined(CONFIG_MTK_CAM_SECURITY_SUPPORT)
 #ifdef CONFIG_CHARGER_RT9471
 #include "mediatek/rt9471.dtsi"
 #endif
-#ifdef CONFIG_TCPC_RT1711H
+#if defined(CONFIG_TCPC_RT1711H)
 #include "mediatek/tcpc_config.dtsi"
 #endif
 #ifdef CONFIG_MTK_ENABLE_GENIEZONE
