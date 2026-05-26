@@ -263,6 +263,11 @@ static void swchg_select_charging_current_limit(struct charger_manager *info)
 				pdata->charging_current_limit = 2000000;
 				break;
 		}
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
+	} else if (info->chr_type == HVDCP_CHARGER) {
+		pdata->input_current_limit = 2000000;
+		pdata->charging_current_limit = 3000000;
+#endif
 	} else if (info->chr_type == CHARGING_HOST) {
 		pdata->input_current_limit =
 				info->data.charging_host_charger_current;
