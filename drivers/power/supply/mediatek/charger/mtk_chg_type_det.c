@@ -120,6 +120,7 @@ static const char * const mtk_chg_type_name[] = {
 	"Apple 1.0A Charger",
 	"Apple 0.5A Charger",
 	"Wireless Charger",
+	"HVDCP_CHARGER",
 };
 
 static void dump_charger_name(enum charger_type type)
@@ -133,6 +134,9 @@ static void dump_charger_name(enum charger_type type)
 	case APPLE_2_1A_CHARGER:
 	case APPLE_1_0A_CHARGER:
 	case APPLE_0_5A_CHARGER:
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
+	case HVDCP_CHARGER:
+#endif
 		pr_info("%s: charger type: %d, %s\n", __func__, type,
 			mtk_chg_type_name[type]);
 		break;
@@ -171,6 +175,12 @@ void reverse_charger(bool en)
 
 	primary_charger = get_charger_by_name("primary_chg");
 	pr_err("dhx---is otg : %d\n", is_otg);
+
+	if (!primary_charger) {
+		pr_err("primary charger otg is null\n");
+		return;
+	}
+
 	if (en) {
 		reverse_flage = 1;
 		charger_dev_enable_otg(primary_charger, false);
@@ -277,8 +287,12 @@ static int mt_charger_set_property(struct power_supply *psy,
 		mtk_chg->chg_type = val->intval;
 		break;
 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
+#ifndef CONFIG_TARGET_PRODUCT_SELENECOMMON
 		call_mode = val->intval*1000;
 		charger_dev_set_input_current(mtk_chg->chg1_dev, (u32)val->intval * 1000);
+#else
+		call_mode = val->intval;
+#endif
 		break;
 	default:
 		return -EINVAL;
@@ -291,6 +305,9 @@ static int mt_charger_set_property(struct power_supply *psy,
 		/* usb */
 		if ((mtk_chg->chg_type == STANDARD_HOST) ||
 			(mtk_chg->chg_type == CHARGING_HOST) ||
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
+			(mtk_chg->chg_type == HVDCP_CHARGER) ||
+#endif
 			(mtk_chg->chg_type == NONSTANDARD_CHARGER))
 			mt_usb_connect();
 		else
@@ -328,6 +345,14 @@ static int mt_ac_get_property(struct power_supply *psy,
 	return 0;
 }
 
+enum quick_charge_type {
+	QUICK_CHARGE_NORMAL = 0,
+	QUICK_CHARGE_FAST,
+	QUICK_CHARGE_FLASH,
+	QUICK_CHARGE_TURPE,
+	QUICK_CHARGE_MAX,
+};
+
 static int mt_usb_get_property(struct power_supply *psy,
 	enum power_supply_property psp, union power_supply_propval *val)
 {
@@ -363,12 +388,13 @@ static int mt_usb_get_property(struct power_supply *psy,
 			val->intval = 0;
 		break;
 	case POWER_SUPPLY_PROP_TYPEC_MODE:
-		if (tcpc->ops->get_mode != NULL) {
-		tcpc->ops->get_mode(tcpc, &typec_mode);
-		if (typec_mode > 2 || typec_mode < 0)
-			typec_mode == 0;
-		val->intval = typec_mode;
+		if (tcpc && tcpc->ops ) {
+			tcpc->ops->get_mode(tcpc, &typec_mode);
+			pr_err("dev %s get mode =  %d\n",tcpc->desc.name,typec_mode);
+		} else {
+			pr_err("tcpc or tcpc->ops is NULL\n");
 		}
+		val->intval = typec_mode;
 		break;
 	case POWER_SUPPLY_PROP_TYPEC_CC_ORIENTATION:
 		val->intval = typec_cc_orientation;
@@ -392,6 +418,14 @@ static int mt_usb_get_property(struct power_supply *psy,
 		case  STANDARD_CHARGER:
 			val->intval = POWER_SUPPLY_TYPE_USB_DCP;
 			break;
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
+		case  HVDCP_CHARGER:
+			val->intval = POWER_SUPPLY_TYPE_USB_HVDCP;
+			break;
+		case NONSTANDARD_CHARGER:
+			val->intval = POWER_SUPPLY_TYPE_USB_FLOAT;
+			break;
+#endif
 		default:
 			val->intval = POWER_SUPPLY_TYPE_UNKNOWN;
 			break;
@@ -408,6 +442,34 @@ static int mt_usb_get_property(struct power_supply *psy,
 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
 		val->intval = battery_get_vbus();
 		break;
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
+	case POWER_SUPPLY_PROP_QUICK_CHARGE_TYPE:
+		if (hvdcp_type_tmp == HVDCP_3) {
+			val->intval = QUICK_CHARGE_FAST;
+			break;
+		} else if (hvdcp_type_tmp == HVDCP) {
+			val->intval = QUICK_CHARGE_FAST;
+			break;
+		}
+		switch (mtk_chg->chg_type) {
+		case  STANDARD_HOST:
+			val->intval = QUICK_CHARGE_NORMAL;
+			break;
+		case  CHARGING_HOST:
+			val->intval = QUICK_CHARGE_NORMAL;
+			break;
+		case  STANDARD_CHARGER:
+			val->intval = QUICK_CHARGE_NORMAL;
+			break;
+		case  HVDCP_CHARGER:
+			val->intval = QUICK_CHARGE_FAST;
+			break;
+		default:
+			val->intval = QUICK_CHARGE_NORMAL;
+			break;
+	}
+		break;
+#endif
 	default:
 		return -EINVAL;
 	}
@@ -585,6 +647,9 @@ static enum power_supply_property mt_usb_properties[] = {
 	POWER_SUPPLY_PROP_REVERSE_CHG_OTG,
 	POWER_SUPPLY_PROP_REVERSE_CHG_STATUS,
 #endif
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
+	POWER_SUPPLY_PROP_QUICK_CHARGE_TYPE,
+#endif
 };
 
 static enum power_supply_property mt_main_properties[] = {
@@ -650,6 +715,12 @@ static int pd_tcp_notifier_call(struct notifier_block *pnb,
 
 	static struct charger_device *primary_charger;
 	primary_charger = get_charger_by_name("primary_chg");
+
+	if (!primary_charger) {
+		pr_err("primary charger notifier is null\n");
+		return 0;
+	}
+
 	switch (event) {
 	case TCP_NOTIFY_SINK_VBUS:
 		if (tcpm_inquire_typec_attach_state(cti->tcpc_dev) ==

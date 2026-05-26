@@ -93,6 +93,10 @@ int mtk_qmax_aging;
 /* ============================================================ */
 /* gauge hal interface */
 /* ============================================================ */
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
+extern int hq_config(void);
+#endif
+
 bool gauge_get_current(int *bat_current)
 {
 	bool is_charging = false;
@@ -647,12 +651,34 @@ void fgauge_get_profile_id(void)
 	pr_err("[%s]battery_id_voltage is %d\n", __func__, id_volt);
 
 	my_battery_id_voltage = id_volt;
+#ifndef CONFIG_TARGET_PRODUCT_SELENECOMMON
 	if (id_volt >= NVT_MIN_VOLTAGE && id_volt <= NVT_MAX_VOLTAGE) {
+#else
+	if (id_volt >= SWD_MIN_VOLTAGE && id_volt <= SWD_MAX_VOLTAGE) {
+#endif
 		gm.battery_id = 0;
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
+	if (hq_config()== 1)
+		gm.battery_id = 2;
+#endif
 	} else if (id_volt >= COSMX_MIN_VOLTAGE && id_volt <= COSMX_MAX_VOLTAGE) {
 		gm.battery_id = 1;
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
+		if(hq_config()== 4)
+			gm.battery_id = 5;
+	} else if (id_volt >= SWD_SEC_MIN_VOLTAGE && id_volt <= SWD_SEC_MAX_VOLTAGE) {
+		gm.battery_id = 3;
+		if(hq_config()== 4)
+			gm.battery_id = 4;
+	} else if (id_volt >= SECRET_MIN_VOLTAGE && id_volt <= SECRET_MAX_VOLTAGE) {
+		gm.battery_id = 4;
+#endif
 	} else {
+#ifndef CONFIG_TARGET_PRODUCT_SELENECOMMON
 		gm.battery_id = 2;
+#else
+		gm.battery_id = 5;
+#endif
 	}
 
 	pr_err("[%s]Battery id (%d) volt (%d)\n",
@@ -1173,8 +1199,10 @@ void fg_custom_init_from_dts(struct platform_device *dev)
 
 	fgauge_get_profile_id();
 	bat_id = gm.battery_id;
+#ifndef CONFIG_TARGET_PRODUCT_SELENECOMMON
 	if (bat_id >= 2)
 		bat_id = 0;
+#endif
 	bm_err("%s bat_id = %d\n", __func__, bat_id);
 
 	fg_read_dts_val(np, "MULTI_BATTERY", &(multi_battery), 1);
