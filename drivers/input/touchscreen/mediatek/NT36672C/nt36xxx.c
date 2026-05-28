@@ -1283,9 +1283,7 @@ void nvt_esd_check_enable(uint8_t enable)
 	/* enable/disable esd check flag */
 	esd_check = enable;
 }
-/* Huaqin modify for HQ-144782 by caogaojie at 2021/07/05 start */
-extern bool g_trigger_disp_esd_recovery;
-/* Huaqin modify for HQ-144782 by caogaojie at 2021/07/05 end */
+
 static void nvt_esd_check_func(struct work_struct *work)
 {
 	unsigned int timer = jiffies_to_msecs(jiffies - irq_timer);
@@ -1304,10 +1302,9 @@ static void nvt_esd_check_func(struct work_struct *work)
 			/* update esd_retry counter */
 			esd_retry++;
 		} else { // esd_retry >= 2
-			NVT_ERR("esd_retry=%d, set g_trigger_disp_esd_recovery true!\n", esd_retry);
+			NVT_ERR("esd_retry=%d!\n", esd_retry);
 			nvt_esd_check_enable(false);
 			esd_retry = 0;
-			g_trigger_disp_esd_recovery = true;
 		}
 	}
 /* Huaqin modify for HQ-144782 by caogaojie at 2021/07/05 end */
