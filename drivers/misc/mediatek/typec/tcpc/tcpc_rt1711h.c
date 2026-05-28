@@ -49,13 +49,6 @@
 
 #define RT1711H_IRQ_WAKE_TIME	(500) /* ms */
 
-bool g_pd_is_present = false;
-
-bool get_pd_status(void)
-{
-       return g_pd_is_present;
-}
-
 struct rt1711_chip {
 	struct i2c_client *client;
 	struct device *dev;
@@ -1476,9 +1469,9 @@ static int rt1711_tcpcdev_init(struct rt1711_chip *chip, struct device *dev)
 
 	if (of_property_read_u32(np, "rt-tcpc,rp_level", &val) >= 0) {
 		switch (val) {
-		case TYPEC_CC_RP_DFT:
-		case TYPEC_CC_RP_1_5:
-		case TYPEC_CC_RP_3_0:
+		case TYPEC_RP_DFT:
+		case TYPEC_RP_1_5:
+		case TYPEC_RP_3_0:
 			desc->rp_lvl = val;
 			break;
 		default:
@@ -1561,8 +1554,6 @@ static inline int rt1711h_check_revision(struct i2c_client *client)
 		dev_err(&client->dev, "read chip ID fail\n");
 		return -EIO;
 	}
-	
-	g_pd_is_present = true;
 
 	if (vid != RICHTEK_1711_VID) {
 		pr_info("%s failed, VID=0x%04x\n", __func__, vid);
@@ -1771,9 +1762,6 @@ MODULE_DEVICE_TABLE(i2c, rt1711_id_table);
 
 static const struct of_device_id rt_match_table[] = {
 	{.compatible = "mediatek,usb_type_c",},
-#ifdef CONFIG_TARGET_PRODUCT_SELENE
-	{.compatible = "mediatek,usb_type_c_mtk",},
-#endif
 	{},
 };
 
