@@ -818,7 +818,6 @@ static int32_t nvt_check_crc_done_ilm_err(void)
 
 #endif /* NVT_TOUCH_ESD_DISP_RECOVERY */
 
-extern bool g_trigger_disp_esd_recovery;
 /* Huaqin modify for HQ-144782 by caogaojie at 2021/07/05 end */
 /*******************************************************
 Description:
@@ -879,12 +878,6 @@ fail:
 			NVT_ERR("error, retry=%d\n", retry);
 			nvt_read_bld_hw_crc();
 /* Huaqin modify for HQ-144782 by caogaojie at 2021/07/05 start */
-#if NVT_TOUCH_ESD_DISP_RECOVERY
-			if (nvt_check_crc_done_ilm_err()) {
-				NVT_ERR("set g_trigger_disp_esd_recovery true!\n");
-				g_trigger_disp_esd_recovery = true;
-			}
-#endif /* #if NVT_TOUCH_ESD_DISP_RECOVERY */
 			break;
 		}
 	}
