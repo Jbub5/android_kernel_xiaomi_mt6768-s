@@ -582,7 +582,8 @@ static inline int tcpci_report_usb_port_attached(struct tcpc_device *tcpc)
 	default:
 		break;
 	}
-	dual_role_instance_changed(tcpc->dr_usb);
+	if (tcpc->dr_usb && !IS_ERR(tcpc->dr_usb))
+		dual_role_instance_changed(tcpc->dr_usb);
 #endif /* CONFIG_DUAL_ROLE_USB_INTF */
 /*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 end*/
 	tcpci_set_wake_lock_pd(tcpc, true);
@@ -612,7 +613,8 @@ static inline int tcpci_report_usb_port_detached(struct tcpc_device *tcpc)
 	tcpc->dual_role_dr = DUAL_ROLE_PROP_DR_NONE;
 	tcpc->dual_role_mode = DUAL_ROLE_PROP_MODE_NONE;
 	tcpc->dual_role_vconn = DUAL_ROLE_PROP_VCONN_SUPPLY_NO;
-	dual_role_instance_changed(tcpc->dr_usb);
+	if (tcpc->dr_usb && !IS_ERR(tcpc->dr_usb))
+		dual_role_instance_changed(tcpc->dr_usb);
 #endif /* CONFIG_DUAL_ROLE_USB_INTF */
 /*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 end*/
 #ifdef CONFIG_USB_POWER_DELIVERY
