@@ -21,6 +21,11 @@
 #include "inc/tcpci_typec.h"
 #include "inc/tcpci_event.h"
 #include "inc/pd_policy_engine.h"
+/*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 start*/
+#ifdef CONFIG_DUAL_ROLE_USB_INTF
+#include <linux/usb/class-dual-role.h>
+#endif /* CONFIG_DUAL_ROLE_USB_INTF */
+/*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 end*/
 
 /* From DTS */
 
@@ -842,8 +847,19 @@ int pd_set_data_role(struct pd_port *pd_port, uint8_t dr)
 {
 	int ret = 0;
 
+/*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 start*/
+#ifdef CONFIG_DUAL_ROLE_USB_INTF
+	/* dual role usb--> 0:ufp, 1:dfp */
+	pd_port->tcpc->dual_role_mode = pd_port->data_role;
+	/* dual role usb --> 0: Device, 1: Host */
+	pd_port->tcpc->dual_role_dr = !(pd_port->data_role);
+	dual_role_instance_changed(pd_port->tcpc->dr_usb);
+#else /* CONFIG_DUAL_ROLE_USB_INTF */
+/*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 end*/
+
 	if (dr == pd_port->data_role)
 		return ret;
+#endif
 
 	pd_port->data_role = dr;
 	ret = pd_update_msg_header(pd_port);
@@ -858,8 +874,17 @@ int pd_set_power_role(struct pd_port *pd_port, uint8_t pr)
 {
 	int ret = 0;
 
+/*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 start*/
+#ifdef CONFIG_DUAL_ROLE_USB_INTF
+	/* 0:sink, 1: source */
+	pd_port->tcpc->dual_role_pr = !(pd_port->power_role);
+	dual_role_instance_changed(pd_port->tcpc->dr_usb);
+#else /* CONFIG_DUAL_ROLE_USB_INTF */
+/*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 end*/
+
 	if (pr == pd_port->power_role)
 		return ret;
+#endif
 
 	pd_port->power_role = pr;
 	ret = pd_update_msg_header(pd_port);
@@ -918,8 +943,16 @@ int pd_set_vconn(struct pd_port *pd_port, uint8_t role)
 	}
 #endif	/* CONFIG_USB_PD_VCONN_SAFE5V_ONLY */
 
+/*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 start*/
+#ifdef CONFIG_DUAL_ROLE_USB_INTF
+	pd_port->tcpc->dual_role_vconn = en_role;
+	dual_role_instance_changed(pd_port->tcpc->dr_usb);
+#else /* CONFIG_DUAL_ROLE_USB_INTF */
+/*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 end*/
+
 	if (role == pd_port->vconn_role)
 		goto out;
+#endif
 
 	pd_port->vconn_role = role;
 	ret = tcpci_set_vconn(tcpc, enable);
