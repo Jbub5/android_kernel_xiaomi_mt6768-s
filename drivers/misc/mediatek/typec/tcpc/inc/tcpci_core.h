@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2016 MediaTek Inc.
- * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -23,6 +22,7 @@
 #include <linux/notifier.h>
 #include <linux/semaphore.h>
 #include <linux/spinlock.h>
+#include <linux/usb/typec.h>
 
 #include "tcpm.h"
 #include "tcpci_timer.h"
@@ -427,6 +427,17 @@ struct tcpc_device {
 #endif	/* CONFIG_TCPC_SOURCE_VCONN */
 
 	uint32_t tcpc_flags;
+
+/*K19A HQ-135321 K19A for VtsHalUsbV1_0TargetTest fail by langjunjun at 2021/6/6 start*/
+#ifdef CONFIG_DUAL_ROLE_USB_INTF
+	struct dual_role_phy_instance *dr_usb;
+	uint8_t dual_role_supported_modes;
+	uint8_t dual_role_mode;
+	uint8_t dual_role_pr;
+	uint8_t dual_role_dr;
+	uint8_t dual_role_vconn;
+#endif /* CONFIG_DUAL_ROLE_USB_INTF */
+/*K19A HQ-135321 K19A for VtsHalUsbV1_0TargetTest fail by langjunjun at 2021/6/6 end*/
 
 #ifdef CONFIG_USB_POWER_DELIVERY
 	/* Event */

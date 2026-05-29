@@ -2731,7 +2731,7 @@ int tcpc_typec_change_role(
 }
 
 #ifdef CONFIG_TYPEC_CAP_POWER_OFF_CHARGE
-#if 0
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON /* Its enabled on default */
 static int typec_init_power_off_charge(struct tcpc_device *tcpc)
 {
 	bool cc_open;
@@ -2806,7 +2806,7 @@ int tcpc_typec_init(struct tcpc_device *tcpc, uint8_t typec_role)
 	tcpc->typec_during_custom_hv = false;
 #endif	/* CONFIG_TYPEC_CAP_CUSTOM_HV */
 
-#if 0
+#if CONFIG_TARGET_PRODUCT_SELENECOMMON
 #ifdef CONFIG_TYPEC_CHECK_LEGACY_CABLE
 	tcpc->typec_legacy_cable = false;
 	typec_legacy_reset_retry_wk(tcpc);

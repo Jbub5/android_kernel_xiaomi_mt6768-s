@@ -22,7 +22,11 @@
 #include <linux/cpu.h>
 #include <linux/delay.h>
 #include <linux/sched.h>
-
+/*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 start*/
+#ifdef CONFIG_DUAL_ROLE_USB_INTF
+#include <linux/usb/class-dual-role.h>
+#endif /* CONFIG_DUAL_ROLE_USB_INTF */
+/*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 end*/
 #include "tcpci_core.h"
 
 #ifdef CONFIG_PD_DBG_INFO
@@ -45,6 +49,7 @@ extern int tcpci_set_wake_lock(
 extern int tcpci_report_power_control(struct tcpc_device *tcpc, bool en);
 extern int tcpc_typec_init(struct tcpc_device *tcpc, uint8_t typec_role);
 extern void tcpc_typec_deinit(struct tcpc_device *tcpc);
+extern int tcpc_dual_role_phy_init(struct tcpc_device *tcpc);
 
 extern struct tcpc_device *tcpc_device_register(
 		struct device *parent, struct tcpc_desc *tcpc_desc,
