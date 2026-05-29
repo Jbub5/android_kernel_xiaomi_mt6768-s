@@ -849,11 +849,12 @@ int pd_set_data_role(struct pd_port *pd_port, uint8_t dr)
 
 /*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 start*/
 #ifdef CONFIG_DUAL_ROLE_USB_INTF
-	/* dual role usb--> 0:ufp, 1:dfp */
-	pd_port->tcpc->dual_role_mode = pd_port->data_role;
-	/* dual role usb --> 0: Device, 1: Host */
-	pd_port->tcpc->dual_role_dr = !(pd_port->data_role);
-	dual_role_instance_changed(pd_port->tcpc->dr_usb);
+	pd_port->tcpc->dual_role_mode = (dr == PD_ROLE_DFP) ?
+		DUAL_ROLE_PROP_MODE_DFP : DUAL_ROLE_PROP_MODE_UFP;
+	pd_port->tcpc->dual_role_dr = (dr == PD_ROLE_DFP) ?
+		DUAL_ROLE_PROP_DR_HOST : DUAL_ROLE_PROP_DR_DEVICE;
+	if (pd_port->tcpc->dr_usb && !IS_ERR(pd_port->tcpc->dr_usb))
+		dual_role_instance_changed(pd_port->tcpc->dr_usb);
 #else /* CONFIG_DUAL_ROLE_USB_INTF */
 /*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 end*/
 
@@ -876,9 +877,10 @@ int pd_set_power_role(struct pd_port *pd_port, uint8_t pr)
 
 /*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 start*/
 #ifdef CONFIG_DUAL_ROLE_USB_INTF
-	/* 0:sink, 1: source */
-	pd_port->tcpc->dual_role_pr = !(pd_port->power_role);
-	dual_role_instance_changed(pd_port->tcpc->dr_usb);
+	pd_port->tcpc->dual_role_pr = (pr == PD_ROLE_SOURCE) ?
+		DUAL_ROLE_PROP_PR_SRC : DUAL_ROLE_PROP_PR_SNK;
+	if (pd_port->tcpc->dr_usb && !IS_ERR(pd_port->tcpc->dr_usb))
+		dual_role_instance_changed(pd_port->tcpc->dr_usb);
 #else /* CONFIG_DUAL_ROLE_USB_INTF */
 /*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 end*/
 
@@ -945,8 +947,11 @@ int pd_set_vconn(struct pd_port *pd_port, uint8_t role)
 
 /*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 start*/
 #ifdef CONFIG_DUAL_ROLE_USB_INTF
-	pd_port->tcpc->dual_role_vconn = en_role;
-	dual_role_instance_changed(pd_port->tcpc->dr_usb);
+	pd_port->tcpc->dual_role_vconn = en_role ?
+		DUAL_ROLE_PROP_VCONN_SUPPLY_YES :
+		DUAL_ROLE_PROP_VCONN_SUPPLY_NO;
+	if (pd_port->tcpc->dr_usb && !IS_ERR(pd_port->tcpc->dr_usb))
+		dual_role_instance_changed(pd_port->tcpc->dr_usb);
 #else /* CONFIG_DUAL_ROLE_USB_INTF */
 /*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 end*/
 
