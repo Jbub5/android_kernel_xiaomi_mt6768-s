@@ -441,6 +441,14 @@ struct tcpc_device *tcpc_device_register(struct device *parent,
 		return ERR_PTR(ret);
 	}
 
+#ifdef CONFIG_DUAL_ROLE_USB_INTF
+	ret = tcpc_dual_role_phy_init(tcpc);
+	if (ret < 0) {
+		pr_err("%s : init dual role usb fail(%d)\n", __func__, ret);
+		tcpc->dr_usb = NULL;
+	}
+#endif /* CONFIG_DUAL_ROLE_USB_INTF */
+
 	INIT_DELAYED_WORK(&tcpc->init_work, tcpc_init_work);
 	INIT_DELAYED_WORK(&tcpc->event_init_work, tcpc_event_init_work);
 
@@ -1086,4 +1094,3 @@ MODULE_LICENSE("GPL");
  * 2.0.1_MTK
  *	First released PD3.0 Driver for MTK Platform
  */
-
