@@ -795,7 +795,6 @@ struct mtk_battery {
 
 /*custom related*/
 	int battery_id;
-	bool shutdown_delay;
 
 	struct zcv_filter zcvf;
 
