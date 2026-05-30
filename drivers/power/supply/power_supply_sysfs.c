@@ -149,20 +149,6 @@ static ssize_t power_supply_show_property(struct device *dev,
 	else if (off == POWER_SUPPLY_PROP_BATTERY_VENDOR)
 		return sprintf(buf, "%s\n",
 				   power_supply_battery_vendor_text[value.intval]);
-	if ((off == POWER_SUPPLY_PROP_ROMID) || (off == POWER_SUPPLY_PROP_DS_STATUS)){
-		return scnprintf(buf, PAGE_SIZE, "%02x,%02x,%02x,%02x,%02x,%02x,%02x,%02x\n",
-			value.arrayval[0], value.arrayval[1], value.arrayval[2], value.arrayval[3],
-			value.arrayval[4], value.arrayval[5], value.arrayval[6], value.arrayval[7]);
-	}
-	else if ((off == POWER_SUPPLY_PROP_PAGE0_DATA) || (off == POWER_SUPPLY_PROP_PAGE1_DATA) || (off == POWER_SUPPLY_PROP_PAGEDATA)){
-		return scnprintf(buf, PAGE_SIZE, "%02x,%02x,%02x,%02x,%02x,%02x,%02x,%02x,%02x,%02x,%02x,%02x,%02x,%02x,%02x,%02x\n",
-			value.arrayval[0], value.arrayval[1], value.arrayval[2], value.arrayval[3],
-			value.arrayval[4], value.arrayval[5], value.arrayval[6], value.arrayval[7],
-			value.arrayval[8], value.arrayval[9], value.arrayval[10], value.arrayval[11],
-			value.arrayval[12], value.arrayval[13], value.arrayval[14], value.arrayval[15]);
-	}
-	else if (off == POWER_SUPPLY_PROP_VERIFY_MODEL_NAME)
-		return sprintf(buf, "%s\n", value.strval);
 #endif
 	else if (off >= POWER_SUPPLY_PROP_MODEL_NAME)
 		return sprintf(buf, "%s\n", value.strval);
@@ -344,22 +330,6 @@ static struct device_attribute power_supply_attrs[] = {
 	POWER_SUPPLY_ATTR(chip_ok),
 #ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
 	POWER_SUPPLY_ATTR(quick_charge_type),
-	/* battery verify properties */
-	POWER_SUPPLY_ATTR(romid),
-	POWER_SUPPLY_ATTR(ds_status),
-	POWER_SUPPLY_ATTR(pagenumber),
-	POWER_SUPPLY_ATTR(pagedata),
-	POWER_SUPPLY_ATTR(authen_result),
-	POWER_SUPPLY_ATTR(session_seed),
-	POWER_SUPPLY_ATTR(s_secret),
-	POWER_SUPPLY_ATTR(challenge),
-	POWER_SUPPLY_ATTR(auth_anon),
-	POWER_SUPPLY_ATTR(auth_bdconst),
-	POWER_SUPPLY_ATTR(page0_data),
-	POWER_SUPPLY_ATTR(page1_data),
-	POWER_SUPPLY_ATTR(verify_model_name),
-	POWER_SUPPLY_ATTR(chip_ok_ds28e16),
-	POWER_SUPPLY_ATTR(maxim_batt_cycle_count),
 #endif
 	/* Local extensions of type int64_t */
 	POWER_SUPPLY_ATTR(charge_counter_ext),
