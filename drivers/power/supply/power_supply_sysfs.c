@@ -321,7 +321,6 @@ static struct device_attribute power_supply_attrs[] = {
 	POWER_SUPPLY_ATTR(input_suspend),
 #ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
 	POWER_SUPPLY_ATTR(hiz_enable),
-	POWER_SUPPLY_ATTR(shutdown_delay),
 #endif
 	POWER_SUPPLY_ATTR(ra_detected),
 	POWER_SUPPLY_ATTR(tx_adapter),
