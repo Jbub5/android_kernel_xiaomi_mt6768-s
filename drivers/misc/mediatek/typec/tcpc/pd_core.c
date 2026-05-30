@@ -847,6 +847,14 @@ int pd_set_data_role(struct pd_port *pd_port, uint8_t dr)
 {
 	int ret = 0;
 
+	if (dr == pd_port->data_role)
+		return ret;
+
+	pd_port->data_role = dr;
+	ret = pd_update_msg_header(pd_port);
+	if (ret < 0)
+		return ret;
+
 /*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 start*/
 #ifdef CONFIG_DUAL_ROLE_USB_INTF
 	pd_port->tcpc->dual_role_mode = (dr == PD_ROLE_DFP) ?
@@ -855,17 +863,8 @@ int pd_set_data_role(struct pd_port *pd_port, uint8_t dr)
 		DUAL_ROLE_PROP_DR_HOST : DUAL_ROLE_PROP_DR_DEVICE;
 	if (pd_port->tcpc->dr_usb && !IS_ERR(pd_port->tcpc->dr_usb))
 		dual_role_instance_changed(pd_port->tcpc->dr_usb);
-#else /* CONFIG_DUAL_ROLE_USB_INTF */
+#endif /* CONFIG_DUAL_ROLE_USB_INTF */
 /*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 end*/
-
-	if (dr == pd_port->data_role)
-		return ret;
-#endif
-
-	pd_port->data_role = dr;
-	ret = pd_update_msg_header(pd_port);
-	if (ret < 0)
-		return ret;
 
 	tcpci_notify_role_swap(pd_port->tcpc, TCP_NOTIFY_DR_SWAP, dr);
 	return ret;
@@ -875,18 +874,8 @@ int pd_set_power_role(struct pd_port *pd_port, uint8_t pr)
 {
 	int ret = 0;
 
-/*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 start*/
-#ifdef CONFIG_DUAL_ROLE_USB_INTF
-	pd_port->tcpc->dual_role_pr = (pr == PD_ROLE_SOURCE) ?
-		DUAL_ROLE_PROP_PR_SRC : DUAL_ROLE_PROP_PR_SNK;
-	if (pd_port->tcpc->dr_usb && !IS_ERR(pd_port->tcpc->dr_usb))
-		dual_role_instance_changed(pd_port->tcpc->dr_usb);
-#else /* CONFIG_DUAL_ROLE_USB_INTF */
-/*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 end*/
-
 	if (pr == pd_port->power_role)
 		return ret;
-#endif
 
 	pd_port->power_role = pr;
 	ret = pd_update_msg_header(pd_port);
@@ -894,6 +883,15 @@ int pd_set_power_role(struct pd_port *pd_port, uint8_t pr)
 		return ret;
 
 	pd_notify_pe_pr_changed(pd_port);
+
+/*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 start*/
+#ifdef CONFIG_DUAL_ROLE_USB_INTF
+	pd_port->tcpc->dual_role_pr = (pr == PD_ROLE_SOURCE) ?
+		DUAL_ROLE_PROP_PR_SRC : DUAL_ROLE_PROP_PR_SNK;
+	if (pd_port->tcpc->dr_usb && !IS_ERR(pd_port->tcpc->dr_usb))
+		dual_role_instance_changed(pd_port->tcpc->dr_usb);
+#endif /* CONFIG_DUAL_ROLE_USB_INTF */
+/*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 end*/
 
 	tcpci_notify_role_swap(pd_port->tcpc, TCP_NOTIFY_PR_SWAP, pr);
 	return ret;
@@ -945,6 +943,14 @@ int pd_set_vconn(struct pd_port *pd_port, uint8_t role)
 	}
 #endif	/* CONFIG_USB_PD_VCONN_SAFE5V_ONLY */
 
+	if (role == pd_port->vconn_role)
+		goto out;
+
+	pd_port->vconn_role = role;
+	ret = tcpci_set_vconn(tcpc, enable);
+	if (ret < 0)
+		return ret;
+
 /*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 start*/
 #ifdef CONFIG_DUAL_ROLE_USB_INTF
 	pd_port->tcpc->dual_role_vconn = en_role ?
@@ -952,17 +958,8 @@ int pd_set_vconn(struct pd_port *pd_port, uint8_t role)
 		DUAL_ROLE_PROP_VCONN_SUPPLY_NO;
 	if (pd_port->tcpc->dr_usb && !IS_ERR(pd_port->tcpc->dr_usb))
 		dual_role_instance_changed(pd_port->tcpc->dr_usb);
-#else /* CONFIG_DUAL_ROLE_USB_INTF */
+#endif /* CONFIG_DUAL_ROLE_USB_INTF */
 /*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 end*/
-
-	if (role == pd_port->vconn_role)
-		goto out;
-#endif
-
-	pd_port->vconn_role = role;
-	ret = tcpci_set_vconn(tcpc, enable);
-	if (ret < 0)
-		return ret;
 
 	if (en_role != en_role_old)
 		tcpci_notify_role_swap(tcpc, TCP_NOTIFY_VCONN_SWAP, en_role);

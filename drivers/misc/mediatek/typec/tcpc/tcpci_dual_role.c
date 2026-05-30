@@ -101,7 +101,7 @@ static int tcpc_dual_role_set_prop_pr(
 		role = PD_ROLE_SINK;
 		break;
 	default:
-		return 0;
+		return -EINVAL;
 	}
 /*K19A HQ-135321 K19A for VtsHalUsbV1_0TargetTest fail by langjunjun at 2021/6/6 end*/
 	if (val == tcpc->dual_role_pr) {
@@ -137,7 +137,7 @@ static int tcpc_dual_role_set_prop_dr(
 		role = PD_ROLE_UFP;
 		break;
 	default:
-		return 0;
+		return -EINVAL;
 	}
 
 	if (val == tcpc->dual_role_dr) {
@@ -167,7 +167,7 @@ static int tcpc_dual_role_set_prop_vconn(
 		role = PD_ROLE_VCONN_ON;
 		break;
 	default:
-		return 0;
+		return -EINVAL;
 	}
 
 	if (val == tcpc->dual_role_vconn) {
@@ -190,6 +190,9 @@ static int tcpc_dual_role_set_prop_mode(
 {
 	int ret;
 
+	if (val >= DUAL_ROLE_PROP_MODE_NONE)
+		return -EINVAL;
+
 	if (val == tcpc->dual_role_mode) {
 		pr_info("%s wrong role (%d->%d)\n",
 			__func__, tcpc->dual_role_mode, val);
@@ -209,29 +212,31 @@ static int tcpc_dual_role_set_prop(struct dual_role_phy_instance *dual_role,
 			enum dual_role_property prop, const unsigned int *val)
 {
 	struct tcpc_device *tcpc = dev_get_drvdata(dual_role->dev.parent);
+	int ret = 0;
 
 	switch (prop) {
 #ifdef CONFIG_USB_POWER_DELIVERY
 	case DUAL_ROLE_PROP_PR:
-		tcpc_dual_role_set_prop_pr(tcpc, *val);
+		ret = tcpc_dual_role_set_prop_pr(tcpc, *val);
 		break;
 	case DUAL_ROLE_PROP_DR:
-		tcpc_dual_role_set_prop_dr(tcpc, *val);
+		ret = tcpc_dual_role_set_prop_dr(tcpc, *val);
 		break;
 	case DUAL_ROLE_PROP_VCONN_SUPPLY:
-		tcpc_dual_role_set_prop_vconn(tcpc, *val);
+		ret = tcpc_dual_role_set_prop_vconn(tcpc, *val);
 		break;
 #else /* TypeC Only */
 	case DUAL_ROLE_PROP_MODE:
-		tcpc_dual_role_set_prop_mode(tcpc, *val);
+		ret = tcpc_dual_role_set_prop_mode(tcpc, *val);
 		break;
 #endif /* CONFIG_USB_POWER_DELIVERY */
 
 	default:
+		ret = -EINVAL;
 		break;
 	}
 
-	return 0;
+	return ret;
 }
 
 static void tcpc_get_dual_desc(struct tcpc_device *tcpc)
@@ -249,28 +254,33 @@ static void tcpc_get_dual_desc(struct tcpc_device *tcpc)
 		else
 			tcpc->dual_role_supported_modes = val;
 	}
+
+	of_node_put(np);
 }
 
 int tcpc_dual_role_phy_init(
 			struct tcpc_device *tcpc)
 {
 	struct dual_role_phy_desc *dual_desc;
+	struct dual_role_phy_instance *dual_role;
 	int len;
 	char *str_name;
-
-	tcpc->dr_usb = devm_kzalloc(&tcpc->dev,
-				sizeof(*tcpc->dr_usb), GFP_KERNEL);
 
 	dual_desc = devm_kzalloc(&tcpc->dev, sizeof(*dual_desc), GFP_KERNEL);
 	if (!dual_desc)
 		return -ENOMEM;
 
+	tcpc->dual_role_supported_modes = DUAL_ROLE_SUPPORTED_MODES_DFP_AND_UFP;
 	tcpc_get_dual_desc(tcpc);
 
 	len = strlen(tcpc->desc.name);
-	str_name = devm_kzalloc(&tcpc->dev, len+11, GFP_KERNEL);
-	snprintf(str_name, PAGE_SIZE, "dual-role-%s", tcpc->desc.name);
+	str_name = devm_kzalloc(&tcpc->dev, len + 11, GFP_KERNEL);
+	if (!str_name)
+		return -ENOMEM;
+
+	snprintf(str_name, len + 11, "dual-role-%s", tcpc->desc.name);
 	dual_desc->name = str_name;
+	dual_desc->supported_modes = tcpc->dual_role_supported_modes;
 
 	dual_desc->properties = tcpc_dual_role_props;
 	dual_desc->num_properties = ARRAY_SIZE(tcpc_dual_role_props);
@@ -278,11 +288,12 @@ int tcpc_dual_role_phy_init(
 	dual_desc->set_property = tcpc_dual_role_set_prop;
 	dual_desc->property_is_writeable = tcpc_dual_role_prop_is_writeable;
 
-	tcpc->dr_usb = devm_dual_role_instance_register(&tcpc->dev, dual_desc);
-	if (IS_ERR(tcpc->dr_usb)) {
+	dual_role = devm_dual_role_instance_register(&tcpc->dev, dual_desc);
+	if (IS_ERR(dual_role)) {
 		dev_err(&tcpc->dev, "tcpc fail to register dual role usb\n");
-		return -EINVAL;
+		return PTR_ERR(dual_role);
 	}
+	tcpc->dr_usb = dual_role;
 	/* init dual role phy instance property */
 	tcpc->dual_role_pr = DUAL_ROLE_PROP_PR_NONE;
 	tcpc->dual_role_dr = DUAL_ROLE_PROP_DR_NONE;
@@ -292,4 +303,3 @@ int tcpc_dual_role_phy_init(
 }
 #endif /* CONFIG_DUAL_ROLE_USB_INTF */
 /*K19A HQ-135321 K19A for VtsHalUsbV1_0TargetTest fail by langjunjun at 2021/6/6 end*/
-
