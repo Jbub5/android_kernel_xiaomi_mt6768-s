@@ -2731,7 +2731,6 @@ int tcpc_typec_change_role(
 }
 
 #ifdef CONFIG_TYPEC_CAP_POWER_OFF_CHARGE
-#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON /* Its enabled on default */
 static int typec_init_power_off_charge(struct tcpc_device *tcpc)
 {
 	bool cc_open;
@@ -2773,7 +2772,6 @@ static int typec_init_power_off_charge(struct tcpc_device *tcpc)
 
 	return 1;
 }
-#endif
 #endif	/* CONFIG_TYPEC_CAP_POWER_OFF_CHARGE */
 
 int tcpc_typec_init(struct tcpc_device *tcpc, uint8_t typec_role)
@@ -2806,7 +2804,6 @@ int tcpc_typec_init(struct tcpc_device *tcpc, uint8_t typec_role)
 	tcpc->typec_during_custom_hv = false;
 #endif	/* CONFIG_TYPEC_CAP_CUSTOM_HV */
 
-#if CONFIG_TARGET_PRODUCT_SELENECOMMON
 #ifdef CONFIG_TYPEC_CHECK_LEGACY_CABLE
 	tcpc->typec_legacy_cable = false;
 	typec_legacy_reset_retry_wk(tcpc);
@@ -2824,7 +2821,6 @@ int tcpc_typec_init(struct tcpc_device *tcpc, uint8_t typec_role)
 #endif	/* CONFIG_TYPEC_POWER_CTRL_INIT */
 
 	typec_unattached_entry(tcpc);
-#endif
 	return ret;
 }
 
