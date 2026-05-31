@@ -93,6 +93,24 @@ static long alsps_factory_unlocked_ioctl(struct file *file, unsigned int cmd,
 			return -EINVAL;
 		}
 		return 0;
+#ifdef TARGET_PRODUCT_SELENECOMMON
+        case ALSPS_GET_ALS_DATA:
+                if (alsps_factory.fops != NULL &&
+                    alsps_factory.fops->als_get_data != NULL) {
+                        err = alsps_factory.fops->als_get_data(&data);
+                        if (err < 0) {
+                                pr_err(
+                                        "ALSPS_GET_ALS_DATA read data fail!\n");
+                                return -EINVAL;
+                        }
+                        if (copy_to_user(ptr, &data, sizeof(data)))
+                                return -EFAULT;
+                } else {
+                        pr_err("ALSPS_GET_ALS_DATA NULL\n");
+                        return -EINVAL;
+                }
+                return 0;
+#endif
 	case ALSPS_SET_ALS_MODE:
 		if (copy_from_user(&enable, ptr, sizeof(enable)))
 			return -EFAULT;
@@ -318,11 +336,19 @@ static long alsps_factory_unlocked_ioctl(struct file *file, unsigned int cmd,
 		}
 		return 0;
 	case ALSPS_PS_ENABLE_CALI:
+#ifdef TARGET_PRODUCT_SELENECOMMON
+		if (copy_from_user(&data, ptr, sizeof(data)))
+			return -EFAULT;
+#endif
 		if (alsps_factory.fops != NULL &&
 			alsps_factory.fops->ps_enable_calibration != NULL) {
-			err = alsps_factory.fops->ps_enable_calibration();
+			err = alsps_factory.fops->ps_enable_calibration(data);
 			if (err < 0) {
 				pr_err("ALSPS_PS_ENABLE_CALI FAIL!\n");
+                if ((err == -EACCES) || (err == -EAGAIN) || (err == -EBUSY)){
+                    pr_err("ALSPS_PS_ENABLE_CALI FAIL! Special return value, directly returned to the upper layer\n");
+                    return err;
+                }
 				return -EINVAL;
 			}
 		} else {
