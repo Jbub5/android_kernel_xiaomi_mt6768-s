@@ -386,8 +386,8 @@
 	cam0_enable_sensor = "s5kgm1sp_mipi_raw s5kgm1sp_sunny_mipi_raw";
 	cam1_enable_sensor = "ov13b10_mipi_raw ov13b10_sunny_mipi_raw";
 	cam2_enable_sensor = "s5k4h7yx_mipi_raw s5k4h7yx_sunny_mipi_raw";
-	cam3_enable_sensor = "gc02m1_mipi_raw gc02m1_sunny_mipi_raw ov2180_mipi_raw ov2180_sunny_mipi_raw";
-	cam4_enable_sensor = "s5k5e9_mipi_raw s5k5e9_sunny_mipi_raw gc02m1_macro_mipi_raw gc02m1_macro_sunny_mipi_raw ov2680_sunny_mipi_raw";
+	cam3_enable_sensor = "ov2180_mipi_raw ov2180_sunny_mipi_raw";
+	cam4_enable_sensor = "gc02m1_macro_mipi_raw gc02m1_macro_sunny_mipi_raw ov2680_sunny_mipi_raw";
 
 	status = "okay";
 

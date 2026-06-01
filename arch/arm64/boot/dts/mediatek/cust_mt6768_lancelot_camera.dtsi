@@ -404,8 +404,8 @@
 	status = "okay";
 
 	cam0_enable_sensor = "ov13b10_ofilm_mipi_raw ov13b10_qtech_mipi_raw s5k3l6_qtech_mipi_raw";
-	cam1_enable_sensor = "s5k4h7yx_ofilm_front_mipi_raw s5k4h7yx_qtech_front_mipi_raw ov8856_qtech_front_mipi_raw";
-	cam2_enable_sensor = "s5k4h7yx_ofilm_ultra_mipi_raw s5k4h7yx_qtech_ultra_mipi_raw ov8856_qtech_ultra_mipi_raw";
+	cam1_enable_sensor = "s5k4h7yx_ofilm_front_mipi_raw ov8856_qtech_front_mipi_raw";
+	cam2_enable_sensor = "s5k4h7yx_ofilm_ultra_mipi_raw ov8856_qtech_ultra_mipi_raw";
 	cam3_enable_sensor = "ov2180_ofilm_mipi_raw ov2180_qtech_mipi_raw";
 	cam4_enable_sensor = "gc5035_ofilm_mipi_raw gc5035_qtech_mipi_raw";
 };
