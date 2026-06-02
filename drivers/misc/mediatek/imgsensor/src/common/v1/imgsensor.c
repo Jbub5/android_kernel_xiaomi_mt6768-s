@@ -128,6 +128,25 @@ void IMGSENSOR_PROFILE(struct timeval *ptv, char *tag) {}
  ************************************************************************/
 #define IMGSENSOR_FUNCTION_ENTRY()    /*pr_info("[%s]:E\n",__FUNCTION__)*/
 #define IMGSENSOR_FUNCTION_EXIT()     /*pr_info("[%s]:X\n",__FUNCTION__)*/
+
+// HACK: START
+static inline int hack(int idx)
+{
+#if defined(CONFIG_TARGET_PRODUCT_LANCELOTCOMMON)
+	if (idx == IMGSENSOR_SENSOR_IDX_MAIN2) {
+		idx = IMGSENSOR_SENSOR_IDX_SUB;
+	}
+#elif defined(CONFIG_TARGET_PRODUCT_MERLINCOMMON)
+	if (idx == IMGSENSOR_SENSOR_IDX_MAIN3) {
+		idx = IMGSENSOR_SENSOR_IDX_SUB;
+	} else if (idx == IMGSENSOR_SENSOR_IDX_SUB2) {
+		idx = IMGSENSOR_SENSOR_IDX_MAIN;
+	}
+#endif
+	return idx;
+}
+// HACK: END
+
 struct IMGSENSOR_SENSOR *
 imgsensor_sensor_get_inst(enum IMGSENSOR_SENSOR_IDX idx)
 {
@@ -651,7 +670,7 @@ static inline int adopt_CAMERA_HW_GetInfo(void *pBuf)
 		return -EFAULT;
 	}
 
-	psensor = imgsensor_sensor_get_inst(pSensorGetInfo->SensorId);
+	psensor = imgsensor_sensor_get_inst(hack(pSensorGetInfo->SensorId)); // HACK
 	if (psensor == NULL) {
 		pr_debug("[CAMERA_HW] NULL psensor.\n");
 		return -EFAULT;
@@ -841,7 +860,7 @@ static inline int adopt_CAMERA_HW_GetInfo2(void *pBuf)
 		return -EFAULT;
 	}
 
-	psensor = imgsensor_sensor_get_inst(pSensorGetInfo->SensorId);
+	psensor = imgsensor_sensor_get_inst(hack(pSensorGetInfo->SensorId)); // HACK
 	if (psensor == NULL) {
 		pr_info("[%s] NULL psensor.\n", __func__);
 		return -EFAULT;
@@ -1263,7 +1282,7 @@ static inline int adopt_CAMERA_HW_FeatureControl(void *pBuf)
 		return -EFAULT;
 	}
 
-	psensor = imgsensor_sensor_get_inst(pFeatureCtrl->InvokeCamera);
+	psensor = imgsensor_sensor_get_inst(hack(pFeatureCtrl->InvokeCamera)); // HACK
 	if (psensor == NULL) {
 		pr_err("[%s] NULL psensor.\n", __func__);
 		return -EFAULT;
@@ -1312,7 +1331,7 @@ static inline int adopt_CAMERA_HW_FeatureControl(void *pBuf)
 	{
 		MINT32 drv_idx;
 
-		psensor->inst.sensor_idx = pFeatureCtrl->InvokeCamera;
+		psensor->inst.sensor_idx = hack(pFeatureCtrl->InvokeCamera); // HACK (remove it for fix lancelot's ultrawide)
 		drv_idx = imgsensor_set_driver(psensor);
 		memcpy(pFeaturePara, &drv_idx, FeatureParaLen);
 
@@ -2059,7 +2078,7 @@ static inline int adopt_CAMERA_HW_FeatureControl(void *pBuf)
 		if (gimgsensor.mclk_set_drive_current != NULL) {
 			gimgsensor.mclk_set_drive_current(
 			gimgsensor.hw.pdev[IMGSENSOR_HW_ID_MCLK]->pinstance,
-				pFeatureCtrl->InvokeCamera,
+				hack(pFeatureCtrl->InvokeCamera), // HACK
 				__current);
 		} else {
 			pr_debug(
