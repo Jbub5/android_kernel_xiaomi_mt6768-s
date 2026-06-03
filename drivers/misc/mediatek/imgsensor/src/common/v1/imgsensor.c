@@ -166,7 +166,7 @@ static void imgsensor_mutex_unlock(struct IMGSENSOR_SENSOR_INST *psensor_inst)
 	else
 		mutex_unlock(&gimgsensor_mutex);
 #else
-	mutex_lock(&psensor_inst->sensor_mutex);
+	mutex_unlock(&psensor_inst->sensor_mutex);
 #endif
 }
 
