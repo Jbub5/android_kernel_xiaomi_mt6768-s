@@ -1967,5 +1967,5 @@
 
 #include "mediatek/merlin/cust.dtsi"
 
-#include "mediatek/cust_mt6768_camera.dtsi"
+#include "mediatek/cust_mt6768_merlin_camera.dtsi"
 /*End of this file, DO NOT ADD ANYTHING HERE*/
