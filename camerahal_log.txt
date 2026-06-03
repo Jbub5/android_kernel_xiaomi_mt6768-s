@@ -1,0 +1,1008 @@
+[  xxx.xxxxxx] (x)[1:init]init: starting service 'camerahalserver'...
+[  xxx.xxxxxx] (x)[1:init]init: Control message: Processed ctl.start for 'camerahalserver' from pid: 4983 (start camerahalserver)
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]binder: xxxx:xxxx ioctl 40046210 7fd0e099c4 returned -22
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]binder: xxxx:xxxx ioctl 40046210 7fd0e099a4 returned -22
+[  xxx.xxxxxx] (x)[417:logd.auditd]type=1400 audit(1780480410.696:489): avc: denied { read } for comm="camerahalserver" name="u:object_r:default_prop:s0" dev="tmpfs" ino=1099 scontext=u:r:mtk_hal_camera:s0 tcontext=u:object_r:default_prop:s0 tclass=file permissive=0
+[  xxx.xxxxxx] (x)[417:logd.auditd]type=1400 audit(1780480410.808:490): avc: denied { read } for comm="camerahalserver" name="stat" dev="proc" ino=4026532133 scontext=u:r:mtk_hal_camera:s0 tcontext=u:object_r:proc_stat:s0 tclass=file permissive=0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][ISP][ISP_open] - E. UserCount: 0.
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][ISP][ISP_open] Curr UserCount(1), (process, pid, tgid)=(camerahalserver, xxxx, xxxx), first user
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][ISP][ISP_open] - X. Ret: 0. UserCount: 1. G_u4EnableClockCount:1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_clk_enable_all_cg
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_open 1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_open 2
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]OV13B10_OFILM_camera_sensor[feature_control] feature_id = 3123, len=8
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 0, power 1 curr_sensor_name ov13b10_ofilm_mipi_raw, enable list ov13b10_ofilm_mipi_raw ov13b10_qtech_mipi_raw s5k3l6_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]OV13B10_OFILM_camera_sensor[feature_control] feature_id = 3041, len=4
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ov13b10_ofilm i2c write id: 0x20, sensor id: 0x560d44 vendor_id: 0x7
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver] Sensor found ID = 0x560d44
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 0, power 0 curr_sensor_name ov13b10_ofilm_mipi_raw, enable list ov13b10_ofilm_mipi_raw ov13b10_qtech_mipi_raw s5k3l6_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 26743 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][imgsensor_set_driver]:[0][0][ov13b10_ofilm_mipi_raw]
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]hq_imgsensor_sensor_hw_register ov13b10_ofilm_mipi_raw is ov13b10_ofilm_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][hq_regiser_hw_info]: device has already registed hw->id:0x34 hw_device_name:ofilm_ov13b10_i
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]hq_imgsensor_sensor_hw_register j = 0  search_index = 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]hq_imgsensor_sensor_hw_register ov13b10_ofilm_mipi_raw is ov13b10_ofilm_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]OV13B10_OFILM_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]OV13B10_OFILM_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]OV13B10_OFILM_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]OV13B10_OFILM_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]OV13B10_OFILM_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]OV13B10_OFILM_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]OV13B10_OFILM_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]OV13B10_OFILM_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]OV13B10_OFILM_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]OV13B10_OFILM_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]OV13B10_OFILM_camera_sensor[feature_control] feature_id = 3081, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3123, len=8
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 1, power 1 curr_sensor_name ov13b10_ofilm_mipi_raw, enable list s5k4h7yx_ofilm_front_mipi_raw s5k4h7yx_qtech_front_mipi_raw ov8856_qtech_front_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 1, power 0 curr_sensor_name ov13b10_ofilm_mipi_raw, enable list s5k4h7yx_ofilm_front_mipi_raw s5k4h7yx_qtech_front_mipi_raw ov8856_qtech_front_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 17 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 1, power 1 curr_sensor_name ov13b10_qtech_mipi_raw, enable list s5k4h7yx_ofilm_front_mipi_raw s5k4h7yx_qtech_front_mipi_raw ov8856_qtech_front_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 1, power 0 curr_sensor_name ov13b10_qtech_mipi_raw, enable list s5k4h7yx_ofilm_front_mipi_raw s5k4h7yx_qtech_front_mipi_raw ov8856_qtech_front_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 22 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 1, power 1 curr_sensor_name s5k3l6_qtech_mipi_raw, enable list s5k4h7yx_ofilm_front_mipi_raw s5k4h7yx_qtech_front_mipi_raw ov8856_qtech_front_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 1, power 0 curr_sensor_name s5k3l6_qtech_mipi_raw, enable list s5k4h7yx_ofilm_front_mipi_raw s5k4h7yx_qtech_front_mipi_raw ov8856_qtech_front_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 12 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 1, power 1 curr_sensor_name s5k4h7yx_ofilm_front_mipi_raw, enable list s5k4h7yx_ofilm_front_mipi_raw s5k4h7yx_qtech_front_mipi_raw ov8856_qtech_front_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3041, len=4
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_imgsensor_id] cxc_ofilm_front vendor_id 0x7
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_imgsensor_id] cxc_ofilm_front sensor id: 0x487d, imgsensor_info.sensor_id 0x487d imgsensor.i2c_write_id: 0x20
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver] Sensor found ID = 0x487d
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 1, power 0 curr_sensor_name s5k4h7yx_ofilm_front_mipi_raw, enable list s5k4h7yx_ofilm_front_mipi_raw s5k4h7yx_qtech_front_mipi_raw ov8856_qtech_front_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 23762 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][imgsensor_set_driver]:[1][3][s5k4h7yx_ofilm_front_mipi_raw]
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]hq_imgsensor_sensor_hw_register s5k4h7yx_ofilm_front_mipi_raw is s5k4h7yx_ofilm_front_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][hq_regiser_hw_info]: device has already registed hw->id:0x33 hw_device_name:ofilm_s5k4h7yx_i
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]hq_imgsensor_sensor_hw_register j = 1  search_index = 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]hq_imgsensor_sensor_hw_register s5k4h7yx_ofilm_front_mipi_raw is s5k4h7yx_ofilm_front_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_info] scenario_id = 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_info] scenario_id = 1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_info] scenario_id = 2
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_info] scenario_id = 3
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_info] scenario_id = 4
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_info] scenario_id = 5
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_info] scenario_id = 6
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_info] scenario_id = 7
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_info] scenario_id = 8
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_info] scenario_id = 9
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_resolution] E
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_default_framerate_by_scenario] scenario_id = 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_default_framerate_by_scenario] scenario_id = 1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_default_framerate_by_scenario] scenario_id = 2
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_default_framerate_by_scenario] scenario_id = 3
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_default_framerate_by_scenario] scenario_id = 4
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_default_framerate_by_scenario] scenario_id = 5
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_default_framerate_by_scenario] scenario_id = 6
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_default_framerate_by_scenario] scenario_id = 7
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_default_framerate_by_scenario] scenario_id = 8
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_default_framerate_by_scenario] scenario_id = 9
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3081, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3123, len=8
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 2, power 1 curr_sensor_name ov13b10_ofilm_mipi_raw, enable list s5k4h7yx_ofilm_ultra_mipi_raw s5k4h7yx_qtech_ultra_mipi_raw ov8856_qtech_ultra_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 2, power 0 curr_sensor_name ov13b10_ofilm_mipi_raw, enable list s5k4h7yx_ofilm_ultra_mipi_raw s5k4h7yx_qtech_ultra_mipi_raw ov8856_qtech_ultra_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 13 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 2, power 1 curr_sensor_name ov13b10_qtech_mipi_raw, enable list s5k4h7yx_ofilm_ultra_mipi_raw s5k4h7yx_qtech_ultra_mipi_raw ov8856_qtech_ultra_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 2, power 0 curr_sensor_name ov13b10_qtech_mipi_raw, enable list s5k4h7yx_ofilm_ultra_mipi_raw s5k4h7yx_qtech_ultra_mipi_raw ov8856_qtech_ultra_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 9 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 2, power 1 curr_sensor_name s5k3l6_qtech_mipi_raw, enable list s5k4h7yx_ofilm_ultra_mipi_raw s5k4h7yx_qtech_ultra_mipi_raw ov8856_qtech_ultra_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 2, power 0 curr_sensor_name s5k3l6_qtech_mipi_raw, enable list s5k4h7yx_ofilm_ultra_mipi_raw s5k4h7yx_qtech_ultra_mipi_raw ov8856_qtech_ultra_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 8 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 2, power 1 curr_sensor_name s5k4h7yx_ofilm_front_mipi_raw, enable list s5k4h7yx_ofilm_ultra_mipi_raw s5k4h7yx_qtech_ultra_mipi_raw ov8856_qtech_ultra_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 2, power 0 curr_sensor_name s5k4h7yx_ofilm_front_mipi_raw, enable list s5k4h7yx_ofilm_ultra_mipi_raw s5k4h7yx_qtech_ultra_mipi_raw ov8856_qtech_ultra_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 8 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 2, power 1 curr_sensor_name ov8856_qtech_front_mipi_raw, enable list s5k4h7yx_ofilm_ultra_mipi_raw s5k4h7yx_qtech_ultra_mipi_raw ov8856_qtech_ultra_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 2, power 0 curr_sensor_name ov8856_qtech_front_mipi_raw, enable list s5k4h7yx_ofilm_ultra_mipi_raw s5k4h7yx_qtech_ultra_mipi_raw ov8856_qtech_ultra_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 8 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 2, power 1 curr_sensor_name s5k4h7yx_ofilm_ultra_mipi_raw, enable list s5k4h7yx_ofilm_ultra_mipi_raw s5k4h7yx_qtech_ultra_mipi_raw ov8856_qtech_ultra_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3041, len=4
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_imgsensor_id] cxc_ofilm_ultra vendor_id 0x7
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[return_sensor_id] s5k_ultra_ofilm get_byte = 18558
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_imgsensor_id] cxc_ofilm_ultra sensor id: 0x487e, imgsensor_info.sensor_id 0x487e imgsensor.i2c_write_id: 0x5a
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver] Sensor found ID = 0x487e
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 2, power 0 curr_sensor_name s5k4h7yx_ofilm_ultra_mipi_raw, enable list s5k4h7yx_ofilm_ultra_mipi_raw s5k4h7yx_qtech_ultra_mipi_raw ov8856_qtech_ultra_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 24138 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][imgsensor_set_driver]:[2][5][s5k4h7yx_ofilm_ultra_mipi_raw]
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]hq_imgsensor_sensor_hw_register s5k4h7yx_ofilm_ultra_mipi_raw is s5k4h7yx_ofilm_ultra_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][hq_regiser_hw_info]: device has already registed hw->id:0x30 hw_device_name:ofilm_s5k4h7yx_i
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]hq_imgsensor_sensor_hw_register j = 2  search_index = 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]hq_imgsensor_sensor_hw_register s5k4h7yx_ofilm_ultra_mipi_raw is s5k4h7yx_ofilm_ultra_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_info] scenario_id = 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_info] scenario_id = 1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_info] scenario_id = 2
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_info] scenario_id = 3
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_info] scenario_id = 4
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_info] scenario_id = 5
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_info] scenario_id = 6
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_info] scenario_id = 7
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_info] scenario_id = 8
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_info] scenario_id = 9
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_resolution] E
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_default_framerate_by_scenario] scenario_id = 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_default_framerate_by_scenario] scenario_id = 1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_default_framerate_by_scenario] scenario_id = 2
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_default_framerate_by_scenario] scenario_id = 3
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_default_framerate_by_scenario] scenario_id = 4
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_default_framerate_by_scenario] scenario_id = 5
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_default_framerate_by_scenario] scenario_id = 6
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_default_framerate_by_scenario] scenario_id = 7
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_default_framerate_by_scenario] scenario_id = 8
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3059, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[get_default_framerate_by_scenario] scenario_id = 9
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3081, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 3, power 1 curr_sensor_name ov13b10_ofilm_mipi_raw, enable list ov2180_ofilm_mipi_raw ov2180_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 3, power 0 curr_sensor_name ov13b10_ofilm_mipi_raw, enable list ov2180_ofilm_mipi_raw ov2180_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 23 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 3, power 1 curr_sensor_name ov13b10_qtech_mipi_raw, enable list ov2180_ofilm_mipi_raw ov2180_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 3, power 0 curr_sensor_name ov13b10_qtech_mipi_raw, enable list ov2180_ofilm_mipi_raw ov2180_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 12 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 3, power 1 curr_sensor_name s5k3l6_qtech_mipi_raw, enable list ov2180_ofilm_mipi_raw ov2180_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 3, power 0 curr_sensor_name s5k3l6_qtech_mipi_raw, enable list ov2180_ofilm_mipi_raw ov2180_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 13 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 3, power 1 curr_sensor_name s5k4h7yx_ofilm_front_mipi_raw, enable list ov2180_ofilm_mipi_raw ov2180_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 3, power 0 curr_sensor_name s5k4h7yx_ofilm_front_mipi_raw, enable list ov2180_ofilm_mipi_raw ov2180_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 12 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 3, power 1 curr_sensor_name ov8856_qtech_front_mipi_raw, enable list ov2180_ofilm_mipi_raw ov2180_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 3, power 0 curr_sensor_name ov8856_qtech_front_mipi_raw, enable list ov2180_ofilm_mipi_raw ov2180_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 11 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 3, power 1 curr_sensor_name s5k4h7yx_ofilm_ultra_mipi_raw, enable list ov2180_ofilm_mipi_raw ov2180_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 3, power 0 curr_sensor_name s5k4h7yx_ofilm_ultra_mipi_raw, enable list ov2180_ofilm_mipi_raw ov2180_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 11 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 3, power 1 curr_sensor_name ov8856_qtech_ultra_mipi_raw, enable list ov2180_ofilm_mipi_raw ov2180_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 3, power 0 curr_sensor_name ov8856_qtech_ultra_mipi_raw, enable list ov2180_ofilm_mipi_raw ov2180_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 11 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 3, power 1 curr_sensor_name ov2180_ofilm_mipi_raw, enable list ov2180_ofilm_mipi_raw ov2180_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver] ov2180_ofilm_mipi_raw_Sensor [feature_control] feature_id = 3041
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]OV2180_OFILM_camera_sensor[get_cam_pin_status] GPIO79 get gpio_get_value ret1= 1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: addr:0x36,transfer timeout
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: timeout:start=0x3,ch_err=0x0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c_dump_info: +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C structure:\x0a[I2C]Clk=24960000,Id=4,Op=0x3,Irq_stat=0x0,Total_len=0x2\x0a[I2C]Trans_len=0x2,Trans_num=0x1,Trans_auxlen=0x1,\x0a[I2C]speed=400000,Trans_stop=0,cg_cnt=1,hs_only=0,\x0a[I2C]ch_offset=0x100,ch_offset_default=0x100
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]base addr:0x00000000fe8fccd9
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C register:\x0a[I2C]SLAVE_ADDR=0x6c,INTR_MASK=0x129,INTR_STAT=0x80,\x0a[I2C]CONTROL=0xba,TRANSFER_LEN=0x2,TRANSAC_LEN=0x2,\x0a[I2C]DELAY_LEN=0xa,TIMING=0x405,LTIMING=0x23,START=0x3\x0a[I2C]FIFO_STAT=0x220,IO_CONFIG=0x3,HS=0x0\x0a[I2C]DCM_EN=0x0,DEBUGSTAT=0x24e,EXT_CONF=0x1801\x0a[I2C]TRANSFER_LEN_AUX=0x1,OFFSET_DMA_FSM_DEBUG=0x840a\x0a[I2C]OFFSET_MCU_INTR=0x1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]before enable DMA register(0xffffff8009db5400):\x0a[I2C]INT_FLAG=0x0,INT_EN=0x0,EN=0x0,RST=0x0,\x0a[I2C]STOP=0x0,FLUSH=0x0,CON=0x8,\x0a[I2C]TX_MEM_ADDR=0x234bc000, RX_MEM_ADDR=0x234bc000\x0a[I2C]TX_LEN=0x2,RX_LEN=0x20,INT_BUF_SIZE=0x0,\x0a[I2C]DEBUGSTA=0x0,TX_MEM_ADDR2=0x1, RX_MEM_ADDR2=0x1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]DMA register(0x0000000071029a1b):\x0a[I2C]INT_FLAG=0x3,INT_EN=0x0,EN=0x0,RST=0x0,\x0a[I2C]STOP=0x0,FLUSH=0x0,CON=0x8,\x0a[I2C]TX_MEM_ADDR=0x234bc002, RX_MEM_ADDR=0x234bc020,\x0a[I2C]TX_LEN=0x2,RX_LEN=x20,INT_BUF_SIZE=0x0,\x0a[I2C]DEBUGSTA=0x2,TX_MEM_ADDR2=0x1, RX_MEM_ADDR2=0x1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c_dump_info: -----------------------
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: last transfer info:
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [00] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=0,CONTROL=ba,FIFO_STAT=220,DEBUGSTAT=24e, tmo=0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [01] [  xxx.xxxxxx] SLAVE_ADDR=20,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [02] [  xxx.xxxxxx] SLAVE_ADDR=20,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [03] [  xxx.xxxxxx] SLAVE_ADDR=20,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [04] [  xxx.xxxxxx] SLAVE_ADDR=a2,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [05] [   xx.xxxxxx] SLAVE_ADDR=a2,INTR_STAT=1,CONTROL=be,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [06] [   xx.xxxxxx] SLAVE_ADDR=a2,INTR_STAT=1,CONTROL=be,FIFO_STAT=1,DEBUGSTAT=0, tmo=499
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [07] [   xx.xxxxxx] SLAVE_ADDR=a2,INTR_STAT=1,CONTROL=be,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [08] [   xx.xxxxxx] SLAVE_ADDR=a2,INTR_STAT=1,CONTROL=be,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [09] [   xx.xxxxxx] SLAVE_ADDR=a2,INTR_STAT=1,CONTROL=be,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C CCU register:\x0a[I2C]SLAVE_ADDR=0xff,INTR_MASK=0x1ff,\x0a[I2C]INTR_STAT=0x0,CONTROL=0x0,\x0a[I2C]TRANSFER_LEN=0x0, TRANSAC_LEN=0x0,DELAY_LEN=0x0\x0a[I2C]TIMING=0x0,LTIMING=0x0,START=0x0,FIFO_STAT=0x220,\x0a[I2C]IO_CONFIG=0x93,HS=0x0,DCM_EN=0x0,DEBUGSTAT=0x4e,\x0a[I2C]EXT_CONF=0x0,TRANSFER_LEN_AUX=0x0\x0a[I2C]OFFSET_DMA_FSM_DEBUG=0x840a,OFFSET_MCU_INTR=0x3
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: i2c_gpio_dump_info +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C gpio structure:\x0a[I2C]EH_CFG=0xfff,PU_CFG=0x41e00180,RSEL_CFG=0xff
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][mt gic dump] irq = 141\x0a[mt gic dump] enable = 1\x0a[mt gic dump] group = 1 (0x1:irq,0x0:fiq)\x0a[mt gic dump] priority = d0\x0a[mt gic dump] sensitivity = 0 (edge:0x1, level:0x0)\x0a[mt gic dump] pending = 0\x0a[mt gic dump] active status = 0\x0a[mt gic dump] polarity = 1 (0x0: high, 0x1:low)\x0a[mt gic dump] tartget cpu mask = 0xffff
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]cg_base           (null), i2c id = 4
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: SLAVE_ADDR=0x6c (shadow RG)
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: bus channel transferred
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: bus tied low/high(0x3)
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C read failed (0x0)! speed(0=1000) (0x30)
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: error:addr=0x36,irq_stat=0x3,ch_offset=0x100,mask:0x129
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c_dump_info: +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C structure:\x0a[I2C]Clk=24960000,Id=4,Op=0x3,Irq_stat=0x3,Total_len=0x2\x0a[I2C]Trans_len=0x2,Trans_num=0x1,Trans_auxlen=0x1,\x0a[I2C]speed=400000,Trans_stop=1,cg_cnt=1,hs_only=0,\x0a[I2C]ch_offset=0x100,ch_offset_default=0x100
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]base addr:0x00000000fe8fccd9
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C register:\x0a[I2C]SLAVE_ADDR=0x6c,INTR_MASK=0x0,INTR_STAT=0x0,\x0a[I2C]CONTROL=0xba,TRANSFER_LEN=0x2,TRANSAC_LEN=0x2,\x0a[I2C]DELAY_LEN=0xa,TIMING=0x405,LTIMING=0x23,START=0x2\x0a[I2C]FIFO_STAT=0x1,IO_CONFIG=0x3,HS=0x0\x0a[I2C]DCM_EN=0x0,DEBUGSTAT=0x0,EXT_CONF=0x1801\x0a[I2C]TRANSFER_LEN_AUX=0x1,OFFSET_DMA_FSM_DEBUG=0x8400\x0a[I2C]OFFSET_MCU_INTR=0x1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]before enable DMA register(0xffffff8009db5400):\x0a[I2C]INT_FLAG=0x0,INT_EN=0x0,EN=0x0,RST=0x0,\x0a[I2C]STOP=0x0,FLUSH=0x0,CON=0x8,\x0a[I2C]TX_MEM_ADDR=0x234bc000, RX_MEM_ADDR=0x234bc000\x0a[I2C]TX_LEN=0x2,RX_LEN=0x20,INT_BUF_SIZE=0x0,\x0a[I2C]DEBUGSTA=0x0,TX_MEM_ADDR2=0x1, RX_MEM_ADDR2=0x1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]DMA register(0x0000000071029a1b):\x0a[I2C]INT_FLAG=0x0,INT_EN=0x0,EN=0x0,RST=0x0,\x0a[I2C]STOP=0x0,FLUSH=0x0,CON=0x8,\x0a[I2C]TX_MEM_ADDR=0x0, RX_MEM_ADDR=0x0,\x0a[I2C]TX_LEN=0x0,RX_LEN=x0,INT_BUF_SIZE=0x0,\x0a[I2C]DEBUGSTA=0x0,TX_MEM_ADDR2=0x0, RX_MEM_ADDR2=0x0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c_dump_info: -----------------------
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: last transfer info:
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [00] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [01] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=0,CONTROL=ba,FIFO_STAT=220,DEBUGSTAT=24e, tmo=0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [02] [  xxx.xxxxxx] SLAVE_ADDR=20,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [03] [  xxx.xxxxxx] SLAVE_ADDR=20,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [04] [  xxx.xxxxxx] SLAVE_ADDR=20,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [05] [  xxx.xxxxxx] SLAVE_ADDR=a2,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [06] [   xx.xxxxxx] SLAVE_ADDR=a2,INTR_STAT=1,CONTROL=be,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [07] [   xx.xxxxxx] SLAVE_ADDR=a2,INTR_STAT=1,CONTROL=be,FIFO_STAT=1,DEBUGSTAT=0, tmo=499
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [08] [   xx.xxxxxx] SLAVE_ADDR=a2,INTR_STAT=1,CONTROL=be,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [09] [   xx.xxxxxx] SLAVE_ADDR=a2,INTR_STAT=1,CONTROL=be,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C CCU register:\x0a[I2C]SLAVE_ADDR=0xff,INTR_MASK=0x1ff,\x0a[I2C]INTR_STAT=0x0,CONTROL=0x0,\x0a[I2C]TRANSFER_LEN=0x0, TRANSAC_LEN=0x0,DELAY_LEN=0x0\x0a[I2C]TIMING=0x0,LTIMING=0x0,START=0x0,FIFO_STAT=0x1,\x0a[I2C]IO_CONFIG=0x93,HS=0x0,DCM_EN=0x0,DEBUGSTAT=0x0,\x0a[I2C]EXT_CONF=0x0,TRANSFER_LEN_AUX=0x0\x0a[I2C]OFFSET_DMA_FSM_DEBUG=0x8400,OFFSET_MCU_INTR=0x3
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: i2c_gpio_dump_info +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C gpio structure:\x0a[I2C]EH_CFG=0xfff,PU_CFG=0x41e00180,RSEL_CFG=0xff
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: addr:0x36,ACK error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: trans done with error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C read failed (0x0)! speed(0=1000) (0x30)
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver] ov2180_ofilm_mipi_raw_Sensor [get_imgsensor_id] OV2180_oflm_Read sensor id fail, write id: 0x6c, id: 0x3
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: error:addr=0x36,irq_stat=0x3,ch_offset=0x100,mask:0x129
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c_dump_info: +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C structure:\x0a[I2C]Clk=24960000,Id=4,Op=0x3,Irq_stat=0x3,Total_len=0x2\x0a[I2C]Trans_len=0x2,Trans_num=0x1,Trans_auxlen=0x1,\x0a[I2C]speed=400000,Trans_stop=1,cg_cnt=1,hs_only=0,\x0a[I2C]ch_offset=0x100,ch_offset_default=0x100
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]base addr:0x00000000fe8fccd9
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C register:\x0a[I2C]SLAVE_ADDR=0x6c,INTR_MASK=0x0,INTR_STAT=0x0,\x0a[I2C]CONTROL=0xba,TRANSFER_LEN=0x2,TRANSAC_LEN=0x2,\x0a[I2C]DELAY_LEN=0xa,TIMING=0x405,LTIMING=0x23,START=0x2\x0a[I2C]FIFO_STAT=0x1,IO_CONFIG=0x3,HS=0x0\x0a[I2C]DCM_EN=0x0,DEBUGSTAT=0x0,EXT_CONF=0x1801\x0a[I2C]TRANSFER_LEN_AUX=0x1,OFFSET_DMA_FSM_DEBUG=0x8400\x0a[I2C]OFFSET_MCU_INTR=0x1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]before enable DMA register(0xffffff8009db5400):\x0a[I2C]INT_FLAG=0x0,INT_EN=0x0,EN=0x0,RST=0x0,\x0a[I2C]STOP=0x0,FLUSH=0x0,CON=0x8,\x0a[I2C]TX_MEM_ADDR=0x234bc000, RX_MEM_ADDR=0x234bc000\x0a[I2C]TX_LEN=0x2,RX_LEN=0x20,INT_BUF_SIZE=0x0,\x0a[I2C]DEBUGSTA=0x0,TX_MEM_ADDR2=0x1, RX_MEM_ADDR2=0x1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]DMA register(0x0000000071029a1b):\x0a[I2C]INT_FLAG=0x0,INT_EN=0x0,EN=0x0,RST=0x0,\x0a[I2C]STOP=0x0,FLUSH=0x0,CON=0x8,\x0a[I2C]TX_MEM_ADDR=0x0, RX_MEM_ADDR=0x0,\x0a[I2C]TX_LEN=0x0,RX_LEN=x0,INT_BUF_SIZE=0x0,\x0a[I2C]DEBUGSTA=0x0,TX_MEM_ADDR2=0x0, RX_MEM_ADDR2=0x0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c_dump_info: -----------------------
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: last transfer info:
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [00] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [01] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [02] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=0,CONTROL=ba,FIFO_STAT=220,DEBUGSTAT=24e, tmo=0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [03] [  xxx.xxxxxx] SLAVE_ADDR=20,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [04] [  xxx.xxxxxx] SLAVE_ADDR=20,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [05] [  xxx.xxxxxx] SLAVE_ADDR=20,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [06] [  xxx.xxxxxx] SLAVE_ADDR=a2,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [07] [   xx.xxxxxx] SLAVE_ADDR=a2,INTR_STAT=1,CONTROL=be,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [08] [   xx.xxxxxx] SLAVE_ADDR=a2,INTR_STAT=1,CONTROL=be,FIFO_STAT=1,DEBUGSTAT=0, tmo=499
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [09] [   xx.xxxxxx] SLAVE_ADDR=a2,INTR_STAT=1,CONTROL=be,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C CCU register:\x0a[I2C]SLAVE_ADDR=0xff,INTR_MASK=0x1ff,\x0a[I2C]INTR_STAT=0x0,CONTROL=0x0,\x0a[I2C]TRANSFER_LEN=0x0, TRANSAC_LEN=0x0,DELAY_LEN=0x0\x0a[I2C]TIMING=0x0,LTIMING=0x0,START=0x0,FIFO_STAT=0x1,\x0a[I2C]IO_CONFIG=0x93,HS=0x0,DCM_EN=0x0,DEBUGSTAT=0x0,\x0a[I2C]EXT_CONF=0x0,TRANSFER_LEN_AUX=0x0\x0a[I2C]OFFSET_DMA_FSM_DEBUG=0x8400,OFFSET_MCU_INTR=0x3
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: i2c_gpio_dump_info +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C gpio structure:\x0a[I2C]EH_CFG=0xfff,PU_CFG=0x41e00180,RSEL_CFG=0xff
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: addr:0x36,ACK error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: trans done with error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C read failed (0x0)! speed(0=1000) (0x30)
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: error:addr=0x36,irq_stat=0x3,ch_offset=0x100,mask:0x129
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c_dump_info: +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C structure:\x0a[I2C]Clk=24960000,Id=4,Op=0x3,Irq_stat=0x3,Total_len=0x2\x0a[I2C]Trans_len=0x2,Trans_num=0x1,Trans_auxlen=0x1,\x0a[I2C]speed=400000,Trans_stop=1,cg_cnt=1,hs_only=0,\x0a[I2C]ch_offset=0x100,ch_offset_default=0x100
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]base addr:0x00000000fe8fccd9
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C register:\x0a[I2C]SLAVE_ADDR=0x6c,INTR_MASK=0x0,INTR_STAT=0x0,\x0a[I2C]CONTROL=0xba,TRANSFER_LEN=0x2,TRANSAC_LEN=0x2,\x0a[I2C]DELAY_LEN=0xa,TIMING=0x405,LTIMING=0x23,START=0x2\x0a[I2C]FIFO_STAT=0x1,IO_CONFIG=0x3,HS=0x0\x0a[I2C]DCM_EN=0x0,DEBUGSTAT=0x0,EXT_CONF=0x1801\x0a[I2C]TRANSFER_LEN_AUX=0x1,OFFSET_DMA_FSM_DEBUG=0x8400\x0a[I2C]OFFSET_MCU_INTR=0x1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]before enable DMA register(0xffffff8009db5400):\x0a[I2C]INT_FLAG=0x0,INT_EN=0x0,EN=0x0,RST=0x0,\x0a[I2C]STOP=0x0,FLUSH=0x0,CON=0x8,\x0a[I2C]TX_MEM_ADDR=0x234bc000, RX_MEM_ADDR=0x234bc000\x0a[I2C]TX_LEN=0x2,RX_LEN=0x20,INT_BUF_SIZE=0x0,\x0a[I2C]DEBUGSTA=0x0,TX_MEM_ADDR2=0x1, RX_MEM_ADDR2=0x1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]DMA register(0x0000000071029a1b):\x0a[I2C]INT_FLAG=0x0,INT_EN=0x0,EN=0x0,RST=0x0,\x0a[I2C]STOP=0x0,FLUSH=0x0,CON=0x8,\x0a[I2C]TX_MEM_ADDR=0x0, RX_MEM_ADDR=0x0,\x0a[I2C]TX_LEN=0x0,RX_LEN=x0,INT_BUF_SIZE=0x0,\x0a[I2C]DEBUGSTA=0x0,TX_MEM_ADDR2=0x0, RX_MEM_ADDR2=0x0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c_dump_info: -----------------------
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: last transfer info:
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [00] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [01] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [02] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [03] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=0,CONTROL=ba,FIFO_STAT=220,DEBUGSTAT=24e, tmo=0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [04] [  xxx.xxxxxx] SLAVE_ADDR=20,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [05] [  xxx.xxxxxx] SLAVE_ADDR=20,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [06] [  xxx.xxxxxx] SLAVE_ADDR=20,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [07] [  xxx.xxxxxx] SLAVE_ADDR=a2,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [08] [   xx.xxxxxx] SLAVE_ADDR=a2,INTR_STAT=1,CONTROL=be,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [09] [   xx.xxxxxx] SLAVE_ADDR=a2,INTR_STAT=1,CONTROL=be,FIFO_STAT=1,DEBUGSTAT=0, tmo=499
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C CCU register:\x0a[I2C]SLAVE_ADDR=0xff,INTR_MASK=0x1ff,\x0a[I2C]INTR_STAT=0x0,CONTROL=0x0,\x0a[I2C]TRANSFER_LEN=0x0, TRANSAC_LEN=0x0,DELAY_LEN=0x0\x0a[I2C]TIMING=0x0,LTIMING=0x0,START=0x0,FIFO_STAT=0x1,\x0a[I2C]IO_CONFIG=0x93,HS=0x0,DCM_EN=0x0,DEBUGSTAT=0x0,\x0a[I2C]EXT_CONF=0x0,TRANSFER_LEN_AUX=0x0\x0a[I2C]OFFSET_DMA_FSM_DEBUG=0x8400,OFFSET_MCU_INTR=0x3
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: i2c_gpio_dump_info +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C gpio structure:\x0a[I2C]EH_CFG=0xfff,PU_CFG=0x41e00180,RSEL_CFG=0xff
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: addr:0x36,ACK error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: trans done with error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C read failed (0x0)! speed(0=1000) (0x30)
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver] ov2180_ofilm_mipi_raw_Sensor [get_imgsensor_id] OV2180_oflm_Read sensor id fail, write id: 0x6c, id: 0x3
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: error:addr=0x36,irq_stat=0x3,ch_offset=0x100,mask:0x129
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c_dump_info: +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C structure:\x0a[I2C]Clk=24960000,Id=4,Op=0x3,Irq_stat=0x3,Total_len=0x2\x0a[I2C]Trans_len=0x2,Trans_num=0x1,Trans_auxlen=0x1,\x0a[I2C]speed=400000,Trans_stop=1,cg_cnt=1,hs_only=0,\x0a[I2C]ch_offset=0x100,ch_offset_default=0x100
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]base addr:0x00000000fe8fccd9
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C register:\x0a[I2C]SLAVE_ADDR=0x6c,INTR_MASK=0x0,INTR_STAT=0x0,\x0a[I2C]CONTROL=0xba,TRANSFER_LEN=0x2,TRANSAC_LEN=0x2,\x0a[I2C]DELAY_LEN=0xa,TIMING=0x405,LTIMING=0x23,START=0x2\x0a[I2C]FIFO_STAT=0x1,IO_CONFIG=0x3,HS=0x0\x0a[I2C]DCM_EN=0x0,DEBUGSTAT=0x0,EXT_CONF=0x1801\x0a[I2C]TRANSFER_LEN_AUX=0x1,OFFSET_DMA_FSM_DEBUG=0x8400\x0a[I2C]OFFSET_MCU_INTR=0x1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]before enable DMA register(0xffffff8009db5400):\x0a[I2C]INT_FLAG=0x0,INT_EN=0x0,EN=0x0,RST=0x0,\x0a[I2C]STOP=0x0,FLUSH=0x0,CON=0x8,\x0a[I2C]TX_MEM_ADDR=0x234bc000, RX_MEM_ADDR=0x234bc000\x0a[I2C]TX_LEN=0x2,RX_LEN=0x20,INT_BUF_SIZE=0x0,\x0a[I2C]DEBUGSTA=0x0,TX_MEM_ADDR2=0x1, RX_MEM_ADDR2=0x1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]DMA register(0x0000000071029a1b):\x0a[I2C]INT_FLAG=0x0,INT_EN=0x0,EN=0x0,RST=0x0,\x0a[I2C]STOP=0x0,FLUSH=0x0,CON=0x8,\x0a[I2C]TX_MEM_ADDR=0x0, RX_MEM_ADDR=0x0,\x0a[I2C]TX_LEN=0x0,RX_LEN=x0,INT_BUF_SIZE=0x0,\x0a[I2C]DEBUGSTA=0x0,TX_MEM_ADDR2=0x0, RX_MEM_ADDR2=0x0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c_dump_info: -----------------------
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: last transfer info:
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [00] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [01] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [02] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [03] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [04] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=0,CONTROL=ba,FIFO_STAT=220,DEBUGSTAT=24e, tmo=0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [05] [  xxx.xxxxxx] SLAVE_ADDR=20,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [06] [  xxx.xxxxxx] SLAVE_ADDR=20,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [07] [  xxx.xxxxxx] SLAVE_ADDR=20,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [08] [  xxx.xxxxxx] SLAVE_ADDR=a2,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [09] [   xx.xxxxxx] SLAVE_ADDR=a2,INTR_STAT=1,CONTROL=be,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C CCU register:\x0a[I2C]SLAVE_ADDR=0xff,INTR_MASK=0x1ff,\x0a[I2C]INTR_STAT=0x0,CONTROL=0x0,\x0a[I2C]TRANSFER_LEN=0x0, TRANSAC_LEN=0x0,DELAY_LEN=0x0\x0a[I2C]TIMING=0x0,LTIMING=0x0,START=0x0,FIFO_STAT=0x1,\x0a[I2C]IO_CONFIG=0x93,HS=0x0,DCM_EN=0x0,DEBUGSTAT=0x0,\x0a[I2C]EXT_CONF=0x0,TRANSFER_LEN_AUX=0x0\x0a[I2C]OFFSET_DMA_FSM_DEBUG=0x8400,OFFSET_MCU_INTR=0x3
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: i2c_gpio_dump_info +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C gpio structure:\x0a[I2C]EH_CFG=0xfff,PU_CFG=0x41e00180,RSEL_CFG=0xff
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: addr:0x36,ACK error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: trans done with error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C read failed (0x0)! speed(0=1000) (0x30)
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: error:addr=0x36,irq_stat=0x3,ch_offset=0x100,mask:0x129
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c_dump_info: +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C structure:\x0a[I2C]Clk=24960000,Id=4,Op=0x3,Irq_stat=0x3,Total_len=0x2\x0a[I2C]Trans_len=0x2,Trans_num=0x1,Trans_auxlen=0x1,\x0a[I2C]speed=400000,Trans_stop=1,cg_cnt=1,hs_only=0,\x0a[I2C]ch_offset=0x100,ch_offset_default=0x100
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]base addr:0x00000000fe8fccd9
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C register:\x0a[I2C]SLAVE_ADDR=0x6c,INTR_MASK=0x0,INTR_STAT=0x0,\x0a[I2C]CONTROL=0xba,TRANSFER_LEN=0x2,TRANSAC_LEN=0x2,\x0a[I2C]DELAY_LEN=0xa,TIMING=0x405,LTIMING=0x23,START=0x2\x0a[I2C]FIFO_STAT=0x1,IO_CONFIG=0x3,HS=0x0\x0a[I2C]DCM_EN=0x0,DEBUGSTAT=0x0,EXT_CONF=0x1801\x0a[I2C]TRANSFER_LEN_AUX=0x1,OFFSET_DMA_FSM_DEBUG=0x8400\x0a[I2C]OFFSET_MCU_INTR=0x1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]before enable DMA register(0xffffff8009db5400):\x0a[I2C]INT_FLAG=0x0,INT_EN=0x0,EN=0x0,RST=0x0,\x0a[I2C]STOP=0x0,FLUSH=0x0,CON=0x8,\x0a[I2C]TX_MEM_ADDR=0x234bc000, RX_MEM_ADDR=0x234bc000\x0a[I2C]TX_LEN=0x2,RX_LEN=0x20,INT_BUF_SIZE=0x0,\x0a[I2C]DEBUGSTA=0x0,TX_MEM_ADDR2=0x1, RX_MEM_ADDR2=0x1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]DMA register(0x0000000071029a1b):\x0a[I2C]INT_FLAG=0x0,INT_EN=0x0,EN=0x0,RST=0x0,\x0a[I2C]STOP=0x0,FLUSH=0x0,CON=0x8,\x0a[I2C]TX_MEM_ADDR=0x0, RX_MEM_ADDR=0x0,\x0a[I2C]TX_LEN=0x0,RX_LEN=x0,INT_BUF_SIZE=0x0,\x0a[I2C]DEBUGSTA=0x0,TX_MEM_ADDR2=0x0, RX_MEM_ADDR2=0x0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c_dump_info: -----------------------
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: last transfer info:
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [00] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [01] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [02] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [03] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [04] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [05] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=0,CONTROL=ba,FIFO_STAT=220,DEBUGSTAT=24e, tmo=0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [06] [  xxx.xxxxxx] SLAVE_ADDR=20,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [07] [  xxx.xxxxxx] SLAVE_ADDR=20,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [08] [  xxx.xxxxxx] SLAVE_ADDR=20,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [09] [  xxx.xxxxxx] SLAVE_ADDR=a2,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C CCU register:\x0a[I2C]SLAVE_ADDR=0xff,INTR_MASK=0x1ff,\x0a[I2C]INTR_STAT=0x0,CONTROL=0x0,\x0a[I2C]TRANSFER_LEN=0x0, TRANSAC_LEN=0x0,DELAY_LEN=0x0\x0a[I2C]TIMING=0x0,LTIMING=0x0,START=0x0,FIFO_STAT=0x1,\x0a[I2C]IO_CONFIG=0x93,HS=0x0,DCM_EN=0x0,DEBUGSTAT=0x0,\x0a[I2C]EXT_CONF=0x0,TRANSFER_LEN_AUX=0x0\x0a[I2C]OFFSET_DMA_FSM_DEBUG=0x8400,OFFSET_MCU_INTR=0x3
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: i2c_gpio_dump_info +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C gpio structure:\x0a[I2C]EH_CFG=0xfff,PU_CFG=0x41e00180,RSEL_CFG=0xff
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: addr:0x36,ACK error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: trans done with error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C read failed (0x0)! speed(0=1000) (0x30)
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver] ov2180_ofilm_mipi_raw_Sensor [get_imgsensor_id] OV2180_oflm_Read sensor id fail, write id: 0x6d, id: 0x3
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: error:addr=0x36,irq_stat=0x3,ch_offset=0x100,mask:0x129
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c_dump_info: +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C structure:\x0a[I2C]Clk=24960000,Id=4,Op=0x3,Irq_stat=0x3,Total_len=0x2\x0a[I2C]Trans_len=0x2,Trans_num=0x1,Trans_auxlen=0x1,\x0a[I2C]speed=400000,Trans_stop=1,cg_cnt=1,hs_only=0,\x0a[I2C]ch_offset=0x100,ch_offset_default=0x100
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]base addr:0x00000000fe8fccd9
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C register:\x0a[I2C]SLAVE_ADDR=0x6c,INTR_MASK=0x0,INTR_STAT=0x0,\x0a[I2C]CONTROL=0xba,TRANSFER_LEN=0x2,TRANSAC_LEN=0x2,\x0a[I2C]DELAY_LEN=0xa,TIMING=0x405,LTIMING=0x23,START=0x2\x0a[I2C]FIFO_STAT=0x1,IO_CONFIG=0x3,HS=0x0\x0a[I2C]DCM_EN=0x0,DEBUGSTAT=0x0,EXT_CONF=0x1801\x0a[I2C]TRANSFER_LEN_AUX=0x1,OFFSET_DMA_FSM_DEBUG=0x8400\x0a[I2C]OFFSET_MCU_INTR=0x1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]before enable DMA register(0xffffff8009db5400):\x0a[I2C]INT_FLAG=0x0,INT_EN=0x0,EN=0x0,RST=0x0,\x0a[I2C]STOP=0x0,FLUSH=0x0,CON=0x8,\x0a[I2C]TX_MEM_ADDR=0x234bc000, RX_MEM_ADDR=0x234bc000\x0a[I2C]TX_LEN=0x2,RX_LEN=0x20,INT_BUF_SIZE=0x0,\x0a[I2C]DEBUGSTA=0x0,TX_MEM_ADDR2=0x1, RX_MEM_ADDR2=0x1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]DMA register(0x0000000071029a1b):\x0a[I2C]INT_FLAG=0x0,INT_EN=0x0,EN=0x0,RST=0x0,\x0a[I2C]STOP=0x0,FLUSH=0x0,CON=0x8,\x0a[I2C]TX_MEM_ADDR=0x0, RX_MEM_ADDR=0x0,\x0a[I2C]TX_LEN=0x0,RX_LEN=x0,INT_BUF_SIZE=0x0,\x0a[I2C]DEBUGSTA=0x0,TX_MEM_ADDR2=0x0, RX_MEM_ADDR2=0x0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c_dump_info: -----------------------
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: last transfer info:
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [00] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [01] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [02] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [03] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [04] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [05] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [06] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=0,CONTROL=ba,FIFO_STAT=220,DEBUGSTAT=24e, tmo=0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [07] [  xxx.xxxxxx] SLAVE_ADDR=20,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [08] [  xxx.xxxxxx] SLAVE_ADDR=20,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [09] [  xxx.xxxxxx] SLAVE_ADDR=20,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C CCU register:\x0a[I2C]SLAVE_ADDR=0xff,INTR_MASK=0x1ff,\x0a[I2C]INTR_STAT=0x0,CONTROL=0x0,\x0a[I2C]TRANSFER_LEN=0x0, TRANSAC_LEN=0x0,DELAY_LEN=0x0\x0a[I2C]TIMING=0x0,LTIMING=0x0,START=0x0,FIFO_STAT=0x1,\x0a[I2C]IO_CONFIG=0x93,HS=0x0,DCM_EN=0x0,DEBUGSTAT=0x0,\x0a[I2C]EXT_CONF=0x0,TRANSFER_LEN_AUX=0x0\x0a[I2C]OFFSET_DMA_FSM_DEBUG=0x8400,OFFSET_MCU_INTR=0x3
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: i2c_gpio_dump_info +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C gpio structure:\x0a[I2C]EH_CFG=0xfff,PU_CFG=0x41e00180,RSEL_CFG=0xff
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: addr:0x36,ACK error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: trans done with error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C read failed (0x0)! speed(0=1000) (0x30)
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: error:addr=0x36,irq_stat=0x3,ch_offset=0x100,mask:0x129
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c_dump_info: +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C structure:\x0a[I2C]Clk=24960000,Id=4,Op=0x3,Irq_stat=0x3,Total_len=0x2\x0a[I2C]Trans_len=0x2,Trans_num=0x1,Trans_auxlen=0x1,\x0a[I2C]speed=400000,Trans_stop=1,cg_cnt=1,hs_only=0,\x0a[I2C]ch_offset=0x100,ch_offset_default=0x100
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]base addr:0x00000000fe8fccd9
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C register:\x0a[I2C]SLAVE_ADDR=0x6c,INTR_MASK=0x0,INTR_STAT=0x0,\x0a[I2C]CONTROL=0xba,TRANSFER_LEN=0x2,TRANSAC_LEN=0x2,\x0a[I2C]DELAY_LEN=0xa,TIMING=0x405,LTIMING=0x23,START=0x2\x0a[I2C]FIFO_STAT=0x1,IO_CONFIG=0x3,HS=0x0\x0a[I2C]DCM_EN=0x0,DEBUGSTAT=0x0,EXT_CONF=0x1801\x0a[I2C]TRANSFER_LEN_AUX=0x1,OFFSET_DMA_FSM_DEBUG=0x8400\x0a[I2C]OFFSET_MCU_INTR=0x1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]before enable DMA register(0xffffff8009db5400):\x0a[I2C]INT_FLAG=0x0,INT_EN=0x0,EN=0x0,RST=0x0,\x0a[I2C]STOP=0x0,FLUSH=0x0,CON=0x8,\x0a[I2C]TX_MEM_ADDR=0x234bc000, RX_MEM_ADDR=0x234bc000\x0a[I2C]TX_LEN=0x2,RX_LEN=0x20,INT_BUF_SIZE=0x0,\x0a[I2C]DEBUGSTA=0x0,TX_MEM_ADDR2=0x1, RX_MEM_ADDR2=0x1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]DMA register(0x0000000071029a1b):\x0a[I2C]INT_FLAG=0x0,INT_EN=0x0,EN=0x0,RST=0x0,\x0a[I2C]STOP=0x0,FLUSH=0x0,CON=0x8,\x0a[I2C]TX_MEM_ADDR=0x0, RX_MEM_ADDR=0x0,\x0a[I2C]TX_LEN=0x0,RX_LEN=x0,INT_BUF_SIZE=0x0,\x0a[I2C]DEBUGSTA=0x0,TX_MEM_ADDR2=0x0, RX_MEM_ADDR2=0x0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c_dump_info: -----------------------
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: last transfer info:
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [00] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [01] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [02] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [03] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [04] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [05] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [06] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [07] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=0,CONTROL=ba,FIFO_STAT=220,DEBUGSTAT=24e, tmo=0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [08] [  xxx.xxxxxx] SLAVE_ADDR=20,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [09] [  xxx.xxxxxx] SLAVE_ADDR=20,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C CCU register:\x0a[I2C]SLAVE_ADDR=0xff,INTR_MASK=0x1ff,\x0a[I2C]INTR_STAT=0x0,CONTROL=0x0,\x0a[I2C]TRANSFER_LEN=0x0, TRANSAC_LEN=0x0,DELAY_LEN=0x0\x0a[I2C]TIMING=0x0,LTIMING=0x0,START=0x0,FIFO_STAT=0x1,\x0a[I2C]IO_CONFIG=0x93,HS=0x0,DCM_EN=0x0,DEBUGSTAT=0x0,\x0a[I2C]EXT_CONF=0x0,TRANSFER_LEN_AUX=0x0\x0a[I2C]OFFSET_DMA_FSM_DEBUG=0x8400,OFFSET_MCU_INTR=0x3
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: i2c_gpio_dump_info +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C gpio structure:\x0a[I2C]EH_CFG=0xfff,PU_CFG=0x41e00180,RSEL_CFG=0xff
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: addr:0x36,ACK error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: trans done with error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C read failed (0x0)! speed(0=1000) (0x30)
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver] ov2180_ofilm_mipi_raw_Sensor [get_imgsensor_id] OV2180_oflm_Read sensor id fail, write id: 0x6d, id: 0x3
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID ffffffff
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 3, power 0 curr_sensor_name ov2180_ofilm_mipi_raw, enable list ov2180_ofilm_mipi_raw ov2180_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 2054090 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 3, power 1 curr_sensor_name ov2180_qtech_mipi_raw, enable list ov2180_ofilm_mipi_raw ov2180_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver] ov2180_qtech_mipi_raw_Sensor [feature_control] feature_id = 3041
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]OV2180_QTECH_camera_sensor[get_cam_pin_status] GPIO79 get gpio_get_value ret1= 1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 3, power 0 curr_sensor_name ov2180_qtech_mipi_raw, enable list ov2180_ofilm_mipi_raw ov2180_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 24193 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 3, power 1 curr_sensor_name gc5035_ofilm_mipi_raw, enable list ov2180_ofilm_mipi_raw ov2180_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 3, power 0 curr_sensor_name gc5035_ofilm_mipi_raw, enable list ov2180_ofilm_mipi_raw ov2180_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 26 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 3, power 1 curr_sensor_name gc5035_qtech_mipi_raw, enable list ov2180_ofilm_mipi_raw ov2180_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 3, power 0 curr_sensor_name gc5035_qtech_mipi_raw, enable list ov2180_ofilm_mipi_raw ov2180_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 24 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 4, power 1 curr_sensor_name ov13b10_ofilm_mipi_raw, enable list gc5035_ofilm_mipi_raw gc5035_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 4, power 0 curr_sensor_name ov13b10_ofilm_mipi_raw, enable list gc5035_ofilm_mipi_raw gc5035_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 30 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 4, power 1 curr_sensor_name ov13b10_qtech_mipi_raw, enable list gc5035_ofilm_mipi_raw gc5035_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 4, power 0 curr_sensor_name ov13b10_qtech_mipi_raw, enable list gc5035_ofilm_mipi_raw gc5035_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 24 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 4, power 1 curr_sensor_name s5k3l6_qtech_mipi_raw, enable list gc5035_ofilm_mipi_raw gc5035_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 4, power 0 curr_sensor_name s5k3l6_qtech_mipi_raw, enable list gc5035_ofilm_mipi_raw gc5035_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 23 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 4, power 1 curr_sensor_name s5k4h7yx_ofilm_front_mipi_raw, enable list gc5035_ofilm_mipi_raw gc5035_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 4, power 0 curr_sensor_name s5k4h7yx_ofilm_front_mipi_raw, enable list gc5035_ofilm_mipi_raw gc5035_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 22 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 4, power 1 curr_sensor_name ov8856_qtech_front_mipi_raw, enable list gc5035_ofilm_mipi_raw gc5035_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 4, power 0 curr_sensor_name ov8856_qtech_front_mipi_raw, enable list gc5035_ofilm_mipi_raw gc5035_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 22 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 4, power 1 curr_sensor_name s5k4h7yx_ofilm_ultra_mipi_raw, enable list gc5035_ofilm_mipi_raw gc5035_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 4, power 0 curr_sensor_name s5k4h7yx_ofilm_ultra_mipi_raw, enable list gc5035_ofilm_mipi_raw gc5035_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 22 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 4, power 1 curr_sensor_name ov8856_qtech_ultra_mipi_raw, enable list gc5035_ofilm_mipi_raw gc5035_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 4, power 0 curr_sensor_name ov8856_qtech_ultra_mipi_raw, enable list gc5035_ofilm_mipi_raw gc5035_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 22 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 4, power 1 curr_sensor_name ov2180_ofilm_mipi_raw, enable list gc5035_ofilm_mipi_raw gc5035_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 4, power 0 curr_sensor_name ov2180_ofilm_mipi_raw, enable list gc5035_ofilm_mipi_raw gc5035_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 22 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 4, power 1 curr_sensor_name ov2180_qtech_mipi_raw, enable list gc5035_ofilm_mipi_raw gc5035_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 4, power 0 curr_sensor_name ov2180_qtech_mipi_raw, enable list gc5035_ofilm_mipi_raw gc5035_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 22 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 4, power 1 curr_sensor_name gc5035_ofilm_mipi_raw, enable list gc5035_ofilm_mipi_raw gc5035_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: error:addr=0x37,irq_stat=0x3,ch_offset=0x100,mask:0x129
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c_dump_info: +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C structure:\x0a[I2C]Clk=24960000,Id=4,Op=0x3,Irq_stat=0x3,Total_len=0x1\x0a[I2C]Trans_len=0x1,Trans_num=0x1,Trans_auxlen=0x1,\x0a[I2C]speed=400000,Trans_stop=1,cg_cnt=1,hs_only=0,\x0a[I2C]ch_offset=0x100,ch_offset_default=0x100
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]base addr:0x00000000fe8fccd9
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C register:\x0a[I2C]SLAVE_ADDR=0x6e,INTR_MASK=0x0,INTR_STAT=0x0,\x0a[I2C]CONTROL=0xba,TRANSFER_LEN=0x1,TRANSAC_LEN=0x2,\x0a[I2C]DELAY_LEN=0xa,TIMING=0x405,LTIMING=0x23,START=0x2\x0a[I2C]FIFO_STAT=0x1,IO_CONFIG=0x3,HS=0x0\x0a[I2C]DCM_EN=0x0,DEBUGSTAT=0x0,EXT_CONF=0x1801\x0a[I2C]TRANSFER_LEN_AUX=0x1,OFFSET_DMA_FSM_DEBUG=0x8400\x0a[I2C]OFFSET_MCU_INTR=0x1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]before enable DMA register(0xffffff8009db5400):\x0a[I2C]INT_FLAG=0x0,INT_EN=0x0,EN=0x0,RST=0x0,\x0a[I2C]STOP=0x0,FLUSH=0x0,CON=0x8,\x0a[I2C]TX_MEM_ADDR=0x234bc000, RX_MEM_ADDR=0x234bc000\x0a[I2C]TX_LEN=0x2,RX_LEN=0x20,INT_BUF_SIZE=0x0,\x0a[I2C]DEBUGSTA=0x0,TX_MEM_ADDR2=0x1, RX_MEM_ADDR2=0x1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]DMA register(0x0000000071029a1b):\x0a[I2C]INT_FLAG=0x0,INT_EN=0x0,EN=0x0,RST=0x0,\x0a[I2C]STOP=0x0,FLUSH=0x0,CON=0x8,\x0a[I2C]TX_MEM_ADDR=0x0, RX_MEM_ADDR=0x0,\x0a[I2C]TX_LEN=0x0,RX_LEN=x0,INT_BUF_SIZE=0x0,\x0a[I2C]DEBUGSTA=0x0,TX_MEM_ADDR2=0x0, RX_MEM_ADDR2=0x0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c_dump_info: -----------------------
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: last transfer info:
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [00] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [01] [  xxx.xxxxxx] SLAVE_ADDR=a4,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [02] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [03] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [04] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [05] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [06] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [07] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [08] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [09] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=0,CONTROL=ba,FIFO_STAT=220,DEBUGSTAT=24e, tmo=0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C CCU register:\x0a[I2C]SLAVE_ADDR=0xff,INTR_MASK=0x1ff,\x0a[I2C]INTR_STAT=0x0,CONTROL=0x0,\x0a[I2C]TRANSFER_LEN=0x0, TRANSAC_LEN=0x0,DELAY_LEN=0x0\x0a[I2C]TIMING=0x0,LTIMING=0x0,START=0x0,FIFO_STAT=0x1,\x0a[I2C]IO_CONFIG=0x93,HS=0x0,DCM_EN=0x0,DEBUGSTAT=0x0,\x0a[I2C]EXT_CONF=0x0,TRANSFER_LEN_AUX=0x0\x0a[I2C]OFFSET_DMA_FSM_DEBUG=0x8400,OFFSET_MCU_INTR=0x3
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: i2c_gpio_dump_info +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C gpio structure:\x0a[I2C]EH_CFG=0xfff,PU_CFG=0x41e00180,RSEL_CFG=0xff
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: addr:0x37,ACK error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: trans done with error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C read failed (0x0)! speed(0=1000) (0xf0)
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: error:addr=0x37,irq_stat=0x3,ch_offset=0x100,mask:0x129
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c_dump_info: +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C structure:\x0a[I2C]Clk=24960000,Id=4,Op=0x3,Irq_stat=0x3,Total_len=0x1\x0a[I2C]Trans_len=0x1,Trans_num=0x1,Trans_auxlen=0x1,\x0a[I2C]speed=400000,Trans_stop=1,cg_cnt=1,hs_only=0,\x0a[I2C]ch_offset=0x100,ch_offset_default=0x100
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]base addr:0x00000000fe8fccd9
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C register:\x0a[I2C]SLAVE_ADDR=0x6e,INTR_MASK=0x0,INTR_STAT=0x0,\x0a[I2C]CONTROL=0xba,TRANSFER_LEN=0x1,TRANSAC_LEN=0x2,\x0a[I2C]DELAY_LEN=0xa,TIMING=0x405,LTIMING=0x23,START=0x2\x0a[I2C]FIFO_STAT=0x1,IO_CONFIG=0x3,HS=0x0\x0a[I2C]DCM_EN=0x0,DEBUGSTAT=0x0,EXT_CONF=0x1801\x0a[I2C]TRANSFER_LEN_AUX=0x1,OFFSET_DMA_FSM_DEBUG=0x8400\x0a[I2C]OFFSET_MCU_INTR=0x1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]before enable DMA register(0xffffff8009db5400):\x0a[I2C]INT_FLAG=0x0,INT_EN=0x0,EN=0x0,RST=0x0,\x0a[I2C]STOP=0x0,FLUSH=0x0,CON=0x8,\x0a[I2C]TX_MEM_ADDR=0x234bc000, RX_MEM_ADDR=0x234bc000\x0a[I2C]TX_LEN=0x2,RX_LEN=0x20,INT_BUF_SIZE=0x0,\x0a[I2C]DEBUGSTA=0x0,TX_MEM_ADDR2=0x1, RX_MEM_ADDR2=0x1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]DMA register(0x0000000071029a1b):\x0a[I2C]INT_FLAG=0x0,INT_EN=0x0,EN=0x0,RST=0x0,\x0a[I2C]STOP=0x0,FLUSH=0x0,CON=0x8,\x0a[I2C]TX_MEM_ADDR=0x0, RX_MEM_ADDR=0x0,\x0a[I2C]TX_LEN=0x0,RX_LEN=x0,INT_BUF_SIZE=0x0,\x0a[I2C]DEBUGSTA=0x0,TX_MEM_ADDR2=0x0, RX_MEM_ADDR2=0x0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c_dump_info: -----------------------
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: last transfer info:
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [00] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [01] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [02] [  xxx.xxxxxx] SLAVE_ADDR=a4,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [03] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [04] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [05] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [06] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [07] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [08] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [09] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C CCU register:\x0a[I2C]SLAVE_ADDR=0xff,INTR_MASK=0x1ff,\x0a[I2C]INTR_STAT=0x0,CONTROL=0x0,\x0a[I2C]TRANSFER_LEN=0x0, TRANSAC_LEN=0x0,DELAY_LEN=0x0\x0a[I2C]TIMING=0x0,LTIMING=0x0,START=0x0,FIFO_STAT=0x1,\x0a[I2C]IO_CONFIG=0x93,HS=0x0,DCM_EN=0x0,DEBUGSTAT=0x0,\x0a[I2C]EXT_CONF=0x0,TRANSFER_LEN_AUX=0x0\x0a[I2C]OFFSET_DMA_FSM_DEBUG=0x8400,OFFSET_MCU_INTR=0x3
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: i2c_gpio_dump_info +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C gpio structure:\x0a[I2C]EH_CFG=0xfff,PU_CFG=0x41e00180,RSEL_CFG=0xff
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: addr:0x37,ACK error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: trans done with error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C read failed (0x0)! speed(0=1000) (0xf1)
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: error:addr=0x37,irq_stat=0x3,ch_offset=0x100,mask:0x129
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: last transfer info:
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [00] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [01] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [02] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [03] [  xxx.xxxxxx] SLAVE_ADDR=a4,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [04] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [05] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [06] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [07] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [08] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [09] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C CCU register:\x0a[I2C]SLAVE_ADDR=0xff,INTR_MASK=0x1ff,\x0a[I2C]INTR_STAT=0x0,CONTROL=0x0,\x0a[I2C]TRANSFER_LEN=0x0, TRANSAC_LEN=0x0,DELAY_LEN=0x0\x0a[I2C]TIMING=0x0,LTIMING=0x0,START=0x0,FIFO_STAT=0x1,\x0a[I2C]IO_CONFIG=0x93,HS=0x0,DCM_EN=0x0,DEBUGSTAT=0x0,\x0a[I2C]EXT_CONF=0x0,TRANSFER_LEN_AUX=0x0\x0a[I2C]OFFSET_DMA_FSM_DEBUG=0x8400,OFFSET_MCU_INTR=0x3
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: i2c_gpio_dump_info +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C gpio structure:\x0a[I2C]EH_CFG=0xfff,PU_CFG=0x41e00180,RSEL_CFG=0xff
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: addr:0x37,ACK error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: trans done with error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C read failed (0x0)! speed(0=1000) (0xf0)
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: error:addr=0x37,irq_stat=0x3,ch_offset=0x100,mask:0x129
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: last transfer info:
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [00] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [01] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [02] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [03] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [04] [  xxx.xxxxxx] SLAVE_ADDR=a4,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [05] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [06] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [07] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [08] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [09] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C CCU register:\x0a[I2C]SLAVE_ADDR=0xff,INTR_MASK=0x1ff,\x0a[I2C]INTR_STAT=0x0,CONTROL=0x0,\x0a[I2C]TRANSFER_LEN=0x0, TRANSAC_LEN=0x0,DELAY_LEN=0x0\x0a[I2C]TIMING=0x0,LTIMING=0x0,START=0x0,FIFO_STAT=0x1,\x0a[I2C]IO_CONFIG=0x93,HS=0x0,DCM_EN=0x0,DEBUGSTAT=0x0,\x0a[I2C]EXT_CONF=0x0,TRANSFER_LEN_AUX=0x0\x0a[I2C]OFFSET_DMA_FSM_DEBUG=0x8400,OFFSET_MCU_INTR=0x3
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: i2c_gpio_dump_info +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C gpio structure:\x0a[I2C]EH_CFG=0xfff,PU_CFG=0x41e00180,RSEL_CFG=0xff
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: addr:0x37,ACK error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: trans done with error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C read failed (0x0)! speed(0=1000) (0xf1)
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: error:addr=0x37,irq_stat=0x3,ch_offset=0x100,mask:0x129
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: last transfer info:
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [00] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [01] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [02] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [03] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [04] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [05] [  xxx.xxxxxx] SLAVE_ADDR=a4,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [06] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [07] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [08] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [09] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C CCU register:\x0a[I2C]SLAVE_ADDR=0xff,INTR_MASK=0x1ff,\x0a[I2C]INTR_STAT=0x0,CONTROL=0x0,\x0a[I2C]TRANSFER_LEN=0x0, TRANSAC_LEN=0x0,DELAY_LEN=0x0\x0a[I2C]TIMING=0x0,LTIMING=0x0,START=0x0,FIFO_STAT=0x1,\x0a[I2C]IO_CONFIG=0x93,HS=0x0,DCM_EN=0x0,DEBUGSTAT=0x0,\x0a[I2C]EXT_CONF=0x0,TRANSFER_LEN_AUX=0x0\x0a[I2C]OFFSET_DMA_FSM_DEBUG=0x8400,OFFSET_MCU_INTR=0x3
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: i2c_gpio_dump_info +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C gpio structure:\x0a[I2C]EH_CFG=0xfff,PU_CFG=0x41e00180,RSEL_CFG=0xff
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: addr:0x37,ACK error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: trans done with error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C read failed (0x0)! speed(0=1000) (0xf0)
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: error:addr=0x37,irq_stat=0x3,ch_offset=0x100,mask:0x129
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: last transfer info:
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [00] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [01] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [02] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [03] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [04] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [05] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [06] [  xxx.xxxxxx] SLAVE_ADDR=a4,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [07] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [08] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [09] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C CCU register:\x0a[I2C]SLAVE_ADDR=0xff,INTR_MASK=0x1ff,\x0a[I2C]INTR_STAT=0x0,CONTROL=0x0,\x0a[I2C]TRANSFER_LEN=0x0, TRANSAC_LEN=0x0,DELAY_LEN=0x0\x0a[I2C]TIMING=0x0,LTIMING=0x0,START=0x0,FIFO_STAT=0x1,\x0a[I2C]IO_CONFIG=0x93,HS=0x0,DCM_EN=0x0,DEBUGSTAT=0x0,\x0a[I2C]EXT_CONF=0x0,TRANSFER_LEN_AUX=0x0\x0a[I2C]OFFSET_DMA_FSM_DEBUG=0x8400,OFFSET_MCU_INTR=0x3
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: i2c_gpio_dump_info +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C gpio structure:\x0a[I2C]EH_CFG=0xfff,PU_CFG=0x41e00180,RSEL_CFG=0xff
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: addr:0x37,ACK error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: trans done with error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C read failed (0x0)! speed(0=1000) (0xf1)
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: error:addr=0x37,irq_stat=0x3,ch_offset=0x100,mask:0x129
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: last transfer info:
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [00] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [01] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [02] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [03] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [04] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [05] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [06] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [07] [  xxx.xxxxxx] SLAVE_ADDR=a4,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [08] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [09] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C CCU register:\x0a[I2C]SLAVE_ADDR=0xff,INTR_MASK=0x1ff,\x0a[I2C]INTR_STAT=0x0,CONTROL=0x0,\x0a[I2C]TRANSFER_LEN=0x0, TRANSAC_LEN=0x0,DELAY_LEN=0x0\x0a[I2C]TIMING=0x0,LTIMING=0x0,START=0x0,FIFO_STAT=0x1,\x0a[I2C]IO_CONFIG=0x93,HS=0x0,DCM_EN=0x0,DEBUGSTAT=0x0,\x0a[I2C]EXT_CONF=0x0,TRANSFER_LEN_AUX=0x0\x0a[I2C]OFFSET_DMA_FSM_DEBUG=0x8400,OFFSET_MCU_INTR=0x3
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: i2c_gpio_dump_info +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C gpio structure:\x0a[I2C]EH_CFG=0xfff,PU_CFG=0x41e00180,RSEL_CFG=0xff
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: addr:0x37,ACK error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: trans done with error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C read failed (0x0)! speed(0=1000) (0xf0)
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: error:addr=0x37,irq_stat=0x3,ch_offset=0x100,mask:0x129
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: last transfer info:
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [00] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [01] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [02] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [03] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [04] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [05] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [06] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [07] [  xxx.xxxxxx] SLAVE_ADDR=6e,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [08] [  xxx.xxxxxx] SLAVE_ADDR=a4,INTR_STAT=1,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: [09] [  xxx.xxxxxx] SLAVE_ADDR=6c,INTR_STAT=3,CONTROL=ba,FIFO_STAT=1,DEBUGSTAT=0, tmo=500
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C CCU register:\x0a[I2C]SLAVE_ADDR=0xff,INTR_MASK=0x1ff,\x0a[I2C]INTR_STAT=0x0,CONTROL=0x0,\x0a[I2C]TRANSFER_LEN=0x0, TRANSAC_LEN=0x0,DELAY_LEN=0x0\x0a[I2C]TIMING=0x0,LTIMING=0x0,START=0x0,FIFO_STAT=0x1,\x0a[I2C]IO_CONFIG=0x93,HS=0x0,DCM_EN=0x0,DEBUGSTAT=0x0,\x0a[I2C]EXT_CONF=0x0,TRANSFER_LEN_AUX=0x0\x0a[I2C]OFFSET_DMA_FSM_DEBUG=0x8400,OFFSET_MCU_INTR=0x3
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: i2c_gpio_dump_info +++++++++++++++++++
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: I2C gpio structure:\x0a[I2C]EH_CFG=0xfff,PU_CFG=0x41e00180,RSEL_CFG=0xff
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: addr:0x37,ACK error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]i2c i2c-4: trans done with error
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]I2C read failed (0x0)! speed(0=1000) (0xf1)
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID ffffffff
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 4, power 0 curr_sensor_name gc5035_ofilm_mipi_raw, enable list gc5035_ofilm_mipi_raw gc5035_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 22053 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 4, power 1 curr_sensor_name gc5035_qtech_mipi_raw, enable list gc5035_ofilm_mipi_raw gc5035_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]Fail to get sensor ID ffffffff
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]ERROR: No imgsensor alive
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 4, power 0 curr_sensor_name gc5035_qtech_mipi_raw, enable list gc5035_ofilm_mipi_raw gc5035_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][CheckIsAlive]Profile = 18957 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][ISP][ISP_release] - E. UserCount: 1.
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][ISP][ISP_release] Curr UserCount(0), (process, pid, tgid)=(camerahalserver, xxxx, xxxx), log_limit_line(0), last user
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][ISP][ISP_release] - X. UserCount: 0. G_u4EnableClockCount:0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_release 1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_clk_disable_all
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam3_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam3_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam3_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam4_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam4_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam4_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam5_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam5_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam5_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam6_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam6_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam6_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam7_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam7_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam7_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam8_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam8_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam8_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam9_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam9_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam9_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam10_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam10_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam10_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam11_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam11_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam11_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_release 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_clk_enable_all_cg
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_open 1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]OV13B10_OFILM_camera_sensor[feature_control] feature_id = 3081, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_clk_disable_all
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam3_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam3_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam3_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam4_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam4_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam4_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam5_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam5_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam5_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam6_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam6_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam6_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam7_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam7_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam7_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam8_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam8_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam8_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam9_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam9_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam9_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam10_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam10_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam10_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam11_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam11_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam11_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_release 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_clk_enable_all_cg
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_open 1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3081, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_clk_disable_all
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam3_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam3_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam3_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam4_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam4_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam4_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam5_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam5_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam5_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam6_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam6_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam6_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam7_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam7_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam7_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam8_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam8_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam8_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam9_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam9_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam9_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam10_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam10_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam10_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam11_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam11_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam11_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_release 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_clk_enable_all_cg
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_open 1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3081, len=16
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_clk_disable_all
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam3_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam3_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam3_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam4_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam4_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam4_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam5_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam5_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam5_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam6_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam6_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam6_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam7_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam7_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam7_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam8_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam8_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam8_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam9_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam9_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam9_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam10_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam10_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam10_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam11_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam11_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam11_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_release 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][ISP][ISP_open] - E. UserCount: 0.
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][ISP][ISP_open] Curr UserCount(1), (process, pid, tgid)=(camerahalserver, xxxx, xxxx), first user
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][ISP][ISP_open] - X. Ret: 0. UserCount: 1. G_u4EnableClockCount:1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_clk_enable_all_cg
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_open 1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_open 2
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]OV13B10_OFILM_camera_sensor[feature_control] feature_id = 3123, len=8
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 0, power 1 curr_sensor_name ov13b10_ofilm_mipi_raw, enable list ov13b10_ofilm_mipi_raw ov13b10_qtech_mipi_raw s5k3l6_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][kdCISModulePowerOn]Profile = 21112 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][SensorOpen]Profile = 52094 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 0, power 0 curr_sensor_name ov13b10_ofilm_mipi_raw, enable list ov13b10_ofilm_mipi_raw ov13b10_qtech_mipi_raw s5k3l6_qtech_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_release 1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][ISP][ISP_release] - E. UserCount: 1.
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][ISP][ISP_release] Curr UserCount(0), (process, pid, tgid)=(camerahalserver, xxxx, xxxx), log_limit_line(0), last user
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][ISP][ISP_release] - X. UserCount: 0. G_u4EnableClockCount:0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_clk_disable_all
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam3_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam3_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam3_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam4_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam4_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam4_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam5_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam5_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam5_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam6_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam6_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam6_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam7_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam7_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam7_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam8_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam8_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam8_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam9_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam9_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam9_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam10_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam10_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam10_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam11_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam11_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam11_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_release 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][ISP][ISP_open] - E. UserCount: 0.
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][ISP][ISP_open] Curr UserCount(1), (process, pid, tgid)=(camerahalserver, xxxx, xxxx), first user
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][ISP][ISP_open] - X. Ret: 0. UserCount: 1. G_u4EnableClockCount:1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_clk_enable_all_cg
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_open 1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_open 2
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3123, len=8
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 1, power 1 curr_sensor_name s5k4h7yx_ofilm_front_mipi_raw, enable list s5k4h7yx_ofilm_front_mipi_raw s5k4h7yx_qtech_front_mipi_raw ov8856_qtech_front_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][kdCISModulePowerOn]Profile = 22120 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[open] cxc open enter
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[open] s5k4h7yxmipiraw open sensor_id = 487d\x0d
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[open] i2c write id: 0x20, sensor id: 0x487d
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[sensor_init] sensor_init() E
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][SensorOpen]Profile = 34214 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[close] E
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 1, power 0 curr_sensor_name s5k4h7yx_ofilm_front_mipi_raw, enable list s5k4h7yx_ofilm_front_mipi_raw s5k4h7yx_qtech_front_mipi_raw ov8856_qtech_front_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_release 1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][ISP][ISP_release] - E. UserCount: 1.
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][ISP][ISP_release] Curr UserCount(0), (process, pid, tgid)=(camerahalserver, xxxx, xxxx), log_limit_line(0), last user
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][ISP][ISP_release] - X. UserCount: 0. G_u4EnableClockCount:0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_clk_disable_all
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam3_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam3_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam3_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam4_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam4_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam4_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam5_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam5_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam5_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam6_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam6_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam6_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam7_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam7_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam7_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam8_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam8_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam8_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam9_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam9_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam9_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam10_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam10_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam10_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam11_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam11_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam11_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_release 0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][ISP][ISP_open] - E. UserCount: 0.
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][ISP][ISP_open] Curr UserCount(1), (process, pid, tgid)=(camerahalserver, xxxx, xxxx), first user
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][ISP][ISP_open] - X. Ret: 0. UserCount: 1. G_u4EnableClockCount:1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_clk_enable_all_cg
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_open 1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_open 2
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[feature_control] feature_id = 3123, len=8
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 2, power 1 curr_sensor_name s5k4h7yx_ofilm_ultra_mipi_raw, enable list s5k4h7yx_ofilm_ultra_mipi_raw s5k4h7yx_qtech_ultra_mipi_raw ov8856_qtech_ultra_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][kdCISModulePowerOn]Profile = 22788 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[open] cxc open enter
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[return_sensor_id] s5k_ultra_ofilm get_byte = 18558
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[open] s5k4h7yxmipiraw open sensor_id = 487e\x0d
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[open] i2c write id: 0x5a, sensor id: 0x487e
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[sensor_init] sensor_init() E
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][SensorOpen]Profile = 34614 us
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]s5k4h7yx_camera_sensor[close] E
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensor_idx 2, power 0 curr_sensor_name s5k4h7yx_ofilm_ultra_mipi_raw, enable list s5k4h7yx_ofilm_ultra_mipi_raw s5k4h7yx_qtech_ultra_mipi_raw ov8856_qtech_ultra_mipi_raw
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_release 1
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][ISP][ISP_release] - E. UserCount: 1.
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][ISP][ISP_release] Curr UserCount(0), (process, pid, tgid)=(camerahalserver, xxxx, xxxx), log_limit_line(0), last user
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver][ISP][ISP_release] - X. UserCount: 0. G_u4EnableClockCount:0
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_clk_disable_all
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam0_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam1_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam2_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam3_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam3_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam3_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam4_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam4_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam4_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam5_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam5_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam5_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam6_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam6_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam6_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam7_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam7_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam7_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam8_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam8_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam8_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam9_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam9_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam9_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam10_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam10_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam10_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam11_vcama not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam11_vcamd not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]sensordrv kd_camera_hw: kd_camera_hw supply cam11_vcamio not found, using dummy regulator
+[  xxx.xxxxxx] (x)[xxxx:camerahalserver]imgsensor_release 0
