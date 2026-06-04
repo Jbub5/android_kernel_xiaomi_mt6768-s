@@ -308,7 +308,7 @@ static struct imgsensor_struct imgsensor = {
 		 * KAL_FALSE for in test pattern mode,
 		 * KAL_TRUE for normal output
 		 */
-	.test_pattern = KAL_FALSE,
+	.test_pattern = KAL_TRUE,
 
 	/* current scenario id */
 	.current_scenario_id = MSDK_SCENARIO_ID_CAMERA_PREVIEW,
@@ -1746,7 +1746,7 @@ static kal_uint32 open(void)
 	imgsensor.dummy_pixel = 0;
 	imgsensor.dummy_line = 0;
 	imgsensor.ihdr_mode = 0;
-	imgsensor.test_pattern = KAL_FALSE;
+	imgsensor.test_pattern = KAL_TRUE;
 	imgsensor.current_fps = imgsensor_info.pre.max_framerate;
 	spin_unlock(&imgsensor_drv_lock);
 
