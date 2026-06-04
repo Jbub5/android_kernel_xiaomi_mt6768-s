@@ -99,7 +99,7 @@ DEFINE_MUTEX(oc_mutex);
 /************************************************************************
  * Profiling
  ************************************************************************/
-#define IMGSENSOR_PROF 1
+#define IMGSENSOR_PROF 0
 #if IMGSENSOR_PROF
 void IMGSENSOR_PROFILE_INIT(struct timeval *ptv)
 {
@@ -119,8 +119,8 @@ void IMGSENSOR_PROFILE(struct timeval *ptv, char *tag)
 }
 
 #else
-void IMGSENSOR_PROFILE_INIT(struct timeval *ptv) {}
-void IMGSENSOR_PROFILE(struct timeval *ptv, char *tag) {}
+static inline void IMGSENSOR_PROFILE_INIT(struct timeval *ptv) {}
+static inline void IMGSENSOR_PROFILE(struct timeval *ptv, char *tag) {}
 #endif
 
 /************************************************************************
