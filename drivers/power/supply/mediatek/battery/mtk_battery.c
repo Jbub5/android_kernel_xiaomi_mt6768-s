@@ -429,10 +429,7 @@ static int bms_get_property(struct power_supply *psy,
 
 	int fgcurrent = 0;
 	bool b_ischarging = 0;
-#ifndef CONFIG_TARGET_PRODUCT_SELENECOMMON
 	int qmax = 5020 * 1000;
-#endif
-
 	switch (psp) {
 	case POWER_SUPPLY_PROP_CAPACITY:
 		val->intval = gm.ui_soc;
@@ -470,17 +467,12 @@ static int bms_get_property(struct power_supply *psy,
 			val->intval = gm.battery_id;
 		}
 #endif
-		pr_info("wlc mature battery_type index:%d.\n", val->intval);
 		break;
 	case POWER_SUPPLY_PROP_CHARGE_FULL:
 		pr_err("gm.algo_qmax:%d gm.aging_factor:%d\n", gm.algo_qmax, gm.aging_factor);
-#ifndef CONFIG_TARGET_PRODUCT_SELENECOMMON
 		if (mtk_qmax_aging < 50200)
 			qmax = mtk_qmax_aging * 100;
 		val->intval = qmax;
-#else
-		val->intval = gm.algo_qmax * gm.aging_factor / 100;
-#endif
 		break;
 	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
 #ifndef CONFIG_TARGET_PRODUCT_SELENECOMMON
@@ -577,7 +569,6 @@ void otg_thermal_limit(void)
 			pr_err("primary_charger is NULL again\n");
 			return;
 		}
-		pr_err("primary_charger is NULL0331\n");
 	}
 
 	if (otg_limit == 1) {
@@ -599,9 +590,7 @@ static int battery_get_property(struct power_supply *psy,
 	int fgcurrent = 0;
 	bool b_ischarging = 0;
 	int input_suspend;
-#ifndef CONFIG_TARGET_PRODUCT_SELENECOMMON
 	int qmax = 5020 * 1000;
-#endif
 	u32 type;
 	static struct charger_device *primary_charger;
 	struct battery_data *data = container_of(psy->desc, struct battery_data, psd);
@@ -672,13 +661,9 @@ static int battery_get_property(struct power_supply *psy,
 		break;
 	case POWER_SUPPLY_PROP_CHARGE_FULL:
 		pr_err("gm.algo_qmax:%d gm.aging_factor:%d\n", gm.algo_qmax, gm.aging_factor);
-#ifndef CONFIG_TARGET_PRODUCT_SELENECOMMON
 		if (mtk_qmax_aging < 50200)
 			qmax = mtk_qmax_aging * 100;
 		val->intval = qmax;
-#else
-		val->intval = gm.algo_qmax * gm.aging_factor / 100;
-#endif
 		break;
 	case POWER_SUPPLY_PROP_CHARGE_COUNTER:
 		val->intval = gm.ui_soc * 5020 * 1000 / 100;
@@ -926,7 +911,7 @@ void battery_update(struct battery_data *bat_data)
 		pr_err("primary_charger is NULL\n");
 		primary_charger = get_charger_by_name("primary_chg");
 		if (!primary_charger) {
-			pr_err("primary_charger is NULL00\n");
+			pr_err("primary_charger is NULL again\n");
 			return;
 		}
 	}
@@ -4705,7 +4690,7 @@ static void otg_boost_limit_work(struct work_struct *work)
 		pr_err("primary_charger is NULL\n");
 		primary_charger = get_charger_by_name("primary_chg");
 		if (!primary_charger) {
-			pr_err("primary_charger is NULL\n");
+			pr_err("primary_charger is NULL again\n");
 			return;
 		}
 	}

@@ -387,7 +387,7 @@ int rawbulk_bind_config(struct usb_configuration *c, int transfer_id)
 		fn->function.disable = rawbulk_function_disable;
 
 		INIT_WORK(&fn->activator, do_activate);
-		fn->initialized = 1;
+		fn->initialized = -1;
 	}
 
 	rc = usb_add_function(c, &fn->function);
@@ -467,7 +467,7 @@ static struct usb_function *rawbulk_alloc(struct usb_function_instance *fi,
 		fn->function.free_func = rawbulk_free;
 
 		INIT_WORK(&fn->activator, do_activate);
-		fn->initialized = 1;
+		fn->initialized = -1;
 	}
 
 	return &fn->function;

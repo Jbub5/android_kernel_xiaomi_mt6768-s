@@ -360,10 +360,10 @@ dual_swchg_select_charging_current_limit(struct charger_manager *info)
 		pdata->charging_current_limit =
 				info->data.apple_2_1a_charger_current;
 #ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
-	} else if (info->chr_type == POWER_SUPPLY_TYPE_USB_HVDCP) {
+	} else if (info->chr_type == HVDCP_CHARGER) {
           pdata->input_current_limit = 2000000;
           pdata->charging_current_limit = 6000000;
-          pr_err("POWER_SUPPLY_TYPE_USB_HVDCP set icl\n");
+          pr_err("HVDCP_CHARGER set icl\n");
 #endif
 	}
 
@@ -953,9 +953,9 @@ int mtk_dual_switch_chr_err(struct charger_manager *info)
 	return 0;
 }
 
-#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
 static int change_recharge_status(struct charger_manager *info)
 {
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
 	bool recharge_flag = false;
 	unsigned int battery_uisoc = 0;
 	long int battery_volt = 0;
@@ -1002,15 +1002,15 @@ static int change_recharge_status(struct charger_manager *info)
 		}
 	}
 	return recharge_flag;
-}
+#else
+	return true;
 #endif
+}
 
 int mtk_dual_switch_chr_full(struct charger_manager *info)
 {
 	bool chg_done = false;
-#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
 	bool recharge_flag = false;
-#endif
 	struct dual_switch_charging_alg_data *swchgalg = info->algorithm_data;
 
 	/* turn off LED */
@@ -1022,12 +1022,9 @@ int mtk_dual_switch_chr_full(struct charger_manager *info)
 	swchg_select_cv(info);
 	info->polling_interval = CHARGING_FULL_INTERVAL;
 	charger_dev_is_charging_done(info->chg1_dev, &chg_done);
-#ifndef CONFIG_TARGET_PRODUCT_SELENECOMMON
-	if (!chg_done) {
-#else
+
 	recharge_flag = change_recharge_status(info);
 	if (!chg_done && recharge_flag) {
-#endif
 		swchgalg->state = CHR_CC;
 		charger_dev_do_event(info->chg1_dev, EVENT_RECHARGE, 0);
 		mtk_pe20_set_to_check_chr_type(info, true);
@@ -1199,14 +1196,7 @@ int mtk_dual_switch_charging_init(struct charger_manager *info)
 		chr_info("Found primary charger [%s]\n",
 			info->chg1_dev->props.alias_name);
 	else
-#ifndef CONFIG_TARGET_PRODUCT_SELENECOMMON
 		chr_err("*** Error: can't find primary charger ***\n");
-#else
-		msleep(300);
-		info->chg1_dev = get_charger_by_name("primary_chg");
-		if (info->chg1_dev == NULL)
-			chr_err("*** Error: can't find primary charger, chg1_dev == NULL ***\n");
-#endif
 
 	info->chg2_dev = get_charger_by_name("secondary_chg");
 	if (info->chg2_dev)
