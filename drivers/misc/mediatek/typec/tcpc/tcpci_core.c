@@ -441,14 +441,6 @@ struct tcpc_device *tcpc_device_register(struct device *parent,
 		return ERR_PTR(ret);
 	}
 
-#ifdef CONFIG_DUAL_ROLE_USB_INTF
-	ret = tcpc_dual_role_phy_init(tcpc);
-	if (ret < 0) {
-		pr_err("%s : init dual role usb fail(%d)\n", __func__, ret);
-		tcpc->dr_usb = NULL;
-	}
-#endif /* CONFIG_DUAL_ROLE_USB_INTF */
-
 	INIT_DELAYED_WORK(&tcpc->init_work, tcpc_init_work);
 	INIT_DELAYED_WORK(&tcpc->event_init_work, tcpc_event_init_work);
 
@@ -465,6 +457,13 @@ struct tcpc_device *tcpc_device_register(struct device *parent,
 	pd_core_init(tcpc);
 #endif /* CONFIG_USB_POWER_DELIVERY */
 
+#ifdef CONFIG_DUAL_ROLE_USB_INTF
+	ret = tcpc_dual_role_phy_init(tcpc);
+	if (ret < 0) {
+		pr_err("%s : init dual role usb fail(%d)\n", __func__, ret);
+		tcpc->dr_usb = NULL;
+	}
+#endif /* CONFIG_DUAL_ROLE_USB_INTF */
 	return tcpc;
 }
 EXPORT_SYMBOL(tcpc_device_register);
@@ -830,6 +829,11 @@ void tcpc_device_unregister(struct device *dev, struct tcpc_device *tcpc)
 	wakeup_source_unregister(tcpc->detach_wake_lock);
 	wakeup_source_unregister(tcpc->attach_wake_lock);
 
+/*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 start*/
+#ifdef CONFIG_DUAL_ROLE_USB_INTF
+	devm_dual_role_instance_unregister(&tcpc->dev, tcpc->dr_usb);
+#endif /* CONFIG_DUAL_ROLE_USB_INTF */
+/*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 end*/
 	device_unregister(&tcpc->dev);
 
 }
