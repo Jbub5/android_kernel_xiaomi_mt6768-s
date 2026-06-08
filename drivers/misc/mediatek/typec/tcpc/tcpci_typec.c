@@ -2187,6 +2187,7 @@ static inline int typec_handle_pe_idle(struct tcpc_device *tcpc)
 
 	case typec_unattachwait_pe:
 		typec_unattached_entry(tcpc);
+		typec_alert_attach_state_change(tcpc);
 		break;
 
 	default:
