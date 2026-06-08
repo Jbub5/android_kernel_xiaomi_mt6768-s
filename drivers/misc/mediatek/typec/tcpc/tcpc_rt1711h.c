@@ -1562,8 +1562,6 @@ static inline int rt1711h_check_revision(struct i2c_client *client)
 		return -EIO;
 	}
 
-	g_pd_is_present = true;
-
 	if (vid != RICHTEK_1711_VID) {
 		pr_info("%s failed, VID=0x%04x\n", __func__, vid);
 		return -ENODEV;
