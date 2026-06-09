@@ -299,9 +299,10 @@ static void wusb3801_irq_work_handler(struct kthread_work *work)
 		//tcpci_report_usb_port_detached(chip->tcpc);
 		tcpci_report_usb_port_changed(chip->tcpc);
 		//tcpc->typec_role = TYPEC_ROLE_UNKNOWN;
-		//tcpci_notify_typec_state(tcpc);
+		tcpci_notify_typec_state(tcpc);
 		if (tcpc->typec_attach_old == TYPEC_ATTACHED_SRC) {
 		    tcpci_source_vbus(tcpc, TCP_VBUS_CTRL_TYPEC, TCPC_VBUS_SOURCE_0V, 0);
+			msleep(100);
 		}
 		tcpc->typec_attach_old = TYPEC_UNATTACHED;
 	}
@@ -340,8 +341,8 @@ static void wusb3801_irq_work_handler(struct kthread_work *work)
 		if (tcpc->typec_attach_new != TYPEC_ATTACHED_SRC) {
 				tcpc->typec_attach_new = TYPEC_ATTACHED_SRC;
 				//tcpci_report_usb_port_attached(chip->tcpc);
-				tcpci_report_usb_port_changed(chip->tcpc);
 				tcpci_source_vbus(tcpc, TCP_VBUS_CTRL_TYPEC, TCPC_VBUS_SOURCE_5V, 0);
+				tcpci_report_usb_port_changed(chip->tcpc);
 				//tcpci_notify_typec_state(tcpc);
 				tcpc->typec_attach_old = TYPEC_ATTACHED_SRC;
 		}
@@ -449,7 +450,7 @@ static int wusb3801_init_alert(struct tcpc_device *tcpc)
 
 	kthread_init_worker(&chip->irq_worker);
 	chip->irq_worker_task = kthread_run(kthread_worker_fn,
-			&chip->irq_worker, "chip->tcpc_desc->name");
+			&chip->irq_worker, "%s", chip->tcpc_desc->name);
 	if (IS_ERR(chip->irq_worker_task)) {
 		pr_err("Error: Could not create tcpc task\n");
 		goto init_alert_err;
@@ -801,10 +802,10 @@ static void wusb3801_first_check_typec_work(struct work_struct *work)
 	case WUSB3801_TYPE_SNK:
 		chip->tcpc->typec_attach_new = TYPEC_ATTACHED_SRC;
 		//tcpci_report_usb_port_attached(chip->tcpc);
+		tcpci_source_vbus(chip->tcpc, TCP_VBUS_CTRL_TYPEC, TCPC_VBUS_SOURCE_5V, 0);
 		tcpci_report_usb_port_changed(chip->tcpc);
 		//chip->tcpc->typec_role = TYPEC_ROLE_SRC;
 		//tcpci_notify_role_swap(chip->tcpc, TCP_NOTIFY_DR_SWAP, PD_ROLE_DFP);
-		tcpci_source_vbus(chip->tcpc, TCP_VBUS_CTRL_TYPEC, TCPC_VBUS_SOURCE_5V, 0);
 		//tcpci_notify_typec_state(chip->tcpc);
 		chip->tcpc->typec_attach_old = TYPEC_ATTACHED_SRC;
 		break;
@@ -830,7 +831,7 @@ static int wusb3801_tcpcdev_init(struct wusb3801_chip *chip, struct device *dev)
 	struct device_node *np;
 	u32 val, len;
 
-	const char *name = "default";
+	const char *name = "type_c_port0";
 
 	np = of_find_node_by_name(NULL, "type_c_port0");
 	if (!np) {
@@ -893,10 +894,10 @@ static int wusb3801_tcpcdev_init(struct wusb3801_chip *chip, struct device *dev)
 	if (IS_ERR(chip->tcpc))
 		return -EINVAL;
 
-	//chip->tcpc->typec_attach_old = !TYPEC_UNATTACHED;
-    //chip->tcpc->typec_attach_new = TYPEC_UNATTACHED;
+	chip->tcpc->typec_attach_old = TYPEC_UNATTACHED;
+    chip->tcpc->typec_attach_new = TYPEC_UNATTACHED;
     //tcpci_report_usb_port_detached(chip->tcpc);
-    //tcpci_report_usb_port_changed(chip->tcpc);
+    tcpci_report_usb_port_changed(chip->tcpc);
     //chip->tcpc->typec_role = TYPEC_ROLE_UNKNOWN;
 	schedule_delayed_work(
 						&chip->first_check_typec_work, msecs_to_jiffies(3000));
@@ -1033,7 +1034,7 @@ static int wusb3801_i2c_probe(struct i2c_client *client,
 	}
 	chip->dev = &client->dev;
 	chip->client = client;
-#ifdef __TEST_CC_PATCH_
+#ifdef __TEST_CC_PATCH__
 	chip->cc_sts = 0xFF;
 	chip->cc_test_flag = 0;
 	chip->dev_sub_id = dev_sub_id;
