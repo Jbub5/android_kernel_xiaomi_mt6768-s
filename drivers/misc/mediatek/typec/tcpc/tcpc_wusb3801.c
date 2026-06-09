@@ -34,8 +34,7 @@
 #include <linux/compiler.h>
 #include "inc/pd_dbg_info.h"
 #include "inc/tcpci.h"
-#include "inc/tcpc_wusb3801.h"
-#include <linux/usb/role.h>
+#include "inc/wusb3801.h"
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/mutex.h>
@@ -50,7 +49,6 @@
 #include "inc/tcpci.h"
 #include "inc/tcpci_timer.h"
 #include "inc/tcpci_typec.h"
-#include "../../extcon/extcon-mtk-usb.h"
 #if 1 /*  #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 9, 0))*/
 #include <linux/sched/rt.h>
 #endif /* #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 9, 0)) */
@@ -89,7 +87,7 @@ struct wusb3801_chip {
 	int chip_id;
 };
 #ifdef __TEST_CC_PATCH__
-uint8_t     typec_cc_orientation;
+extern uint8_t typec_cc_orientation;
 #endif	/* __TEST_CC_PATCH__ */
 static struct i2c_client *w_client;
 static int wusb3801_read_device(void *client, u32 reg, int len, void *dst)
@@ -866,12 +864,12 @@ static const struct i2c_device_id wusb3801_id_table[] = {
 };
 MODULE_DEVICE_TABLE(i2c, wusb3801_id_table);
 static const struct of_device_id rt_match_table[] = {
-	{.compatible = "will,wusb3801",},
+	{.compatible = "mediatek,usb_type_c",},
 	{},
 };
 static struct i2c_driver wusb3801_driver = {
 	.driver = {
-		.name = "wusb3801",
+		.name = "usb_type_c",
 		.owner = THIS_MODULE,
 		.of_match_table = rt_match_table,
 		.pm = wusb3801_PM_OPS,
@@ -886,11 +884,11 @@ static int __init wusb3801_init(void)
 {
 	struct device_node *np;
 	pr_info("%s (%s): initializing...\n", __func__, WUSB3801_DRV_VERSION);
-	np = of_find_node_by_name(NULL, "wusb3801");
+	np = of_find_node_by_name(NULL, "usb_type_c");
 	if (np != NULL)
-		pr_info("wusb3801 node found...\n");
+		pr_info("usb_type_c node found...\n");
 	else
-		pr_info("wusb3801 node not found...\n");
+		pr_info("usb_type_c node not found...\n");
 	return i2c_add_driver(&wusb3801_driver);
 }
 subsys_initcall(wusb3801_init);
