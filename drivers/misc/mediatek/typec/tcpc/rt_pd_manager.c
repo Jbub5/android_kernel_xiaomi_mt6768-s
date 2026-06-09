@@ -48,104 +48,6 @@ void __attribute__((weak)) usb_dpdm_pulldown(bool enable)
 	pr_notice("%s is not defined\n", __func__);
 }
 
-#ifdef CONFIG_DUAL_ROLE_USB_INTF
-static void rt_dual_role_mirror_attach(struct rt_pd_manager_data *rpmd,
-				       bool is_source)
-{
-	if (!rpmd->tcpc)
-		return;
-
-	if (is_source) {
-		rpmd->tcpc->dual_role_pr = DUAL_ROLE_PROP_PR_SRC;
-		rpmd->tcpc->dual_role_dr = DUAL_ROLE_PROP_DR_HOST;
-		rpmd->tcpc->dual_role_mode = DUAL_ROLE_PROP_MODE_DFP;
-		rpmd->tcpc->dual_role_vconn = DUAL_ROLE_PROP_VCONN_SUPPLY_YES;
-	} else {
-		rpmd->tcpc->dual_role_pr = DUAL_ROLE_PROP_PR_SNK;
-		rpmd->tcpc->dual_role_dr = DUAL_ROLE_PROP_DR_DEVICE;
-		rpmd->tcpc->dual_role_mode = DUAL_ROLE_PROP_MODE_UFP;
-		rpmd->tcpc->dual_role_vconn = DUAL_ROLE_PROP_VCONN_SUPPLY_NO;
-	}
-}
-
-static void rt_dual_role_mirror_detach(struct rt_pd_manager_data *rpmd)
-{
-	if (!rpmd->tcpc)
-		return;
-
-	rpmd->tcpc->dual_role_pr = DUAL_ROLE_PROP_PR_NONE;
-	rpmd->tcpc->dual_role_dr = DUAL_ROLE_PROP_DR_NONE;
-	rpmd->tcpc->dual_role_mode = DUAL_ROLE_PROP_MODE_NONE;
-	rpmd->tcpc->dual_role_vconn = DUAL_ROLE_PROP_VCONN_SUPPLY_NO;
-}
-
-static void rt_dual_role_mirror_pr(struct rt_pd_manager_data *rpmd,
-				   bool is_source)
-{
-	if (!rpmd->tcpc)
-		return;
-
-	rpmd->tcpc->dual_role_pr = is_source ?
-		DUAL_ROLE_PROP_PR_SRC : DUAL_ROLE_PROP_PR_SNK;
-}
-
-static void rt_dual_role_mirror_dr(struct rt_pd_manager_data *rpmd,
-				   bool is_host)
-{
-	if (!rpmd->tcpc)
-		return;
-
-	rpmd->tcpc->dual_role_dr = is_host ?
-		DUAL_ROLE_PROP_DR_HOST : DUAL_ROLE_PROP_DR_DEVICE;
-	rpmd->tcpc->dual_role_mode = is_host ?
-		DUAL_ROLE_PROP_MODE_DFP : DUAL_ROLE_PROP_MODE_UFP;
-}
-
-static void rt_dual_role_mirror_vconn(struct rt_pd_manager_data *rpmd,
-				      bool is_source)
-{
-	if (!rpmd->tcpc)
-		return;
-
-	rpmd->tcpc->dual_role_vconn = is_source ?
-		DUAL_ROLE_PROP_VCONN_SUPPLY_YES :
-		DUAL_ROLE_PROP_VCONN_SUPPLY_NO;
-}
-#else
-static inline void rt_dual_role_mirror_attach(struct rt_pd_manager_data *rpmd,
-					      bool is_source)
-{
-	(void)rpmd;
-	(void)is_source;
-}
-
-static inline void rt_dual_role_mirror_detach(struct rt_pd_manager_data *rpmd)
-{
-	(void)rpmd;
-}
-
-static inline void rt_dual_role_mirror_pr(struct rt_pd_manager_data *rpmd,
-					  bool is_source)
-{
-	(void)rpmd;
-	(void)is_source;
-}
-
-static inline void rt_dual_role_mirror_dr(struct rt_pd_manager_data *rpmd,
-					  bool is_host)
-{
-	(void)rpmd;
-	(void)is_host;
-}
-
-static inline void rt_dual_role_mirror_vconn(struct rt_pd_manager_data *rpmd,
-					     bool is_source)
-{
-	(void)rpmd;
-	(void)is_source;
-}
-#endif
-
 static int pd_tcp_notifier_call(struct notifier_block *nb,
 				unsigned long event, void *data)
 {
@@ -201,7 +103,6 @@ static int pd_tcp_notifier_call(struct notifier_block *nb,
 					     noti->typec_state.rp_level -
 					     TYPEC_CC_VOLT_SNK_DFT);
 			typec_set_vconn_role(rpmd->typec_port, TYPEC_SINK);
-			rt_dual_role_mirror_attach(rpmd, false);
 		} else if ((old_state == TYPEC_ATTACHED_SNK ||
 			    old_state == TYPEC_ATTACHED_NORP_SRC ||
 			    old_state == TYPEC_ATTACHED_CUSTOM_SRC ||
@@ -236,7 +137,6 @@ static int pd_tcp_notifier_call(struct notifier_block *nb,
 			}
 			typec_set_pwr_opmode(rpmd->typec_port, opmode);
 			typec_set_vconn_role(rpmd->typec_port, TYPEC_SOURCE);
-			rt_dual_role_mirror_attach(rpmd, true);
 		} else if ((old_state == TYPEC_ATTACHED_SRC ||
 			    old_state == TYPEC_ATTACHED_DEBUG) &&
 			    new_state == TYPEC_UNATTACHED) {
@@ -255,7 +155,6 @@ static int pd_tcp_notifier_call(struct notifier_block *nb,
 		if (new_state == TYPEC_UNATTACHED) {
 			typec_unregister_partner(rpmd->partner);
 			rpmd->partner = NULL;
-			rt_dual_role_mirror_detach(rpmd);
 			if (rpmd->typec_caps.prefer_role == TYPEC_SOURCE) {
 				typec_set_data_role(rpmd->typec_port,
 						    TYPEC_HOST);
@@ -315,14 +214,12 @@ static int pd_tcp_notifier_call(struct notifier_block *nb,
 			 */
 
 			typec_set_pwr_role(rpmd->typec_port, TYPEC_SINK);
-			rt_dual_role_mirror_pr(rpmd, false);
 		} else if (noti->swap_state.new_role == PD_ROLE_SOURCE) {
 			dev_info(rpmd->dev, "%s swap power role to source\n",
 					    __func__);
 			/* report charger plug-out */
 
 			typec_set_pwr_role(rpmd->typec_port, TYPEC_SOURCE);
-			rt_dual_role_mirror_pr(rpmd, true);
 		}
 		break;
 	case TCP_NOTIFY_DR_SWAP:
@@ -337,7 +234,6 @@ static int pd_tcp_notifier_call(struct notifier_block *nb,
 			 */
 
 			typec_set_data_role(rpmd->typec_port, TYPEC_DEVICE);
-			rt_dual_role_mirror_dr(rpmd, false);
 		} else if (noti->swap_state.new_role == PD_ROLE_DFP) {
 			dev_info(rpmd->dev, "%s swap data role to host\n",
 					    __func__);
@@ -347,7 +243,6 @@ static int pd_tcp_notifier_call(struct notifier_block *nb,
 			 */
 
 			typec_set_data_role(rpmd->typec_port, TYPEC_HOST);
-			rt_dual_role_mirror_dr(rpmd, true);
 		}
 		break;
 	case TCP_NOTIFY_VCONN_SWAP:
@@ -357,12 +252,10 @@ static int pd_tcp_notifier_call(struct notifier_block *nb,
 			dev_info(rpmd->dev, "%s swap vconn role to on\n",
 					    __func__);
 			typec_set_vconn_role(rpmd->typec_port, TYPEC_SOURCE);
-			rt_dual_role_mirror_vconn(rpmd, true);
 		} else {
 			dev_info(rpmd->dev, "%s swap vconn role to off\n",
 					    __func__);
 			typec_set_vconn_role(rpmd->typec_port, TYPEC_SINK);
-			rt_dual_role_mirror_vconn(rpmd, false);
 		}
 		break;
 	case TCP_NOTIFY_EXT_DISCHARGE:
