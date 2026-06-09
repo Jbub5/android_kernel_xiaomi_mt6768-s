@@ -423,7 +423,7 @@ static int mtk_pd_adapter_probe(struct platform_device *pdev)
 
 	info->pd_nb.notifier_call = pd_tcp_notifier_call;
 	ret = register_tcp_dev_notifier(info->tcpc, &info->pd_nb,
-				TCP_NOTIFY_TYPE_USB | TCP_NOTIFY_TYPE_MISC | TCP_NOTIFY_TYPE_MODE);
+				TCP_NOTIFY_TYPE_USB | TCP_NOTIFY_TYPE_MISC);
 	if (ret < 0) {
 		pr_info("%s: register tcpc notifer fail\n", __func__);
 		ret = -EINVAL;
