@@ -1,6 +1,5 @@
 /*
  * Copyright (c) 2018, ON Semiconductor Inc. All rights reserved.
- * Copyright (C) 2021 XiaoMi, Inc.
  *
  * fusb303 USB TYPE-C Configuration Controller driver
  *
@@ -28,6 +27,10 @@
 #include <linux/delay.h>
 #include <linux/workqueue.h>
 #include "inc/tcpci.h"
+#include "../../extcon/extcon-mtk-usb.h"
+#include <linux/usb/role.h>
+#include <linux/pm_wakeup.h>
+
 #ifdef HAVE_DR
 #include <linux/usb/class-dual-role.h>
 #endif /* HAVE_DR */
@@ -73,6 +76,8 @@
 #define FUSB303_REG_TYPE                0x13
 #define FUSB303_REG_INTERRUPT           0x14
 #define FUSB303_REG_INTERRUPT1          0x15
+#define TYPEC_DERECTION_CC1           0x10
+#define TYPEC_DERECTION_CC2           0x20
 /* Register Values */
 #define FUSB303_REV                     0x10
 #define FUSB303_REVTYPE                 0x01
@@ -238,8 +243,8 @@
 #define REVERSE_CHG_SINK				0X02
 #define REVERSE_CHG_DRP					0X03
 #define REVERSE_CHG_TEST				0X04
-
-extern uint8_t     typec_cc_orientation;
+#define FUSB303_IRQ_WAKE_TIME	(1000) /* ms */
+uint8_t     typec_cc_orientation;
 bool first_check = true;
 struct fusb303_chip *chip_chg;
 struct i2c_client *g_client;
@@ -260,6 +265,7 @@ struct fusb303_chip {
 	struct i2c_client *client;
 	struct fusb303_data *pdata;
 	struct workqueue_struct  *cc_wq;
+	struct wakeup_source *irq_wake_lock;
 	struct tcpc_device *tcpc;
 	struct tcpc_desc *tcpc_desc;
 	int irq_gpio;
@@ -323,14 +329,12 @@ out:
 }
 static int fusb303_read_device_id(struct fusb303_chip *chip)
 {
-	struct device *cdev = &chip->client->dev;
 	int rc;
 	rc = i2c_smbus_read_byte_data(chip->client,
 				FUSB303_REG_DEVICEID);
 	if (rc < 0)
 		return rc;
 	chip->dev_id = rc;
-	dev_info(cdev, "%s: device id: 0x%02x\n", __func__, rc);
 	return rc;
 }
 static int fusb303_update_status(struct fusb303_chip *chip)
@@ -365,46 +369,30 @@ static int fusb303_update_status(struct fusb303_chip *chip)
 }
 static int fusb303_set_manual_reg(struct fusb303_chip *chip, u8 state)
 {
-	struct device *cdev = &chip->client->dev;
 	int rc = 0;
-
 	if (state > FUSB303_FORCE_SRC)
 		return -EINVAL;
 	if (state & FUSB303_DISABLED) {
-		dev_err(cdev,
-				"%s: return err if sw try to disable device state=%d\n",
-				__func__, state);
 		return -EINVAL;
 	}
 	if ((state & FUSB303_FORCE_SRC) && (chip->type == FUSB303_TYPE_SRC)) {
-		dev_err(cdev,
-				"%s: return err if chip already in src, state=%d\n",
-				__func__, state);
 		return -EINVAL;
 	}
 	if ((state & FUSB303_FORCE_SNK) && (chip->type == FUSB303_TYPE_SNK)) {
-		dev_err(cdev,
-				"%s: return err if chip already in snk, state=%d\n",
-				__func__, state);
 		return -EINVAL;
 	}
 	rc = i2c_smbus_write_byte_data(chip->client,
 			FUSB303_REG_MANUAL,
 			state);
 	if (rc < 0) {
-		dev_err(cdev, "%s: failed to write manual, errno=%d\n",
-				__func__, rc);
 		return rc;
 	}
-	dev_info(cdev, "%s: state=%d\n", __func__, state);
 	return rc;
 }
 static int fusb303_set_chip_state(struct fusb303_chip *chip, u8 state)
 {
 	struct device *cdev = &chip->client->dev;
 	int rc = 0;
-
-	dev_info(cdev, "%s: update manual reg=%d\n", __func__, state);
 	rc = fusb303_set_manual_reg(chip, state);
 	if (rc < 0) {
 		dev_err(cdev, "%s: failed to write manual reg\n", __func__);
@@ -1556,10 +1544,6 @@ static void fusb303_bclvl_changed(struct fusb303_chip *chip)
 		fusb303_power_set_icurrent_max(chip, limit);
 	}
 	dev_info(cdev, "%s: bc_lvl=%d\n", __func__, chip->bc_lvl);
-
-	if (!chip->bc_lvl && type == FUSB303_TYPE_SNK) {
-		fusb303_detach(chip);
-	}
 }
 static void fusb303_autosnk_changed(struct fusb303_chip *chip)
 {
@@ -1702,7 +1686,6 @@ static void fusb303_attached_src(struct fusb303_chip *chip)
 	dual_role_instance_changed(chip->dual_role);
 #endif /* HAVE_DR */
 	chip->type = FUSB303_TYPE_SRC;
-	dev_info(cdev, "%s: chip->type=0x%02x\n", __func__, chip->type);
 }
 static void fusb303_attached_snk(struct fusb303_chip *chip)
 {
@@ -1805,12 +1788,8 @@ static void fusb303_attach(struct fusb303_chip *chip)
 		dev_err(cdev, "%s: failed to read type\n", __func__);
 		return;
 	}
-
 	type = (status & FUSB303_ATTACH) ?
 		(rc & FUSB303_TYPE_MASK) : FUSB303_TYPE_INVALID;
-	dev_info(cdev, "%s: status=0x%02x, status1=0x%02x, type=0x%02x\n",
-			__func__, status, status1, type);
-
 	switch (type) {
 	case FUSB303_TYPE_SRC:
 	case FUSB303_TYPE_SRC_ACC:
@@ -1854,6 +1833,11 @@ static void fusb303_attach(struct fusb303_chip *chip)
 	case FUSB303_TYPE_PWR_AUD_ACC:
 		fusb303_attached_aud_acc(chip);
 		chip->type = type;
+		if (chip->tcpc->typec_attach_new != TYPEC_ATTACHED_AUDIO) {
+			chip->tcpc->typec_attach_new = TYPEC_ATTACHED_AUDIO;
+			tcpci_notify_typec_state(chip->tcpc);
+			chip->tcpc->typec_attach_old = TYPEC_ATTACHED_AUDIO;
+		}
 		break;
 	case FUSB303_TYPE_INVALID:
 		fusb303_detach(chip);
@@ -1891,7 +1875,6 @@ static void fusb303_work_handler(struct work_struct *work)
 		goto work_unlock;
 	}
 	int_sts = rc & FUSB303_INT_STS_MASK;
-	dev_info(cdev, "%s: int_sts[0x%02x]\n", __func__, int_sts);
 	if (int_sts & FUSB303_I_DETACH) {
 		fusb303_detach(chip);
 	} else {
@@ -1920,10 +1903,7 @@ static void fusb303_work_handler(struct work_struct *work)
 		dev_err(cdev, "%s: failed to read interrupt1\n", __func__);
 		goto work_unlock;
 	}
-
 	int_sts1 = rc & FUSB303_INT1_STS_MASK;
-	dev_info(cdev, "%s: interrupt_1=0x%02x\n", __func__, int_sts1);
-
 	if (int_sts1 & FUSB303_I_REMEDY) {
 		fusb303_remedy_changed(chip);
 	}
@@ -1958,6 +1938,8 @@ static irqreturn_t fusb303_interrupt(int irq, void *data)
 		pr_err("%s : called before init.\n", __func__);
 		return IRQ_HANDLED;
 	}
+	pr_err("%s : irq_wake_lock.\n", __func__);
+	__pm_wakeup_event(chip->irq_wake_lock, FUSB303_IRQ_WAKE_TIME);
 	/*
 	 * wake_lock_timeout, prevents multiple suspend entries
 	 * before charger gets chance to trigger usb core for device
@@ -1971,42 +1953,20 @@ static int fusb303_init_gpio(struct fusb303_chip *chip)
 {
 	struct device *cdev = &chip->client->dev;
 	int ret = 0;
-
 	chip->pdata->int_gpio = of_get_named_gpio(cdev->of_node,
 			"fusb303,int-gpio", 0);
-	dev_info(cdev, "%s: int_gpio: %d\n",
-			__func__, chip->pdata->int_gpio);
-
 	ret = devm_gpio_request(&chip->client->dev,
 			chip->pdata->int_gpio, "type_c_port0");
-	if (ret < 0) {
-		dev_err(cdev, "Error: failed to request GPIO %d (ret = %d)\n",
-				chip->pdata->int_gpio, ret);
-	}
-
 	ret = gpio_direction_input(chip->pdata->int_gpio);
 	if (ret < 0) {
 		dev_err(cdev,
 				"Error: failed to set GPIO %d as input pin(ret = %d)\n",
 				chip->pdata->int_gpio, ret);
 	}
-
 	chip->irq_gpio = gpio_to_irq(chip->pdata->int_gpio);
-	if (chip->irq_gpio  <= 0) {
-		dev_err(cdev, "gpio to irq fail, chip->irq(%d)\n",
-				chip->irq_gpio);
-	}
-
 	ret = request_irq(chip->irq_gpio, fusb303_interrupt,
 				IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
 				"fusb303_int_gpio", chip);
-	if (ret)
-		dev_err(cdev, "unable to request int_gpio %d\n",
-				chip->pdata->int_gpio);
-
-	dev_info(cdev, "%s: name=%s, gpio=%d, IRQ number=%d\n",
-			__func__, chip->tcpc_desc->name,
-			chip->pdata->int_gpio, chip->irq_gpio);
 	return ret;
 }
 static void fusb303_free_gpio(struct fusb303_chip *chip)
@@ -2068,15 +2028,8 @@ static int fusb303_parse_dt(struct fusb303_chip *chip)
 		data->ccdebtime = FUSB303_TCCDEB_150MS;
 		rc = 0;
 	}
-	dev_err(cdev,
-		"%s init_mode:%d dfp_power:%d tdrp_time:%d toggle_dutycycle_time:%d\n",
-			__func__, data->init_mode, data->dfp_power,
-			data->tdrptime, data->dttime);
-	dev_err(cdev, "%s autosnk_thres:%d ccdebtime:%d\n",
-			__func__, data->autosnk_thres, data->ccdebtime);
 	return rc;
 }
-
 #ifdef HAVE_DR
 static enum dual_role_property fusb_drp_properties[] = {
 	DUAL_ROLE_PROP_MODE,
@@ -2239,13 +2192,31 @@ int fusb303_get_fault_status(struct tcpc_device *tcpc, uint8_t *status)
 		pr_info("%s enter \n", __func__);
 	return 0;
 }
-
 static int fusb303_get_cc(struct tcpc_device *tcpc, int *cc1, int *cc2)
 {
+	int ret = 0;
+	u8 status = 0;
+	struct fusb303_chip *chip = tcpc_get_dev_data(tcpc);
 		pr_info("%s enter \n", __func__);
+	ret = i2c_smbus_read_word_data(chip->client,
+				FUSB303_REG_STATUS);
+	if (ret < 0) {
+		pr_err("%s: failed to read\n", __func__);
+		return ret;
+	}
+	status = ret & FUSB303_ORIENT_MASK;
+	if (ret & FUSB303_ATTACH) {
+		if (status == TYPEC_DERECTION_CC1)
+			*cc1 = 1;
+		else if (status == TYPEC_DERECTION_CC2)
+			*cc2 = 1;
+		else
+			*cc1 = *cc2 = 0;
+	}
+	else
+		*cc1 = *cc2 = 0;
 	return 0;
 }
-
 static int fusb303_set_cc(struct tcpc_device *tcpc, int pull)
 {
 		pr_info("%s enter \n", __func__);
@@ -2290,9 +2261,8 @@ int fusb303_get_mode(struct tcpc_device *tcpc, int *typec_mode)
 		dev_err(cdev, "%s: failed to read type\n", __func__);
 		return 0;
 	}
-
 	type = rc & FUSB303_TYPE_MASK;
-
+	/*K19A HQ-134474 K19A for typec mode by langjunjun at 2021/6/1 start*/
 	switch (type) {
 	case FUSB303_TYPE_SRC:
 	case FUSB303_TYPE_SRC_ACC:
@@ -2309,8 +2279,8 @@ int fusb303_get_mode(struct tcpc_device *tcpc, int *typec_mode)
 		break;
 	}
 	pr_err("dhx---fusb303 get typec mode type:%d, reg:%x\n", *typec_mode, type);
+	/*K19A HQ-134474 K19A for typec mode by langjunjun at 2021/6/1 end*/
 	return 0;
-
 }
 int fusb303_set_role(struct tcpc_device *tcpc, int state)
 {
@@ -2366,10 +2336,8 @@ static void fusb303_first_check_typec_work(struct work_struct *work)
 		dev_err(cdev, "%s: failed to read interrupt\n", __func__);
 		goto work_unlock;
 	}
-
 	first_check = false;
 	int_sts = rc & FUSB303_INT_STS_MASK;
-	dev_info(cdev, "%s: interrupt=0x%02x\n", __func__, int_sts);
 	if (int_sts & FUSB303_I_DETACH) {
 		fusb303_detach(chip);
 	} else {
@@ -2400,7 +2368,6 @@ static void fusb303_first_check_typec_work(struct work_struct *work)
 		goto work_unlock;
 	}
 	int_sts1 = rc & FUSB303_INT1_STS_MASK;
-	dev_info(cdev, "%s: interrupt_1=0x%02x\n", __func__, int_sts1);
 	if (int_sts1 & FUSB303_I_REMEDY) {
 		fusb303_remedy_changed(chip);
 	}
@@ -2453,6 +2420,10 @@ static int fusb303_probe(struct i2c_client *client,
 		dev_err(cdev, "smbus data not supported!\n");
 		return -EIO;
 	}
+	else
+	{
+		dev_info(cdev, "I2C functionality : OK...\n");
+	}
 	chip = devm_kzalloc(cdev, sizeof(struct fusb303_chip), GFP_KERNEL);
 	if (!chip) {
 		dev_err(cdev, "can't alloc fusb303_chip\n");
@@ -2495,6 +2466,7 @@ static int fusb303_probe(struct i2c_client *client,
 	sema_init(&chip->suspend_lock, 1);
 	INIT_DELAYED_WORK(&chip->first_check_typec_work,
 			fusb303_first_check_typec_work);
+	chip->irq_wake_lock = wakeup_source_register(cdev, "fusb303_irq_wakelock");
 	mutex_init(&chip->mlock);
 	ret = fusb303_create_devices(cdev);
 	if (ret < 0) {
@@ -2515,7 +2487,6 @@ static int fusb303_probe(struct i2c_client *client,
 	desc->role_def = TYPEC_ROLE_TRY_SRC;
 	desc->rp_lvl = TYPEC_CC_RP_1_5;
 	chip->tcpc_desc = desc;
-	pr_err("fusb303 role = %d\n", desc->role_def);
 	chip->tcpc = tcpc_device_register(cdev,
 			desc, &fusb303_tcpc_ops, chip);
 	chip->tcpc->typec_attach_old = TYPEC_UNATTACHED;
@@ -2568,6 +2539,7 @@ err3:
 	destroy_workqueue(chip->cc_wq);
 	mutex_destroy(&chip->mlock);
 	fusb303_free_gpio(chip);
+	wakeup_source_unregister(chip->irq_wake_lock);
 err2:
 	devm_kfree(cdev, chip->pdata);
 err1:
