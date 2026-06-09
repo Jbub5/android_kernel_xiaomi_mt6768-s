@@ -444,11 +444,7 @@ static inline bool pd_process_timer_msg(
 #ifdef CONFIG_USB_PD_REV30_SNK_FLOW_DELAY_STARTUP
 	case PD_TIMER_SNK_FLOW_DELAY:
 		if (pe_data->pd_traffic_control == PD_SINK_TX_START) {
-			if (typec_get_cc_res() == TYPEC_CC_VOLT_SNK_3_0)
 				pe_data->pd_traffic_control = PD_SINK_TX_OK;
-			else
-				pe_data->pd_traffic_control = PD_SINK_TX_NG;
-			if (pd_check_rev30(pd_port))
 				dpm_reaction_set_ready_once(pd_port);
 		}
 		break;
