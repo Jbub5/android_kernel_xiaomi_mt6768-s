@@ -27,8 +27,6 @@
 #include <linux/delay.h>
 #include <linux/workqueue.h>
 #include "inc/tcpci.h"
-#include "../../extcon/extcon-mtk-usb.h"
-#include <linux/usb/role.h>
 #include <linux/pm_wakeup.h>
 
 #ifdef HAVE_DR
@@ -244,7 +242,7 @@
 #define REVERSE_CHG_DRP					0X03
 #define REVERSE_CHG_TEST				0X04
 #define FUSB303_IRQ_WAKE_TIME	(1000) /* ms */
-uint8_t     typec_cc_orientation;
+extern uint8_t typec_cc_orientation;
 bool first_check = true;
 struct fusb303_chip *chip_chg;
 struct i2c_client *g_client;
