@@ -240,6 +240,8 @@
 #define REVERSE_CHG_TEST				0X04
 
 extern uint8_t     typec_cc_orientation;
+extern int tcpci_report_usb_port_attached(struct tcpc_device *tcpc);
+extern int tcpci_report_usb_port_detached(struct tcpc_device *tcpc);
 bool first_check = true;
 struct fusb303_chip *chip_chg;
 struct i2c_client *g_client;
@@ -1698,6 +1700,7 @@ static void fusb303_attached_src(struct fusb303_chip *chip)
 	}
 
 	fusb_update_state(chip, FUSB_STATE_ATTACHED_SRC);
+	tcpci_report_usb_port_attached(chip->tcpc);
 #ifdef HAVE_DR
 	dual_role_instance_changed(chip->dual_role);
 #endif /* HAVE_DR */
@@ -1712,6 +1715,7 @@ static void fusb303_attached_snk(struct fusb303_chip *chip)
 	}
 
 	fusb_update_state(chip, FUSB_STATE_ATTACHED_SNK);
+	tcpci_report_usb_port_attached(chip->tcpc);
 #ifdef HAVE_DR
 	dual_role_instance_changed(chip->dual_role);
 #endif /* HAVE_DR */
@@ -1765,6 +1769,7 @@ static void fusb303_detach(struct fusb303_chip *chip)
 				TCP_VBUS_CTRL_TYPEC, TCPC_VBUS_SOURCE_0V, 0);
 	}
 	chip->tcpc->typec_attach_old = TYPEC_UNATTACHED;
+	tcpci_report_usb_port_detached(chip->tcpc);
 #ifdef HAVE_DR
 	dual_role_instance_changed(chip->dual_role);
 #endif /* HAVE_DR */

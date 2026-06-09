@@ -2197,6 +2197,11 @@ static inline int typec_handle_pe_idle(struct tcpc_device *tcpc)
 	return 0;
 }
 
+inline int typec_pd_start_entry(struct tcpc_device *tcpc_dev)
+{
+	return pd_put_cc_attached_event(tcpc_dev, tcpc_dev->typec_attach_new);
+}
+
 #ifdef CONFIG_USB_PD_WAIT_BC12
 static inline void typec_handle_pd_wait_bc12(struct tcpc_device *tcpc)
 {
@@ -2731,7 +2736,6 @@ int tcpc_typec_change_role(
 }
 
 #ifdef CONFIG_TYPEC_CAP_POWER_OFF_CHARGE
-#if 0
 static int typec_init_power_off_charge(struct tcpc_device *tcpc)
 {
 	bool cc_open;
@@ -2773,7 +2777,6 @@ static int typec_init_power_off_charge(struct tcpc_device *tcpc)
 
 	return 1;
 }
-#endif
 #endif	/* CONFIG_TYPEC_CAP_POWER_OFF_CHARGE */
 
 int tcpc_typec_init(struct tcpc_device *tcpc, uint8_t typec_role)
@@ -2806,7 +2809,6 @@ int tcpc_typec_init(struct tcpc_device *tcpc, uint8_t typec_role)
 	tcpc->typec_during_custom_hv = false;
 #endif	/* CONFIG_TYPEC_CAP_CUSTOM_HV */
 
-#if 0
 #ifdef CONFIG_TYPEC_CHECK_LEGACY_CABLE
 	tcpc->typec_legacy_cable = false;
 	typec_legacy_reset_retry_wk(tcpc);
@@ -2824,7 +2826,6 @@ int tcpc_typec_init(struct tcpc_device *tcpc, uint8_t typec_role)
 #endif	/* CONFIG_TYPEC_POWER_CTRL_INIT */
 
 	typec_unattached_entry(tcpc);
-#endif
 	return ret;
 }
 
