@@ -375,7 +375,7 @@ void wusb3801_intr_handler_resume(void)
 	if (g_irq_3801_flag == true) {
 		g_irq_3801_flag = false;
 		pr_err("%s:ljj  g_irq_3801_flag is true\n", __func__);
-		__pm_wakeup_event(&g_3801_chip->irq_wake_lock, WUSB3801_IRQ_WAKE_TIME);
+		__pm_wakeup_event(g_3801_chip->irq_wake_lock, WUSB3801_IRQ_WAKE_TIME);
 		kthread_queue_work(&g_3801_chip->irq_worker, &g_3801_chip->irq_work);
 	}
 	return;
