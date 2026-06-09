@@ -21,11 +21,6 @@
 #include "inc/tcpci_typec.h"
 #include "inc/tcpci_event.h"
 #include "inc/pd_policy_engine.h"
-/*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 start*/
-#ifdef CONFIG_DUAL_ROLE_USB_INTF
-#include <linux/usb/class-dual-role.h>
-#endif /* CONFIG_DUAL_ROLE_USB_INTF */
-/*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 end*/
 
 /* From DTS */
 
@@ -855,17 +850,6 @@ int pd_set_data_role(struct pd_port *pd_port, uint8_t dr)
 	if (ret < 0)
 		return ret;
 
-/*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 start*/
-#ifdef CONFIG_DUAL_ROLE_USB_INTF
-	pd_port->tcpc->dual_role_mode = (dr == PD_ROLE_DFP) ?
-		DUAL_ROLE_PROP_MODE_DFP : DUAL_ROLE_PROP_MODE_UFP;
-	pd_port->tcpc->dual_role_dr = (dr == PD_ROLE_DFP) ?
-		DUAL_ROLE_PROP_DR_HOST : DUAL_ROLE_PROP_DR_DEVICE;
-	if (pd_port->tcpc->dr_usb && !IS_ERR(pd_port->tcpc->dr_usb))
-		dual_role_instance_changed(pd_port->tcpc->dr_usb);
-#endif /* CONFIG_DUAL_ROLE_USB_INTF */
-/*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 end*/
-
 	tcpci_notify_role_swap(pd_port->tcpc, TCP_NOTIFY_DR_SWAP, dr);
 	return ret;
 }
@@ -883,15 +867,6 @@ int pd_set_power_role(struct pd_port *pd_port, uint8_t pr)
 		return ret;
 
 	pd_notify_pe_pr_changed(pd_port);
-
-/*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 start*/
-#ifdef CONFIG_DUAL_ROLE_USB_INTF
-	pd_port->tcpc->dual_role_pr = (pr == PD_ROLE_SOURCE) ?
-		DUAL_ROLE_PROP_PR_SRC : DUAL_ROLE_PROP_PR_SNK;
-	if (pd_port->tcpc->dr_usb && !IS_ERR(pd_port->tcpc->dr_usb))
-		dual_role_instance_changed(pd_port->tcpc->dr_usb);
-#endif /* CONFIG_DUAL_ROLE_USB_INTF */
-/*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 end*/
 
 	tcpci_notify_role_swap(pd_port->tcpc, TCP_NOTIFY_PR_SWAP, pr);
 	return ret;
@@ -950,16 +925,6 @@ int pd_set_vconn(struct pd_port *pd_port, uint8_t role)
 	ret = tcpci_set_vconn(tcpc, enable);
 	if (ret < 0)
 		return ret;
-
-/*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 start*/
-#ifdef CONFIG_DUAL_ROLE_USB_INTF
-	pd_port->tcpc->dual_role_vconn = en_role ?
-		DUAL_ROLE_PROP_VCONN_SUPPLY_YES :
-		DUAL_ROLE_PROP_VCONN_SUPPLY_NO;
-	if (pd_port->tcpc->dr_usb && !IS_ERR(pd_port->tcpc->dr_usb))
-		dual_role_instance_changed(pd_port->tcpc->dr_usb);
-#endif /* CONFIG_DUAL_ROLE_USB_INTF */
-/*K19A HQ-140788 K19A for typec mode by langjunjun at 2021/6/11 end*/
 
 	if (en_role != en_role_old)
 		tcpci_notify_role_swap(tcpc, TCP_NOTIFY_VCONN_SWAP, en_role);
