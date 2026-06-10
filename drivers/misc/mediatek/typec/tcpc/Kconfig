@@ -5,7 +5,8 @@
 config TCPC_CLASS
 	bool "TypeC Port Controller Device Class"
 	select MTK_USB_TYPEC
-	select TYPEC
+	select TYPEC if !TARGET_PRODUCT_LANCELOTCOMMON && !TARGET_PRODUCT_MERLINCOMMON
+	select DUMMY_TYPEC if TARGET_PRODUCT_LANCELOTCOMMON || TARGET_PRODUCT_MERLINCOMMON
 	help
 	  Say Y to enable
 	  Typec Port
