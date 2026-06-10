@@ -572,7 +572,7 @@ int tcpci_report_usb_port_attached(struct tcpc_device *tcpc)
 
 	/* MTK Only */
 	if (tcpc->pd_inited_flag) {
-#ifdef CONFIG_TYPEC_WAIT_BC12
+#ifdef CONFIG_USB_PD_WAIT_BC12
 		if (tcpc->typec_attach_new == TYPEC_ATTACHED_SNK)
 			tcpc_enable_timer(tcpc, TYPEC_RT_TIMER_SINK_WAIT_BC12);
 		else
