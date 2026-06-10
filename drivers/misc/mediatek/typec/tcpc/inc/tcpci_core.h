@@ -421,15 +421,6 @@ struct tcpc_device {
 
 	uint32_t tcpc_flags;
 
-#ifdef CONFIG_DUAL_ROLE_USB_INTF
-	struct dual_role_phy_instance *dr_usb;
-	uint8_t dual_role_supported_modes;
-	uint8_t dual_role_mode;
-	uint8_t dual_role_pr;
-	uint8_t dual_role_dr;
-	uint8_t dual_role_vconn;
-#endif /* CONFIG_DUAL_ROLE_USB_INTF */
-
 #ifdef CONFIG_USB_POWER_DELIVERY
 	/* Event */
 	uint8_t pd_event_count;

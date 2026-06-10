@@ -21,9 +21,6 @@
 #include "inc/tcpci_typec.h"
 #include "inc/tcpci_event.h"
 #include "inc/pd_policy_engine.h"
-#ifdef CONFIG_DUAL_ROLE_USB_INTF
-#include <linux/usb/class-dual-role.h>
-#endif /* CONFIG_DUAL_ROLE_USB_INTF */
 
 /* From DTS */
 
@@ -841,14 +838,6 @@ int pd_set_data_role(struct pd_port *pd_port, uint8_t dr)
 {
 	pd_port->data_role = dr;
 
-#ifdef CONFIG_DUAL_ROLE_USB_INTF
-	/* dual role usb--> 0:ufp, 1:dfp */
-	pd_port->tcpc_dev->dual_role_mode = pd_port->data_role;
-	/* dual role usb --> 0: Device, 1: Host */
-	pd_port->tcpc_dev->dual_role_dr = !(pd_port->data_role);
-	dual_role_instance_changed(pd_port->tcpc_dev->dr_usb);
-#endif /* CONFIG_DUAL_ROLE_USB_INTF */
-
 	tcpci_notify_role_swap(pd_port->tcpc_dev, TCP_NOTIFY_DR_SWAP, dr);
 	return pd_update_msg_header(pd_port);
 }
@@ -863,12 +852,6 @@ int pd_set_power_role(struct pd_port *pd_port, uint8_t pr)
 		return ret;
 
 	pd_notify_pe_pr_changed(pd_port);
-
-#ifdef CONFIG_DUAL_ROLE_USB_INTF
-	/* 0:sink, 1: source */
-	pd_port->tcpc_dev->dual_role_pr = !(pd_port->power_role);
-	dual_role_instance_changed(pd_port->tcpc_dev->dr_usb);
-#endif /* CONFIG_DUAL_ROLE_USB_INTF */
 
 	tcpci_notify_role_swap(pd_port->tcpc_dev, TCP_NOTIFY_PR_SWAP, pr);
 	return ret;
@@ -909,11 +892,6 @@ int pd_set_vconn(struct pd_port *pd_port, uint8_t role)
 	bool en_role = role != PD_ROLE_VCONN_OFF;
 
 	PE_DBG("%s:%d\r\n", __func__, role);
-
-#ifdef CONFIG_DUAL_ROLE_USB_INTF
-	pd_port->tcpc_dev->dual_role_vconn = en_role;
-	dual_role_instance_changed(pd_port->tcpc_dev->dr_usb);
-#endif /* CONFIG_DUAL_ROLE_USB_INTF */
 
 	pd_port->vconn_role = role;
 	tcpci_notify_role_swap(pd_port->tcpc_dev,
