@@ -52,10 +52,12 @@
 #include "inc/tcpci_timer.h"
 #include "inc/tcpci_typec.h"
 
+#ifdef CONFIG_CHARGER_BQ2589X_CHARGER
 /* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 start */
 #define __BQ25890H__ 1
 #include "../../../../power/supply/mediatek/charger/bq2589x_reg.h"
 /* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 end */
+#endif
 
 #if 1 /*  #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 9, 0))*/
 #include <linux/sched/rt.h>
@@ -102,10 +104,12 @@ extern	uint8_t     typec_cc_orientation;
 #endif	/* __TEST_CC_PATCH__ */
 static struct i2c_client *w_client;
 
+#ifdef CONFIG_CHARGER_BQ2589X_CHARGER
 /* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 start */
 static bool g_irq_3801_flag = false;
 struct wusb3801_chip *g_3801_chip = NULL;
 /* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 end */
+#endif
 
 static int wusb3801_read_device(void *client, u32 reg, int len, void *dst)
 {
@@ -242,9 +246,11 @@ static int test_cc_patch(struct wusb3801_chip *chip)
 	if (ret & WUSB3801_FORCE_ERR_RCY_MASK) {
 		pr_err("wusb3801 [%s]enter error recovery :0x%x\n", __func__, ret);
 		wusb3801_i2c_write8(chip->tcpc, WUSB3801_REG_TEST_02, 0x00);
+#ifdef CONFIG_CHARGER_BQ2589X_CHARGER
 		/* HQ-134474 K19A typec mode by langjunjun at 2021/6/1 start */
 		wusb3801_i2c_write8(chip->tcpc, WUSB3801_REG_TEST_09, 0x00);
 		/* HQ-134474 K19A typec mode by langjunjun at 2021/6/1 end */
+#endif
 	}
     return BITS_GET(rc, 0x40);
 }
@@ -361,6 +367,7 @@ static void wusb3801_irq_work_handler(struct kthread_work *work)
 	tcpci_unlock_typec(tcpc);
 }
 
+#ifdef CONFIG_CHARGER_BQ2589X_CHARGER
 /* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 start */
 void wusb3801_intr_handler_resume(void)
 {
@@ -373,10 +380,12 @@ void wusb3801_intr_handler_resume(void)
 	return;
 }
 /* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 end */
+#endif
 
 static irqreturn_t wusb3801_intr_handler(int irq, void *data)
 {
 	struct wusb3801_chip *chip = data;
+#ifdef CONFIG_CHARGER_BQ2589X_CHARGER
 	/* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 start */
 	if (bq2589x_get_cdp_status() == true) {
 		pr_err("%s:ljj  bq2589x_get_cdp_status is true,returned!!!\n", __func__);
@@ -387,6 +396,12 @@ static irqreturn_t wusb3801_intr_handler(int irq, void *data)
 		kthread_queue_work(&chip->irq_worker, &chip->irq_work);
 	}
 	/* HQHW-963 K19A sy cdp by langjunjun at 2021/7/15 end */
+#else
+	__pm_wakeup_event(&chip->irq_wake_lock, WUSB3801_IRQ_WAKE_TIME);
+
+	kthread_queue_work(&chip->irq_worker, &chip->irq_work);
+#endif
+
 	return IRQ_HANDLED;
 }
 
@@ -448,9 +463,11 @@ static int wusb3801_init_alert(struct tcpc_device *tcpc)
 	if (ret & WUSB3801_FORCE_ERR_RCY_MASK) {
 		pr_err("wusb3801 [%s]enter error recovery :0x%x\n", __func__, ret);
 		wusb3801_i2c_write8(chip->tcpc, WUSB3801_REG_TEST_02, 0x00);
+#ifdef CONFIG_CHARGER_BQ2589X_CHARGER
 		/* HQ-134474 K19A typec mode by langjunjun at 2021/6/1 start */
 		wusb3801_i2c_write8(chip->tcpc, WUSB3801_REG_TEST_09, 0x00);
 		/* HQ-134474 K19A typec mode by langjunjun at 2021/6/1 end */
+#endif
 	}
 	ret = request_irq(chip->irq, wusb3801_intr_handler,
 		IRQF_TRIGGER_FALLING | IRQF_NO_THREAD |
