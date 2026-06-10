@@ -23,6 +23,10 @@
 #include <linux/delay.h>
 #include <linux/sched.h>
 
+#ifdef CONFIG_DUAL_ROLE_USB_INTF
+#include <linux/usb/class-dual-role.h>
+#endif /* CONFIG_DUAL_ROLE_USB_INTF */
+
 #include "tcpci_core.h"
 
 #ifdef CONFIG_PD_DBG_INFO

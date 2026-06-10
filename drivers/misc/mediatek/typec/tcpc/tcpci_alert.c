@@ -28,6 +28,10 @@
 #include "inc/tcpci_event.h"
 #endif /* CONFIG_USB_POWER_DELIVERY */
 
+#ifdef CONFIG_DUAL_ROLE_USB_INTF
+#include <linux/usb/class-dual-role.h>
+#endif /* CONFIG_DUAL_ROLE_USB_INTF */
+
 /*
  * [BLOCK] TCPCI IRQ Handler
  */
@@ -475,6 +479,28 @@ static inline int tcpci_report_usb_port_attached(struct tcpc_device *tcpc)
 {
 	TCPC_INFO("usb_port_attached\r\n");
 
+#ifdef CONFIG_DUAL_ROLE_USB_INTF
+	switch (tcpc->typec_attach_new) {
+	case TYPEC_ATTACHED_SNK:
+	case TYPEC_ATTACHED_CUSTOM_SRC:
+	case TYPEC_ATTACHED_NORP_SRC:
+		tcpc->dual_role_pr = DUAL_ROLE_PROP_PR_SNK;
+		tcpc->dual_role_dr = DUAL_ROLE_PROP_DR_DEVICE;
+		tcpc->dual_role_mode = DUAL_ROLE_PROP_MODE_UFP;
+		tcpc->dual_role_vconn = DUAL_ROLE_PROP_VCONN_SUPPLY_NO;
+		break;
+	case TYPEC_ATTACHED_SRC:
+		tcpc->dual_role_pr = DUAL_ROLE_PROP_PR_SRC;
+		tcpc->dual_role_dr = DUAL_ROLE_PROP_DR_HOST;
+		tcpc->dual_role_mode = DUAL_ROLE_PROP_MODE_DFP;
+		tcpc->dual_role_vconn = DUAL_ROLE_PROP_VCONN_SUPPLY_YES;
+		break;
+	default:
+		break;
+	}
+	dual_role_instance_changed(tcpc->dr_usb);
+#endif /* CONFIG_DUAL_ROLE_USB_INTF */
+
 	tcpci_set_wake_lock_pd(tcpc, true);
 
 #ifdef CONFIG_USB_POWER_DELIVERY
@@ -495,6 +521,14 @@ static inline int tcpci_report_usb_port_attached(struct tcpc_device *tcpc)
 static inline int tcpci_report_usb_port_detached(struct tcpc_device *tcpc)
 {
 	TCPC_INFO("usb_port_detached\r\n");
+
+#ifdef CONFIG_DUAL_ROLE_USB_INTF
+	tcpc->dual_role_pr = DUAL_ROLE_PROP_PR_NONE;
+	tcpc->dual_role_dr = DUAL_ROLE_PROP_DR_NONE;
+	tcpc->dual_role_mode = DUAL_ROLE_PROP_MODE_NONE;
+	tcpc->dual_role_vconn = DUAL_ROLE_PROP_VCONN_SUPPLY_NO;
+	dual_role_instance_changed(tcpc->dr_usb);
+#endif /* CONFIG_DUAL_ROLE_USB_INTF */
 
 #ifdef CONFIG_USB_POWER_DELIVERY
 	/* MTK Only */
