@@ -4,9 +4,6 @@ menu "USB Power Delivery and Type-C drivers"
 config TYPEC
 	tristate
 
-config DUMMY_TYPEC
-	tristate
-
 config TYPEC_WCOVE
 	tristate "Intel WhiskeyCove PMIC USB Type-C PHY driver"
 	depends on ACPI

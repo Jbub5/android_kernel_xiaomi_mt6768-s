@@ -1,3 +1,6 @@
+
+ccflags-y += -I$(srctree)/drivers/misc/mediatek/usb_boost/
+
 obj-$(CONFIG_TCPC_MT6360)		+= tcpc_mt6360.o
 obj-$(CONFIG_TCPC_MT6362)		+= tcpc_mt6362.o
 obj-$(CONFIG_TCPC_MT6370)		+= tcpc_mt6370.o
@@ -5,12 +8,7 @@ obj-$(CONFIG_TCPC_WUSB3801)		+= tcpc_wusb3801.o
 obj-$(CONFIG_TCPC_FUSB303)		+= tcpc_fusb303.o
 obj-$(CONFIG_TCPC_RT1711H)		+= tcpc_rt1711h.o
 obj-$(CONFIG_TCPC_CLASS)		+= tcpci_core.o tcpci_typec.o tcpci_timer.o \
-		tcpm.o tcpci.o pd_dbg_info.o tcpci_alert.o
-ifneq ($(CONFIG_DUMMY_TYPEC),y)
-obj-$(CONFIG_TCPC_CLASS)		+= rt_pd_manager.o
-else
-obj-$(CONFIG_TCPC_CLASS)		+= rt_pd_manager_legacy.o
-endif
+		tcpm.o tcpci.o pd_dbg_info.o tcpci_alert.o rt_pd_manager.o
 
 obj-$(CONFIG_USB_POWER_DELIVERY)	+= tcpci_event.o \
 		pd_core.o pd_policy_engine.o pd_process_evt.o \

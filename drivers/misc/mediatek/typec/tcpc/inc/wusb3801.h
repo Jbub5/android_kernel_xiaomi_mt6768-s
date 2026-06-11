@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2017 MediaTek Inc.
- * Copyright (C) 2021 XiaoMi, Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -178,4 +177,5 @@
 #define REVERSE_CHG_SOURCE				0X01
 #define REVERSE_CHG_SINK				0X02
 #define REVERSE_CHG_DRP					0X03
+
 #endif /* #ifndef __LINUX_WUSB3801_H */
