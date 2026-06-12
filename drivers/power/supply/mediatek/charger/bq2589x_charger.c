@@ -1227,9 +1227,6 @@ static int bq2589x_register_interrupt(struct bq2589x *bq)
 
 	return 0;
 }
-/* Huaqin add for K19A-312 by wangchao at 2021/6/3 start */
-static void bq2589x_dump_regs(struct bq2589x *bq);
-/* Huaqin add for K19A-312 by wangchao at 2021/6/3 end */
 
 static int bq2589x_init_device(struct bq2589x *bq)
 {
@@ -1238,10 +1235,6 @@ static int bq2589x_init_device(struct bq2589x *bq)
 	int id_dis = 0;
 	u8 reg_val = 0;
 /* Huaqin add for HQ-132657 by miaozhichao at 2021/5/27 end */
-/* Huaqin add for K19A-312 by wangchao at 2021/6/3 start */
-	pr_err("bq2589x_dump_regs before init: \n");
-	bq2589x_dump_regs(bq);
-/* Huaqin add for K19A-312 by wangchao at 2021/6/3 end */
 	/* Huaqin add for HQHW-963 by zhixueyin at 2021/6/29 start */
 	ret = bq2589x_disable_12V(bq);
 	if (ret)
@@ -1315,10 +1308,6 @@ static int bq2589x_init_device(struct bq2589x *bq)
 	ret = bq2589x_enable_hvdcp(bq);
 	bq2589x_enable_auto_dpdm(bq, true);
 	ret = bq2589x_force_dpdm(bq);
-/* Huaqin add for HQHW-963 by zhixueyin at 2021/6/29 end */
-	pr_err("bq2589x_dump_regs after init: \n");
-	bq2589x_dump_regs(bq);
-/* Huaqin add for K19A-312 by wangchao at 2021/6/3 end */
 
 	return 0;
 }
@@ -1341,19 +1330,6 @@ static int bq2589x_detect_device(struct bq2589x *bq)
 	}
 
 	return ret;
-}
-
-static void bq2589x_dump_regs(struct bq2589x *bq)
-{
-	int addr;
-	u8 val;
-	int ret;
-
-	for (addr = 0x0; addr <= 0x14; addr++) {
-		ret = bq2589x_read_byte(bq, addr, &val);
-		if (ret == 0)
-			pr_err("Reg[%.2x] = 0x%.2x\n", addr, val);
-	}
 }
 
 static ssize_t
@@ -1482,10 +1458,6 @@ static int bq2589x_plug_out(struct charger_device *chg_dev)
 
 static int bq2589x_dump_register(struct charger_device *chg_dev)
 {
-	struct bq2589x *bq = dev_get_drvdata(&chg_dev->dev);
-
-	bq2589x_dump_regs(bq);
-
 	return 0;
 }
 
