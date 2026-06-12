@@ -92,7 +92,7 @@ struct wusb3801_chip {
 //extern int tcpci_report_usb_port_attached(struct tcpc_device *tcpc);
 //extern int tcpci_report_usb_port_detached(struct tcpc_device *tcpc);
 #ifdef __TEST_CC_PATCH__
-uint8_t	typec_cc_orientation;
+extern uint8_t	typec_cc_orientation;
 #endif	/* __TEST_CC_PATCH__ */
 static struct i2c_client *w_client;
 
