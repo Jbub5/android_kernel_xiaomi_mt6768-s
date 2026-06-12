@@ -285,6 +285,7 @@ config CRYPTO_CHACHA20POLY1305
 	select CRYPTO_CHACHA20
 	select CRYPTO_POLY1305
 	select CRYPTO_AEAD
+	default y
 	help
 	  ChaCha20-Poly1305 AEAD support, RFC7539.
 
