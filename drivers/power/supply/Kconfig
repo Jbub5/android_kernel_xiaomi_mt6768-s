@@ -619,6 +619,12 @@ config CUSTOM_BATTERY_EXTERNAL_CHANNEL
 	  Say Y to enable support for Customer external gauge.
 	  if unsure ,choose n.
 
+config MTK_REVERSE_CHG_ENABLE
+	bool "MTK_REVERSE_CHG_ENABLE"
+	default n
+	help
+	  reverse charger enable if Y.
+
 source "drivers/power/supply/mediatek/battery/Kconfig"
 source "drivers/power/supply/mediatek/charger/Kconfig"
 
