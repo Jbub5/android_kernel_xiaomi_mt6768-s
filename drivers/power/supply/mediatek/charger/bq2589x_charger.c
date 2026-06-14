@@ -107,7 +107,7 @@ struct bq2589x {
 	/*K19A HQHW-963 K19A for sy cdp  by langjunjun at 2021/7/15 end*/
 };
 /* Huaqin modify for WXYFB-592 by miaozhichao at 2021/3/29 start */
-extern enum hvdcp_status hvdcp_type_tmp;
+enum hvdcp_status hvdcp_type_tmp;
 /* Huaqin modify for WXYFB-592 by miaozhichao at 2021/3/29 end */
 static int g_charger_type = 0;
 /* Huaqin add for HQ-134476 by miaozhichao at 2021/5/29 start */
@@ -1620,7 +1620,7 @@ static int bq2589x_kick_wdt(struct charger_device *chg_dev)
 }
 
 /*K19A WXYFB-588 K19A charger usb_otg by wangqi at 2021/3/27 start*/
-extern bool usb_otg;
+bool usb_otg;
 /*K19A WXYFB-588 K19A charger usb_otg by wangqi at 2021/3/27 end*/
 static int bq2589x_set_otg(struct charger_device *chg_dev, bool en)
 {
