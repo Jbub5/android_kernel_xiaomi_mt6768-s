@@ -1,7 +1,7 @@
 #ifndef HQSYS_PCBA
 #define HQSYS_PCBA
 
-#if defined(TARGET_PRODUCT_LANCELOT) || defined(TARGET_PRODUCT_SHIVA)
+#if defined(TARGET_PRODUCT_LANCELOT)
 
 typedef enum {
 	PCBA_UNKNOW = 0,

@@ -48,7 +48,7 @@ static HW_INFO(HWID_PCBA, pcba_config);
 static HW_INFO(HWID_PMIC_VERSION, pmic_version);
 static HW_INFO(HWID_AUDIO, audio_PA);
 
-#if defined(TARGET_PRODUCT_LANCELOT) || defined(TARGET_PRODUCT_SHIVA)
+#if defined(TARGET_PRODUCT_LANCELOT)
 
 struct pcba_info pcba[] = {
 	{PCBA_J19_P0_1_CN, "PCBA_J19_P0-1_CN"},

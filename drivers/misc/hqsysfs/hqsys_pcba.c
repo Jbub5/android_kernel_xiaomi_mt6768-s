@@ -35,7 +35,7 @@ typedef struct {
 	int voltage_max;
 	PCBA_CONFIG version;
 } board_id_map_t;
-#if defined(TARGET_PRODUCT_LANCELOT) || defined(TARGET_PRODUCT_SHIVA)
+#if defined(TARGET_PRODUCT_LANCELOT)
 
 static int pcba_config;
 static board_id_map_t PCBA_DETECT_LANCELOT_CN[] = {
@@ -120,7 +120,7 @@ static const board_id_map_t j15n_board_id_map_ext[] = {
 };
 #endif
 
-#if defined(TARGET_PRODUCT_LANCELOT) || defined(TARGET_PRODUCT_SHIVA)
+#if defined(TARGET_PRODUCT_LANCELOT)
 
 static int __init get_pcba_config(char *p)
 {
@@ -430,7 +430,7 @@ static int board_id_probe(struct platform_device *pdev)
 		pr_err("[%s] Failed %d!!!\n", __func__, ret);
 		return ret;
 	}
-#if defined(TARGET_PRODUCT_LANCELOT) || defined(TARGET_PRODUCT_SHIVA)
+#if defined(TARGET_PRODUCT_LANCELOT)
 
 	read_pcba_config_j19();
 #elif defined(TARGET_PRODUCT_SELENE)

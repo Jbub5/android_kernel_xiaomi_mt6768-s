@@ -90,7 +90,7 @@ extern bool tp_charger_status;
 
 static DEFINE_MUTEX(consumer_mutex);
 
-#if defined(TARGET_PRODUCT_LANCELOT) || defined(TARGET_PRODUCT_SHIVA)
+#if defined(TARGET_PRODUCT_LANCELOT)
 
 typedef enum {
 	PCBA_UNKNOW = 0,
@@ -1073,7 +1073,7 @@ void charger_manager_set_prop_system_temp_level(int temp_level)
 	if (pinfo == NULL)
 		return ;
 	pcba_to_thermal = get_huaqin_pcba_config();
-#if defined(TARGET_PRODUCT_LANCELOT) || defined(TARGET_PRODUCT_SHIVA)
+#if defined(TARGET_PRODUCT_LANCELOT)
 	if (pcba_to_thermal == PCBA_J19_MP_CN)
 		is_cn = true;
 #elif defined(TARGET_PRODUCT_SELENE)
