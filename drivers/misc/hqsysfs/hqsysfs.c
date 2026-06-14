@@ -48,7 +48,7 @@ static HW_INFO(HWID_PCBA, pcba_config);
 static HW_INFO(HWID_PMIC_VERSION, pmic_version);
 static HW_INFO(HWID_AUDIO, audio_PA);
 
-#if defined(TARGET_PRODUCT_LANCELOT)
+#if defined(CONFIG_TARGET_PRODUCT_LANCELOTCOMMON)
 
 struct pcba_info pcba[] = {
 	{PCBA_J19_P0_1_CN, "PCBA_J19_P0-1_CN"},
@@ -73,7 +73,7 @@ struct pcba_info pcba[] = {
 	{PCBA_J19P_POCO_MP_INDIA, "PCBA_J19P_POCO_MP_INDIA"},
 
 };
-#elif defined(TARGET_PRODUCT_SELENE)
+#elif defined(CONFIG_TARGET_PRODUCT_SELENECOMMON)
 struct pcba_info pcba[] = {
 	{PCBA_K19A_P0_GLOBAL, "PCBA_K19A_P0_GLOBAL"},
 	{PCBA_K19A_P0_LA, "PCBA_K19A_P0_LA"},

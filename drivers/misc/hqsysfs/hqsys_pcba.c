@@ -35,7 +35,7 @@ typedef struct {
 	int voltage_max;
 	PCBA_CONFIG version;
 } board_id_map_t;
-#if defined(TARGET_PRODUCT_LANCELOT)
+#if defined(CONFIG_TARGET_PRODUCT_LANCELOTCOMMON)
 
 static int pcba_config;
 static board_id_map_t PCBA_DETECT_LANCELOT_CN[] = {
@@ -84,7 +84,7 @@ static board_id_map_t PCBA_DETECT_POCO_INDIA[] = {
 	{406, 500, PCBA_J19P_POCO_MP_INDIA},
 };
 
-#elif defined(TARGET_PRODUCT_SELENE)
+#elif defined(CONFIG_TARGET_PRODUCT_SELENECOMMON)
 
 static int selene_pcba_config;
 static int selene_pcba_stage;
@@ -120,7 +120,7 @@ static const board_id_map_t j15n_board_id_map_ext[] = {
 };
 #endif
 
-#if defined(TARGET_PRODUCT_LANCELOT)
+#if defined(CONFIG_TARGET_PRODUCT_LANCELOTCOMMON)
 
 static int __init get_pcba_config(char *p)
 {
@@ -225,7 +225,7 @@ static bool read_pcba_config_j19(void)
 	return true;
 }
 
-#elif defined(TARGET_PRODUCT_SELENE)
+#elif defined(CONFIG_TARGET_PRODUCT_SELENECOMMON)
 static int __init get_selene_pcba_config(char *p)
 {
 	char pcba[10];
@@ -430,10 +430,10 @@ static int board_id_probe(struct platform_device *pdev)
 		pr_err("[%s] Failed %d!!!\n", __func__, ret);
 		return ret;
 	}
-#if defined(TARGET_PRODUCT_LANCELOT)
+#if defined(CONFIG_TARGET_PRODUCT_LANCELOTCOMMON)
 
 	read_pcba_config_j19();
-#elif defined(TARGET_PRODUCT_SELENE)
+#elif defined(CONFIG_TARGET_PRODUCT_SELENECOMMON)
 	read_pcba_config_k19a();
 #else
 	read_pcba_config();

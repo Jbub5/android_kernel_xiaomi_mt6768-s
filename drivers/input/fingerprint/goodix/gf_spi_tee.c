@@ -308,7 +308,7 @@ static int gf_get_gpio_dts_info(struct gf_device *gf_dev)
 	}
 #endif
 
-#ifdef TARGET_PRODUCT_SELENE
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
 	gf_dev->pins_reset_high = pinctrl_lookup_state(gf_dev->pinctrl_gpios, "reset_high");
 	if (IS_ERR(gf_dev->pins_reset_high)) {
 		ret = PTR_ERR(gf_dev->pins_reset_high);
@@ -2115,7 +2115,7 @@ static int gf_probe(struct spi_device *spi)
 	pr_err("%s %d now get dts info done!", __func__, __LINE__);
 	mdelay(10);
 	gf_hw_power_enable(gf_dev, 1);
-#ifndef TARGET_PRODUCT_SELENE
+#ifndef CONFIG_TARGET_PRODUCT_SELENECOMMON
 	//set cs pin to cs mode
 	pinctrl_select_state(gf_dev->pinctrl_gpios, gf_dev->pins_spi_cs_high);
 #endif
@@ -2288,7 +2288,7 @@ static int gf_probe(struct spi_device *spi)
 	//__set_bit(GF_KEY_INPUT_KPENTER, gf_dev->input->keybit);
 
 	gf_dev->input->name = GF_INPUT_NAME;
-#ifdef TARGET_PRODUCT_SELENE
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
 	gf_dev->input->id.vendor  = 0x0666;
 	gf_dev->input->id.product = 0x0888;
 #endif

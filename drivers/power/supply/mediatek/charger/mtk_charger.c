@@ -90,7 +90,7 @@ extern bool tp_charger_status;
 
 static DEFINE_MUTEX(consumer_mutex);
 
-#if defined(TARGET_PRODUCT_LANCELOT)
+#if defined(CONFIG_TARGET_PRODUCT_LANCELOTCOMMON)
 
 typedef enum {
 	PCBA_UNKNOW = 0,
@@ -117,7 +117,7 @@ typedef enum {
 	PCBA_J19P_END,
 	PCBA_END,
 } PCBA_CONFIG;
-#elif defined(TARGET_PRODUCT_SELENE)
+#elif defined(CONFIG_TARGET_PRODUCT_SELENECOMMON)
 typedef enum
 {
 	PCBA_UNKNOW = 0,
@@ -1073,10 +1073,10 @@ void charger_manager_set_prop_system_temp_level(int temp_level)
 	if (pinfo == NULL)
 		return ;
 	pcba_to_thermal = get_huaqin_pcba_config();
-#if defined(TARGET_PRODUCT_LANCELOT)
+#if defined(CONFIG_TARGET_PRODUCT_LANCELOTCOMMON)
 	if (pcba_to_thermal == PCBA_J19_MP_CN)
 		is_cn = true;
-#elif defined(TARGET_PRODUCT_SELENE)
+#elif defined(CONFIG_TARGET_PRODUCT_SELENECOMMON)
 	if (pcba_to_thermal == PCBA_K19B_MP_CN || pcba_to_thermal == PCBA_K19S_MP_CN)
 		is_cn = true;
 #else
