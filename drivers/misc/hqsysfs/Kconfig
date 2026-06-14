@@ -1,7 +1,3 @@
-config TARGET_PRODUCT_LANCELOT
-  bool "lancelot"
-  default n
-
 config HQ_SYSFS_SUPPORT
   bool "Enable Huaqin Sysfs Driver"
   default n
