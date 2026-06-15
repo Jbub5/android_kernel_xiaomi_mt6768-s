@@ -83,9 +83,10 @@ static struct charger_manager *pinfo;
 static struct list_head consumer_head = LIST_HEAD_INIT(consumer_head);
 #ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
 extern int hq_selene_pcba_config;
-#if defined(CONFIG_CONFIG_TOUCHSCREEN_NT36672C) //TODO: Make this value global when common NT36XXX_SPI driver included
-extern bool tp_charger_status;
 #endif
+
+#if defined(CONFIG_TOUCHSCREEN_NT36xxx_SPI)
+extern bool tp_charger_status;
 #endif
 
 static DEFINE_MUTEX(consumer_mutex);
@@ -2448,14 +2449,14 @@ static int charger_routine_thread(void *arg)
 
 		if (is_disable_charger() == false) {
 			if (is_charger_on == true) {
-#ifdef CONFIG_CONFIG_TOUCHSCREEN_NT36672C
+#ifdef CONFIG_TOUCHSCREEN_NT36xxx_SPI
 				tp_charger_status = true;
 #endif
 				if (info->do_algorithm)
 					info->do_algorithm(info);
 				wakeup_sc_algo_cmd(&pinfo->sc.data, SC_EVENT_CHARGING, 0);
 			} else
-#ifdef CONFIG_CONFIG_TOUCHSCREEN_NT36672C
+#ifdef CONFIG_TOUCHSCREEN_NT36xxx_SPI
 				tp_charger_status = false;
 #endif
 				wakeup_sc_algo_cmd(&pinfo->sc.data, SC_EVENT_STOP_CHARGING, 0);
