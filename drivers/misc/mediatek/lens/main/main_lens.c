@@ -91,6 +91,8 @@ static struct stAF_OisPosInfo OisPosInfo;
 static struct stAF_DrvList g_stAF_DrvList[MAX_NUM_OF_LENS] = {
 	{1, AFDRV_DW9718TAF, DW9718TAF_SetI2Cclient, DW9718TAF_Ioctl,
 	 DW9718TAF_Release, DW9718TAF_GetFileName, NULL},
+	{1, AFDRV_GT9772AF, GT9772AF_SetI2Cclient, GT9772AF_Ioctl,
+	 GT9772AF_Release, GT9772AF_GetFileName, NULL},
 	{1, AFDRV_AK7371AF, AK7371AF_SetI2Cclient, AK7371AF_Ioctl,
 	 AK7371AF_Release, AK7371AF_GetFileName, NULL},
 	{1, AFDRV_BU6424AF, BU6424AF_SetI2Cclient, BU6424AF_Ioctl,
@@ -314,6 +316,9 @@ void AFRegulatorCtrl(int Stage)
 					regVCAMAF =
 					regulator_get(lens_device, "vcamio");
 				}
+				#elif defined(CONFIG_MACH_MT6877) || defined(CONFIG_MACH_MT6781)
+				regVCAMAF =
+					regulator_get(lens_device, "rt5133-ldo3");
 				#elif defined(CONFIG_MACH_MT6885) || defined(CONFIG_MACH_MT6893)
 				if (strncmp(CONFIG_ARCH_MTK_PROJECT,
 					"k6885v1_64_alpha", 16) == 0) {
