@@ -901,6 +901,17 @@ static int AF_i2c_probe(struct i2c_client *client,
 	CN3927AFJ19_SwitchToPowerDown(g_pstAF_I2Cclient, true); /* Power down mode */
 #endif
 
+#ifdef CONFIG_TARGET_PRODUCT_SELENECOMMON
+ /* Power on vldo28 in advance .
+*  To set GT9764AF  chip power down.
+* If chip is not in power down status,when vldo28 is power on, the chip will cause 0.3ma leakage.
+* If power is off , the chip status will be restored.
+*/
+	AFRegulatorCtrl(0);
+	AFRegulatorCtrl(1);
+	GT9764AF_SwitchToPowerDown(g_pstAF_I2Cclient);
+#endif
+
 	LOG_INF("Attached!!\n");
 
 	return 0;
